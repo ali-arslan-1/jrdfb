@@ -1,0 +1,49 @@
+<http://industrialdataspace.org/instance/header/12345678-1234-1234-1234-123456789012>
+        a                  "http://industrialdataspace.org/2016/10/idsv/core#TransferedDataset" ;
+        <http://industrialdataspace.org/2016/10/idsv/core#authToken>
+                "authorized!" ;
+        <http://industrialdataspace.org/2016/10/idsv/core#createdAt>
+                "2016-11-08T12:30"^^<xsd:dateTime> ;
+        <http://industrialdataspace.org/2016/10/idsv/core#customProperty>
+                [ a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag> ;
+                  <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1>
+                          [ <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                                    "ok" ;
+                            <http://purl.org/dc/terms/identifier>
+                                    "myparameter"
+                          ]
+                ] ;
+        <http://industrialdataspace.org/2016/10/idsv/core#digest>
+                "J4ZMxSGalRp6blK4yN3faYHQmNoWWNliWMhwssiN+8tRhBrqFyoouvpqeXMRZVhGdwZgRclZ7Q+ZKWiNBN78KQ==" ;
+        <http://industrialdataspace.org/2016/10/idsv/core#format>
+                "rdf" ;
+        <http://industrialdataspace.org/2016/10/idsv/core#receiver>
+                "http://fraunhofer.de" ;
+        <http://industrialdataspace.org/2016/10/idsv/core#sender>
+                "https://www.iml.frauhofer.de" ;
+        <http://purl.org/dc/terms/identifier>
+                "12345678-1234-1234-1234-123456789012" ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://industrialdataspace.org/2016/10/idsv/core#authToken>
+                          "de.fhg.iml.ids.metadata.impl.StringToken" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#createdAt>
+                          "java.time.LocalDateTime" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#customProperty>
+                          "java.util.TreeMap" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#digest>
+                          "java.lang.String" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#format>
+                          "java.lang.String" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#receiver>
+                          "java.net.URI" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#sender>
+                          "java.net.URI" ;
+                  <http://purl.org/dc/terms/identifier>
+                          "java.util.UUID" ;
+                  <http://www.w3.org/2002/07/owl#versionInfo>
+                          "java.lang.Byte" ;
+                  <void:vocabulary>  "java.net.URI"
+                ] ;
+        <http://www.w3.org/2002/07/owl#versionInfo>
+                "2" ;
+        <void:vocabulary>  "http://industrialdataspace.org/2016/10/idsv/core#" .
