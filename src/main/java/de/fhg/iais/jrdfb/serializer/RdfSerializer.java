@@ -1,8 +1,8 @@
-package de.fhg.iml.jrdfb.serializer;
+package de.fhg.iais.jrdfb.serializer;
 
-import de.fhg.iml.jrdfb.annotation.*;
-import de.fhg.iml.jrdfb.util.JenaUtils;
-import de.fhg.iml.jrdfb.util.ReflectUtils;
+import de.fhg.iais.jrdfb.annotation.*;
+import de.fhg.iais.jrdfb.util.ReflectUtils;
+import de.fhg.iais.jrdfb.util.JenaUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;

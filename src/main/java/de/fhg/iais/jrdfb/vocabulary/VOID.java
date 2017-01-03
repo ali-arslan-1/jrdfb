@@ -1,14 +1,14 @@
-package de.fhg.iml.jrdfb.vocabulary;
+package de.fhg.iais.jrdfb.vocabulary;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class DcTerms {
+public class VOID {
 
     /**
      * The namespace of the vocabulary as a string
      */
-    private static final String uri = "http://purl.org/dc/terms/";
+    private static final String uri = "void:";
 
     /** returns the URI for this schema
      * @return the URI for this schema
@@ -17,5 +17,7 @@ public class DcTerms {
         return uri;
     }
 
-    public static final String IDENTIFIER = uri + "identifier";
+    public static final String VOCABULARY = uri + "vocabulary";
+
 }
+

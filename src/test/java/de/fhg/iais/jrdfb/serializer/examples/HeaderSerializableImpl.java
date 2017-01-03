@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.fhg.iml.jrdfb.serializer.examples;
+package de.fhg.iais.jrdfb.serializer.examples;
 
+import de.fhg.iais.jrdfb.annotation.*;
+import de.fhg.iais.jrdfb.vocabulary.IDS;
+import de.fhg.iais.jrdfb.vocabulary.OWL;
 import de.fhg.iml.ids.metadata.*;
 import de.fhg.iml.ids.metadata.internal.StringTokenXMLAdapter;
 import de.fhg.iml.ids.metadata.internal.URIBuilder;
 import de.fhg.iml.ids.metadata.util.*;
-import de.fhg.iml.jrdfb.annotation.*;
-import de.fhg.iml.jrdfb.vocabulary.DcTerms;
-import de.fhg.iml.jrdfb.vocabulary.IDS;
-import de.fhg.iml.jrdfb.vocabulary.OWL;
-import de.fhg.iml.jrdfb.vocabulary.VOID;
+import de.fhg.iais.jrdfb.vocabulary.DcTerms;
+import de.fhg.iais.jrdfb.vocabulary.VOID;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;

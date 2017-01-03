@@ -1,4 +1,4 @@
-package de.fhg.iml.jrdfb.util;
+package de.fhg.iais.jrdfb.util;
 
 import java.beans.*;
 import java.lang.reflect.Constructor;

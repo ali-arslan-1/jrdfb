@@ -1,12 +1,12 @@
-package de.fhg.iml.jrdfb.serializer;
+package de.fhg.iais.jrdfb.serializer;
 
+import de.fhg.iais.jrdfb.serializer.examples.HeaderSerializableImpl;
+import de.fhg.iais.jrdfb.vocabulary.IDS;
 import de.fhg.iml.ids.metadata.Receiver;
 import de.fhg.iml.ids.metadata.Sender;
 import de.fhg.iml.ids.metadata.impl.StringToken;
 import de.fhg.iml.ids.metadata.internal.URIBuilder;
-import de.fhg.iml.jrdfb.serializer.examples.*;
-import de.fhg.iml.jrdfb.util.FileUtils;
-import de.fhg.iml.jrdfb.vocabulary.IDS;
+import de.fhg.iais.jrdfb.util.FileUtils;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.InvocationTargetException;

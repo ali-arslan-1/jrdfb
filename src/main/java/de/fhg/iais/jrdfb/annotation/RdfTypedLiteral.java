@@ -1,4 +1,4 @@
-package de.fhg.iml.jrdfb.annotation;
+package de.fhg.iais.jrdfb.annotation;
 
 import java.lang.annotation.*;
 
@@ -8,5 +8,6 @@ import java.lang.annotation.*;
 @Inherited
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RdfBag {
+public @interface RdfTypedLiteral {
+    String value();
 }

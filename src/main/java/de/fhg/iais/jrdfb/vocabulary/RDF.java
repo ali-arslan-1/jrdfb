@@ -1,4 +1,4 @@
-package de.fhg.iml.jrdfb.vocabulary;
+package de.fhg.iais.jrdfb.vocabulary;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>

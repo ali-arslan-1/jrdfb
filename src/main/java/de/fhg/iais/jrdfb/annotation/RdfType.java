@@ -1,4 +1,4 @@
-package de.fhg.iml.jrdfb.annotation;
+package de.fhg.iais.jrdfb.annotation;
 
 import java.lang.annotation.*;
 
@@ -6,9 +6,9 @@ import java.lang.annotation.*;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RdfId {
-    String baseURI() default "";
+public @interface RdfType {
+    String value();
 }

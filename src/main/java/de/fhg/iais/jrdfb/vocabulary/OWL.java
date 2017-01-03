@@ -1,14 +1,14 @@
-package de.fhg.iml.jrdfb.vocabulary;
+package de.fhg.iais.jrdfb.vocabulary;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class VOID {
+public class OWL {
 
     /**
      * The namespace of the vocabulary as a string
      */
-    private static final String uri = "void:";
+    private static final String uri = "http://www.w3.org/2002/07/owl#";
 
     /** returns the URI for this schema
      * @return the URI for this schema
@@ -17,7 +17,7 @@ public class VOID {
         return uri;
     }
 
-    public static final String VOCABULARY = uri + "vocabulary";
+    public static final String VERSION_INFO = uri + "versionInfo";
 
 }
 

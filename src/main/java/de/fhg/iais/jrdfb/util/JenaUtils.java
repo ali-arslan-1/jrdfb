@@ -1,4 +1,4 @@
-package de.fhg.iml.jrdfb.util;
+package de.fhg.iais.jrdfb.util;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
