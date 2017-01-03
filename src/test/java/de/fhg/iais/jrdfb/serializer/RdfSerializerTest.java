@@ -9,6 +9,7 @@ import de.fhg.iml.ids.metadata.internal.URIBuilder;
 import de.fhg.iais.jrdfb.util.FileUtils;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -28,11 +29,11 @@ public class RdfSerializerTest {
     RdfSerializer serializer;
     String rdf_turtle;
 
-    public RdfSerializerTest() {
+    public RdfSerializerTest() throws IOException {
         serializer = new RdfSerializer<>(HeaderSerializableImpl.class);
         rdf_turtle = FileUtils
-                .readFile("src/test/resources/data/transferedDataset_test_all.ttl",
-                        StandardCharsets.UTF_8);
+                .readResource("transferedDataset_test_all.ttl",
+                        this.getClass());
     }
 
     @Test

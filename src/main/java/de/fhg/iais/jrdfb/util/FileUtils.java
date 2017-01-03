@@ -5,6 +5,8 @@
  */
 package de.fhg.iais.jrdfb.util;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -35,5 +37,14 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String readResource(String fileName, Class<?> resourceClass) throws IOException {
+        String content = IOUtils.toString(
+                resourceClass.getResourceAsStream(fileName),
+                "UTF-8"
+        );
+
+        return content;
     }
 }
