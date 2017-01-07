@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RdfProperty {
-    String property();
+    String value();
     String path() default "";
 
 }

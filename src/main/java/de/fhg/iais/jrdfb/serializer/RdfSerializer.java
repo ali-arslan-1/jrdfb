@@ -67,7 +67,7 @@ public class RdfSerializer<T> {
 
                 Object value;
                 RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
-                Property jenaProperty = model.createProperty(rdfPropertyInfo.property());
+                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
                 if (rdfPropertyInfo.path().isEmpty()) {
                     value = field.get(obj);
                 }
@@ -164,7 +164,7 @@ public class RdfSerializer<T> {
                 Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
 
                 RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
-                Property jenaProperty = model.createProperty(rdfPropertyInfo.property());
+                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
                 value = resource.getProperty(jenaProperty);
                 if (rdfPropertyInfo.path().isEmpty()) {
 
