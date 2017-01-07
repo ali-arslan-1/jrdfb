@@ -1,17 +1,16 @@
 package de.fhg.iais.jrdfb.serializer;
 
-import de.fhg.iais.jrdfb.serializer.examples.HeaderSerializableImpl;
+import de.fhg.iais.jrdfb.util.FileUtils;
 import de.fhg.iais.jrdfb.vocabulary.IDS;
 import de.fhg.iml.ids.metadata.Receiver;
 import de.fhg.iml.ids.metadata.Sender;
+import de.fhg.iml.ids.metadata.impl.HeaderSerializableImpl;
 import de.fhg.iml.ids.metadata.impl.StringToken;
 import de.fhg.iml.ids.metadata.internal.URIBuilder;
-import de.fhg.iais.jrdfb.util.FileUtils;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -20,7 +19,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -64,7 +63,7 @@ public class RdfSerializerTest {
         metaDataMock.setCustomAttributes(attributesMock);
 
 
-        assertEquals( rdf_turtle.trim() , serializer.serialize(metaDataMock).trim());
+        assertEquals(serializer.serialize(metaDataMock).trim(), rdf_turtle.trim());
     }
 
     @Test
@@ -73,7 +72,7 @@ public class RdfSerializerTest {
         HeaderSerializableImpl actualHeader = (HeaderSerializableImpl)serializer
                 .deserialize(rdf_turtle);
 
-        assertEquals("ok" , actualHeader.customAttribute("myparameter"));
+        assertEquals(actualHeader.customAttribute("myparameter"), "ok");
 
     }
 
@@ -90,7 +89,7 @@ public class RdfSerializerTest {
                 .getInstance("SHA-512")
                 .digest(new byte[]{1, 2, 3}));
 
-        assertEquals(expectedDigest , actualHeader.getPayloadDigest());
+        assertEquals(actualHeader.getPayloadDigest(), expectedDigest);
     }
 
     @Test
@@ -99,7 +98,7 @@ public class RdfSerializerTest {
         HeaderSerializableImpl actualHeader = (HeaderSerializableImpl)serializer
                 .deserialize(rdf_turtle);
 
-        assertEquals(LocalDateTime.of(2016, 11, 8, 12, 30) , actualHeader.getCreationTime());
+        assertEquals(actualHeader.getCreationTime(), LocalDateTime.of(2016, 11, 8, 12, 30));
     }
 
     @Test
@@ -110,8 +109,8 @@ public class RdfSerializerTest {
 
         assertEquals("https://www.iml.frauhofer.de", actualHeader.getSender()
                 .getAddress().toString());
-        assertEquals("http://fraunhofer.de", actualHeader.getReceiver()
-                .getAddress().toString());
+        assertEquals(actualHeader.getReceiver()
+                .getAddress().toString(), "http://fraunhofer.de");
     }
 
     @Test
@@ -120,7 +119,7 @@ public class RdfSerializerTest {
         HeaderSerializableImpl actualHeader = (HeaderSerializableImpl)serializer
                 .deserialize(rdf_turtle);
 
-        assertEquals(UUID.fromString("12345678-1234-1234-1234-123456789012"), actualHeader.getId());
+        assertEquals(actualHeader.getId(), UUID.fromString("12345678-1234-1234-1234-123456789012"));
     }
 
 }

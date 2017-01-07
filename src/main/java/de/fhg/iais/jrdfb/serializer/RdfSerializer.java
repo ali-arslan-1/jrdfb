@@ -36,19 +36,23 @@ public class RdfSerializer<T> {
         Resource resource;
         Resource metaData;
         Object id = null;
-        String baseURI = "";
+        String uriTemplate = "";
         for(Field field: tClass.getDeclaredFields()) {
 
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
                 id = field.get(obj);
-                baseURI = field.getAnnotation(RdfId.class).baseURI();
+                uriTemplate = field.getAnnotation(RdfId.class).uriTemplate();
                 break;
             }
         }
         id = (id == null || id.toString().isEmpty()) ? UUID.randomUUID() : id;
 
-        resource = model.createResource(baseURI + id.toString());
+        if(uriTemplate.contains("{RfdId}")){
+            id = uriTemplate.replace("{RfdId}", id.toString());
+        }
+
+        resource = model.createResource(id.toString());
         metaData = model.createResource();
 
 

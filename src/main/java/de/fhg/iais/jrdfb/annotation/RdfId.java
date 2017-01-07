@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RdfId {
-    String baseURI() default "";
+    String uriTemplate() default "";
 }
