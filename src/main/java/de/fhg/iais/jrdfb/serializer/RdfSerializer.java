@@ -4,8 +4,8 @@ import de.fhg.iais.jrdfb.annotation.*;
 import de.fhg.iais.jrdfb.resolver.Resolver;
 import de.fhg.iais.jrdfb.resolver.ResolverFactory;
 import de.fhg.iais.jrdfb.resolver.ResolverFactoryImpl;
-import de.fhg.iais.jrdfb.util.ReflectUtils;
 import de.fhg.iais.jrdfb.util.JenaUtils;
+import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -31,8 +30,7 @@ public class RdfSerializer<T> {
     public RdfSerializer(Class<T> tClass){
         this.tClass = tClass;
     }
-    public String serialize(T obj) throws InvocationTargetException, IllegalAccessException,
-            NoSuchMethodException, NoSuchFieldException {
+    public String serialize(T obj) throws ReflectiveOperationException {
         assert (obj != null);
 
         Model model = ModelFactory.createDefaultModel();
@@ -138,7 +136,7 @@ public class RdfSerializer<T> {
         return result;
     }
 
-    public T deserialize(String data) throws Exception {
+    public T deserialize(String data) throws ReflectiveOperationException {
         assert (data != null);
 
         T obj = tClass.newInstance();
@@ -147,7 +145,7 @@ public class RdfSerializer<T> {
         if(tClass.isAnnotationPresent(RdfType.class))
             RDFType = tClass.getAnnotation(RdfType.class).value();
         else
-            throw new Exception("RdfType for the Class "+tClass.getName()+" is not provided.");
+            throw new ReflectiveOperationException("RdfType for the Class "+tClass.getName()+" is not provided.");
 
 
         Model model = ModelFactory.createDefaultModel();

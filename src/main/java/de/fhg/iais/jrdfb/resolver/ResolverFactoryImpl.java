@@ -1,7 +1,6 @@
 package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfTypedLiteral;
-import org.apache.jena.rdf.model.Resource;
 
 import java.lang.reflect.Field;
 
@@ -11,7 +10,9 @@ import java.lang.reflect.Field;
 public class ResolverFactoryImpl implements ResolverFactory {
     @Override
     public Resolver createResolver(Field field) {
-        Resolver resolver = null;
+
+        Resolver resolver = new ObjectResolver(field);
+
         if(field.isAnnotationPresent(RdfTypedLiteral.class)){
             resolver = new LiteralResolver(field);
         }

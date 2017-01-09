@@ -10,9 +10,7 @@ import de.fhg.iml.ids.metadata.internal.URIBuilder;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.SortedMap;
@@ -36,9 +34,7 @@ public class RdfSerializerTest {
     }
 
     @Test
-    public void testSerialize() throws NoSuchAlgorithmException, IllegalAccessException,
-            NoSuchMethodException,
-            InvocationTargetException, NoSuchFieldException {
+    public void testSerialize() throws Exception {
 
         HeaderSerializableImpl metaDataMock = new HeaderSerializableImpl();
 
