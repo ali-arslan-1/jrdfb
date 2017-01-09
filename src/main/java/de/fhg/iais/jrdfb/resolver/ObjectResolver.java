@@ -5,7 +5,9 @@ import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.VOID;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
@@ -27,6 +29,20 @@ public abstract class ObjectResolver implements Resolver {
             return field.get(object);
         }else{
             return ReflectUtils.getNestedField(object, field , getRdfProperty().path());
+        }
+    }
+
+    @Override
+    public @NotNull Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+        Statement value = resource.getProperty(getJenaProperty());
+        String className = resolveFieldClassName(resource);
+        if(getRdfProperty().path().isEmpty()){
+            return ReflectUtils.stringToObject(className,
+                    value.getLiteral().getString());
+        }else{
+            return ReflectUtils.initNestedField(Class.forName(className).newInstance(), field ,
+                    getRdfProperty().path(),
+                    value.getObject().toString());
         }
     }
 

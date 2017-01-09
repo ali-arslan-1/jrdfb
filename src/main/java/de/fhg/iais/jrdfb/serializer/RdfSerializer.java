@@ -142,8 +142,9 @@ public class RdfSerializer<T> {
                     }
                     else
                     {
-                        propertyVal = ReflectUtils.stringToObject(propertyClassName,
-                                value.getObject().toString());
+                        propertyVal = resolverFactory.createResolver(field, model).resolveProperty(resource);
+//                        propertyVal = ReflectUtils.stringToObject(propertyClassName,
+//                                value.getObject().toString());
                     }
                 }
                 else

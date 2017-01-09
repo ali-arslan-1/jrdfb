@@ -1,8 +1,9 @@
 package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfBag;
-import de.fhg.iais.jrdfb.util.ReflectUtils;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Bag;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 
@@ -44,10 +45,4 @@ public class MapResolver extends ObjectResolver {
         return rdfNode;
     }
 
-    @Override
-    public Object resolveProperty(Resource resource) throws ClassNotFoundException {
-        Statement value = resource.getProperty(getJenaProperty());
-        return ReflectUtils.stringToObject(resolveFieldClassName(resource),
-                value.getLiteral().getString());
-    }
 }
