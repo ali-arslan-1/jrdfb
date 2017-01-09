@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -33,8 +34,9 @@ public abstract class ObjectResolver implements Resolver {
     }
 
     @Override
-    public @NotNull Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+    public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
+        if(value==null)return null;
         if(getRdfProperty().path().isEmpty()){
             return ReflectUtils.stringToObject(resolveFieldClassName(resource),
                     value.getLiteral().getString());
@@ -47,21 +49,22 @@ public abstract class ObjectResolver implements Resolver {
         }
     }
 
+    @NotNull
     @Override
-    public String resolveFieldClassName(Object object) throws ReflectiveOperationException {
+    public String resolveFieldClassName(@NotNull Object object) throws ReflectiveOperationException {
         return extractFieldValue(object).getClass().getName();
     }
 
     @Override
-    public String resolveFieldClassName(Resource resource){
+    @Nullable
+    public String resolveFieldClassName(@NotNull Resource resource){
         Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
 
         return metadata.getProperty(getJenaProperty()).getObject().toString();
     }
 
     protected Property getJenaProperty(){
-        Property jenaProperty = model.createProperty(getRdfProperty().value());
-        return jenaProperty;
+        return model.createProperty(getRdfProperty().value());
     }
 
     protected RdfProperty getRdfProperty(){

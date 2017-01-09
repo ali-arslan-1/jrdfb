@@ -3,6 +3,7 @@ package de.fhg.iais.jrdfb.resolver;
 import de.fhg.iais.jrdfb.annotation.RdfTypedLiteral;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
@@ -17,10 +18,10 @@ public class LiteralResolver extends ObjectResolver {
     }
 
     @Override
-    public RDFNode resolveField(Object object) throws ReflectiveOperationException {
+    public RDFNode resolveField(@NotNull Object object) throws ReflectiveOperationException {
         Object value = extractFieldValue(object);
         if(value == null) return null;
-        RDFNode rdfNode = null;
+        RDFNode rdfNode;
 
         if(field.isAnnotationPresent(RdfTypedLiteral.class)){
             rdfNode =  model.createTypedLiteral(value.toString(),

@@ -5,9 +5,9 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -22,7 +22,7 @@ public class MapResolver extends ObjectResolver {
     }
 
     @Override
-    public RDFNode resolveField(Object object) throws ReflectiveOperationException {
+    public @Nullable RDFNode resolveField(@NotNull Object object) throws ReflectiveOperationException {
         Object value = extractFieldValue(object);
         if(value == null) return null;
 
@@ -31,10 +31,8 @@ public class MapResolver extends ObjectResolver {
             Map map = (Map) value;
             Bag propertiesBag = model.createBag();
 
-            Iterator it = map.entrySet().iterator();
-
-            while(it.hasNext()){
-                Map.Entry pair = (Map.Entry)it.next();
+            for (Object o : map.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
                 propertiesBag.add(model.createResource()
                         .addProperty(DCTerms.identifier, pair.getKey().toString())
                         .addProperty(RDF.value, pair.getValue().toString()));
@@ -47,7 +45,7 @@ public class MapResolver extends ObjectResolver {
     }
 
     @Override
-    public @NotNull Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+    public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(field.isAnnotationPresent(RdfBag.class)){
             SortedMap<String, String> map = null;
