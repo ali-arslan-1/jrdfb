@@ -1,6 +1,9 @@
 package de.fhg.iais.jrdfb.serializer;
 
 import de.fhg.iais.jrdfb.annotation.*;
+import de.fhg.iais.jrdfb.resolver.Resolver;
+import de.fhg.iais.jrdfb.resolver.ResolverFactory;
+import de.fhg.iais.jrdfb.resolver.ResolverFactoryImpl;
 import de.fhg.iais.jrdfb.util.ReflectUtils;
 import de.fhg.iais.jrdfb.util.JenaUtils;
 import org.apache.jena.rdf.model.*;
@@ -23,6 +26,7 @@ import java.util.UUID;
 public class RdfSerializer<T> {
 
     private Class<T> tClass;
+    private ResolverFactory resolverFactory = new ResolverFactoryImpl();
 
     public RdfSerializer(Class<T> tClass){
         this.tClass = tClass;
@@ -81,9 +85,9 @@ public class RdfSerializer<T> {
                     metaData.addProperty(jenaProperty, value.getClass().getName());
 
                     if(field.isAnnotationPresent(RdfTypedLiteral.class)){
+                        Resolver resolver = resolverFactory.createResolver(field);
                         resource.addProperty(jenaProperty,
-                                model.createTypedLiteral(value.toString(),
-                                field.getAnnotation(RdfTypedLiteral.class).value()));
+                                resolver.resolveField(obj));
                     }
                     else if(field.isAnnotationPresent(RdfBag.class))
                     {
@@ -172,13 +176,12 @@ public class RdfSerializer<T> {
 
                     String propertyClassName = metadata.getProperty(jenaProperty).getObject()
                             .toString();
-                    //System.out.println("serialized type: "+ propertyClassName);
+                    //System.out.println("serialized type: "+ metaData);
 
                     if (Map.class.isAssignableFrom(Class.forName(propertyClassName))){
                         propertyVal = JenaUtils.bagToMap(value.getBag());
                     }else if(field.isAnnotationPresent(RdfTypedLiteral.class)){
-                        propertyVal = ReflectUtils.stringToObject(propertyClassName,
-                                value.getLiteral().getString());
+                        propertyVal = resolverFactory.createResolver(field).resolveProperty(resource);
                     }
                     else
                     {
