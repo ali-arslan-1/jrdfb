@@ -35,12 +35,13 @@ public abstract class ObjectResolver implements Resolver {
     @Override
     public @NotNull Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
-        String className = resolveFieldClassName(resource);
         if(getRdfProperty().path().isEmpty()){
-            return ReflectUtils.stringToObject(className,
+            return ReflectUtils.stringToObject(resolveFieldClassName(resource),
                     value.getLiteral().getString());
         }else{
-            return ReflectUtils.initNestedField(Class.forName(className).newInstance(), field ,
+            return ReflectUtils.initNestedField(Class.forName(
+                    field.getDeclaringClass().getName()).newInstance(),
+                    field,
                     getRdfProperty().path(),
                     value.getObject().toString());
         }

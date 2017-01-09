@@ -3,12 +3,9 @@ package de.fhg.iais.jrdfb.serializer;
 import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.annotation.RdfType;
-import de.fhg.iais.jrdfb.annotation.RdfTypedLiteral;
 import de.fhg.iais.jrdfb.resolver.Resolver;
 import de.fhg.iais.jrdfb.resolver.ResolverFactory;
 import de.fhg.iais.jrdfb.resolver.ResolverFactoryImpl;
-import de.fhg.iais.jrdfb.util.JenaUtils;
-import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -17,7 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -120,38 +116,7 @@ public class RdfSerializer<T> {
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
 
-                Statement value = null;
-                Object propertyVal = null;
-                Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
-
-                RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
-                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                value = resource.getProperty(jenaProperty);
-                if (rdfPropertyInfo.path().isEmpty()) {
-
-                    if (value == null) continue;
-
-                    String propertyClassName = metadata.getProperty(jenaProperty).getObject()
-                            .toString();
-                    //System.out.println("serialized type: "+ metaData);
-
-                    if (Map.class.isAssignableFrom(Class.forName(propertyClassName))){
-                        propertyVal = JenaUtils.bagToMap(value.getBag());
-                    }else if(field.isAnnotationPresent(RdfTypedLiteral.class)){
-                        propertyVal = resolverFactory.createResolver(field, model).resolveProperty(resource);
-                    }
-                    else
-                    {
-                        propertyVal = resolverFactory.createResolver(field, model).resolveProperty(resource);
-//                        propertyVal = ReflectUtils.stringToObject(propertyClassName,
-//                                value.getObject().toString());
-                    }
-                }
-                else
-                {
-                    propertyVal = ReflectUtils.initNestedField(obj, field ,rdfPropertyInfo.path(),
-                            value.getObject().toString());
-                }
+                Object propertyVal = resolverFactory.createResolver(field, model).resolveProperty(resource);
 
                 field.set(obj, propertyVal);
             }

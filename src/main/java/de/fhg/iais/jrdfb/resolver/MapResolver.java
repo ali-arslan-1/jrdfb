@@ -1,11 +1,11 @@
 package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfBag;
-import org.apache.jena.rdf.model.Bag;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.RDFNode;
+import de.fhg.iais.jrdfb.util.JenaUtils;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -45,4 +45,12 @@ public class MapResolver extends ObjectResolver {
         return rdfNode;
     }
 
+    @Override
+    public @NotNull Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+        Statement value = resource.getProperty(getJenaProperty());
+        if(field.isAnnotationPresent(RdfBag.class)){
+            return JenaUtils.bagToMap(value.getBag());
+        }
+        return super.resolveProperty(resource);
+    }
 }
