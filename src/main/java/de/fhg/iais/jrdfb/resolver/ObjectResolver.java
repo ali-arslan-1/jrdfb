@@ -2,7 +2,9 @@ package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.util.ReflectUtils;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.VOID;
 
 import java.lang.reflect.Field;
@@ -10,25 +12,15 @@ import java.lang.reflect.Field;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class ObjectResolver implements Resolver {
+public abstract class ObjectResolver implements Resolver {
     protected Field field;
     protected Model model;
 
-    public ObjectResolver(Field field) {
+    public ObjectResolver(Field field, Model model) {
         this.field = field;
-        this.model = ModelFactory.createDefaultModel();
+        this.model = model;
     }
 
-
-    @Override
-    public RDFNode resolveField(Object object) throws ReflectiveOperationException {
-        return null;
-    }
-
-    @Override
-    public Object resolveProperty(Resource resource) throws ReflectiveOperationException {
-        return null;
-    }
 
     protected Object extractFieldValue(Object object) throws ReflectiveOperationException {
         if(getRdfProperty().path().isEmpty()){
@@ -38,7 +30,13 @@ public class ObjectResolver implements Resolver {
         }
     }
 
-    protected String getFieldClassName(Resource resource){
+    @Override
+    public String resolveFieldClassName(Object object) throws ReflectiveOperationException {
+        return extractFieldValue(object).getClass().getName();
+    }
+
+    @Override
+    public String resolveFieldClassName(Resource resource){
         Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
 
         return metadata.getProperty(getJenaProperty()).getObject().toString();
