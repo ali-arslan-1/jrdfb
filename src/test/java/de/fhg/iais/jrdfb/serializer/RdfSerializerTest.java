@@ -2,8 +2,7 @@ package de.fhg.iais.jrdfb.serializer;
 
 import de.fhg.iais.jrdfb.util.FileUtils;
 import de.fhg.iais.jrdfb.vocabulary.IDS;
-import de.fhg.iml.ids.metadata.Receiver;
-import de.fhg.iml.ids.metadata.Sender;
+import de.fhg.iml.ids.metadata.Addressable;
 import de.fhg.iml.ids.metadata.impl.HeaderSerializableImpl;
 import de.fhg.iml.ids.metadata.impl.StringToken;
 import de.fhg.iml.ids.metadata.internal.URIBuilder;
@@ -27,7 +26,7 @@ public class RdfSerializerTest {
     String rdf_turtle;
 
     public RdfSerializerTest() throws IOException {
-        serializer = new RdfSerializer<>(HeaderSerializableImpl.class);
+        serializer = new RdfSerializer(HeaderSerializableImpl.class);
         rdf_turtle = FileUtils
                 .readResource("transferedDataset_test_all.ttl",
                         this.getClass());
@@ -39,8 +38,8 @@ public class RdfSerializerTest {
         HeaderSerializableImpl metaDataMock = new HeaderSerializableImpl();
 
         metaDataMock.setId(UUID.fromString("12345678-1234-1234-1234-123456789012"));
-        metaDataMock.setSender(new Sender("https://www.iml.frauhofer.de"));
-        metaDataMock.setReceiver(new Receiver("http://fraunhofer.de"));
+        metaDataMock.setSender(new Addressable("https://www.iml.frauhofer.de"));
+        metaDataMock.setReceiver(new Addressable("http://fraunhofer.de"));
         metaDataMock.setAuthorizationToken(new StringToken("authorized!"));
         byte version = 2;
         metaDataMock.setVersion(version);

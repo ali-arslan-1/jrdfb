@@ -19,24 +19,29 @@ import java.util.UUID;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class RdfSerializer<T> {
+public class RdfSerializer {
 
-    private Class<T> tClass;
+    private Class[] tClasses;
     private ResolverFactory resolverFactory = new ResolverFactoryImpl();
 
-    public RdfSerializer(Class<T> tClass){
-        this.tClass = tClass;
+    public RdfSerializer(Class... tClasses){
+        //this.rootClass = rootClass;
+        this.tClasses = tClasses;
     }
-    public String serialize(T obj) throws ReflectiveOperationException {
+    public String serialize(Object obj) throws ReflectiveOperationException {
         assert (obj != null);
-
+        Class rootClass = tClasses[0];
+        for(Class clazz: tClasses){
+            if(clazz.isInstance(obj))
+                rootClass = clazz;
+        }
         Model model = ModelFactory.createDefaultModel();
 
         Resource resource;
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
-        for(Field field: tClass.getDeclaredFields()) {
+        for(Field field: rootClass.getDeclaredFields()) {
 
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
@@ -55,11 +60,11 @@ public class RdfSerializer<T> {
         metaData = model.createResource();
 
 
-        if(tClass.isAnnotationPresent(RdfType.class))
-            resource.addProperty(RDF.type, tClass.getAnnotation(RdfType.class).value());
+        if(rootClass.isAnnotationPresent(RdfType.class))
+            resource.addProperty(RDF.type, ((RdfType) rootClass.getAnnotation(RdfType.class)).value());
 
 
-        for(Field field: tClass.getDeclaredFields()) {
+        for(Field field: rootClass.getDeclaredFields()) {
             field.setAccessible(true);
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
@@ -91,16 +96,18 @@ public class RdfSerializer<T> {
         return result;
     }
 
-    public T deserialize(String data) throws ReflectiveOperationException {
+    public Object deserialize(String data) throws ReflectiveOperationException {
         assert (data != null);
 
-        T obj = tClass.newInstance();
+        Class rootClass = tClasses[0]; //todo
+
+        Object obj = rootClass.newInstance();
 
         String RDFType;
-        if(tClass.isAnnotationPresent(RdfType.class))
-            RDFType = tClass.getAnnotation(RdfType.class).value();
+        if(rootClass.isAnnotationPresent(RdfType.class))
+            RDFType = ((RdfType) rootClass.getAnnotation(RdfType.class)).value();
         else
-            throw new ReflectiveOperationException("RdfType for the Class "+tClass.getName()+" is not provided.");
+            throw new ReflectiveOperationException("RdfType for the Class "+ rootClass.getName()+" is not provided.");
 
 
         Model model = ModelFactory.createDefaultModel();
@@ -111,7 +118,7 @@ public class RdfSerializer<T> {
 
         if(resource==null) return null;
 
-        for(Field field: tClass.getDeclaredFields()) {
+        for(Field field: rootClass.getDeclaredFields()) {
             field.setAccessible(true);
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
