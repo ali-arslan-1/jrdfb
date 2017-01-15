@@ -14,6 +14,7 @@ import org.apache.jena.vocabulary.VOID;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
@@ -102,7 +103,9 @@ public class RdfSerializer {
 
         Class rootClass = tClasses[0]; //todo
 
-        Object obj = rootClass.newInstance();
+        Constructor cons = rootClass.getDeclaredConstructor();
+        cons.setAccessible(true);
+        Object obj = cons.newInstance();
 
         String RDFType;
         if(rootClass.isAnnotationPresent(RdfType.class))
