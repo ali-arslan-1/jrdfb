@@ -17,6 +17,8 @@ public class IDS {
         return uri;
     }
 
+    public static final String TRANSFERED_DATASET = uri + "TransferedDataset" ;
+
     public static final String SENDER = uri + "sender" ;
     public static final String RECEIVER = uri + "receiver" ;
     public static final String DIGEST = uri + "digest" ;
@@ -24,7 +26,13 @@ public class IDS {
     public static final String CREATED_AT = uri + "createdAt" ;
     public static final String CUSTOM_PROPERTY = uri + "customProperty" ;
     public static final String FORMAT = uri + "format" ;
-    public static final String TRANSFERED_DATASET = uri + "TransferedDataset" ;
+
+    // BrokerMessage Vocabulary
+    public static final String BROKER_DATA_REQUEST = uri + "BrokerDataRequest" ;
+
+    public static final String DATA_REQUEST_ACTION = uri + "dataRequestAction" ;
+    public static final String REQUEST_ID = uri + "requestId" ;
+    public static final String PAYLOAD = uri + "payload" ;
 
 
 }

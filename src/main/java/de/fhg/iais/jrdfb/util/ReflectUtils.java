@@ -1,11 +1,16 @@
 package de.fhg.iais.jrdfb.util;
 
+import org.apache.jena.ext.com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.beans.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -168,6 +173,22 @@ public class ReflectUtils {
         nestedField.set(nestedBean, toObject(nestedField.getType(), value.toString()));
 
         return nestedBean;
+    }
+
+    public static Iterable<Field> getFieldsUpTo(@NotNull Class<?> startClass,
+                                                @Nullable Class<?> exclusiveParent) {
+
+        List<Field> currentClassFields = Lists.newArrayList(startClass.getDeclaredFields());
+        Class<?> parentClass = startClass.getSuperclass();
+
+        if (parentClass != null &&
+                (exclusiveParent == null || !(parentClass.equals(exclusiveParent)))) {
+            List<Field> parentClassFields =
+                    (List<Field>) getFieldsUpTo(parentClass, exclusiveParent);
+            currentClassFields.addAll(parentClassFields);
+        }
+
+        return currentClassFields;
     }
 
 }

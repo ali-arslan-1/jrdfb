@@ -6,6 +6,7 @@ import de.fhg.iais.jrdfb.annotation.RdfType;
 import de.fhg.iais.jrdfb.resolver.Resolver;
 import de.fhg.iais.jrdfb.resolver.ResolverFactory;
 import de.fhg.iais.jrdfb.resolver.ResolverFactoryImpl;
+import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -41,8 +42,8 @@ public class RdfSerializer {
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
-        for(Field field: rootClass.getDeclaredFields()) {
-
+        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
+        for(Field field: allFields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
                 id = field.get(obj);
@@ -64,7 +65,7 @@ public class RdfSerializer {
             resource.addProperty(RDF.type, ((RdfType) rootClass.getAnnotation(RdfType.class)).value());
 
 
-        for(Field field: rootClass.getDeclaredFields()) {
+        for(Field field: allFields) {
             field.setAccessible(true);
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
@@ -118,7 +119,8 @@ public class RdfSerializer {
 
         if(resource==null) return null;
 
-        for(Field field: rootClass.getDeclaredFields()) {
+        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
+        for(Field field: allFields) {
             field.setAccessible(true);
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
