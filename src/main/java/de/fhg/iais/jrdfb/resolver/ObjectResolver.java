@@ -11,6 +11,7 @@ import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 /**
@@ -37,14 +38,16 @@ public abstract class ObjectResolver implements Resolver {
     public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
-        if(getRdfProperty().path().isEmpty()){
+        if(getFieldPath().isEmpty()){
             return ReflectUtils.stringToObject(resolveFieldClassName(resource),
                     value.getLiteral().getString());
         }else{
-            return ReflectUtils.initNestedField(Class.forName(
-                    field.getDeclaringClass().getName()).newInstance(),
+            Constructor cons = Class.forName(
+                    field.getDeclaringClass().getName()).getDeclaredConstructor();
+            cons.setAccessible(true);
+            return ReflectUtils.initNestedField(cons.newInstance(),
                     field,
-                    getRdfProperty().path(),
+                    getFieldPath(),
                     value.getObject().toString());
         }
     }
