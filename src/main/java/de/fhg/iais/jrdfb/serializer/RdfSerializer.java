@@ -101,26 +101,29 @@ public class RdfSerializer {
     public Object deserialize(String data) throws ReflectiveOperationException {
         assert (data != null);
 
-        Class rootClass = tClasses[0]; //todo
+        Class rootClass = null;
+
+        Model model = ModelFactory.createDefaultModel();
+        model.read(new ByteArrayInputStream(data.getBytes()), null, "TURTLE");
+
+        Resource resource = null;
+        for(Class clazz: tClasses){
+            if(clazz.isAnnotationPresent(RdfType.class)){
+                String RDFType  = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
+                ResIterator iter = model.listResourcesWithProperty(RDF.type, RDFType);
+                if(iter!=null && iter.hasNext()){
+                    rootClass = clazz;
+                    resource = iter.nextResource();
+                    break;
+                }
+            }
+        }
 
         Constructor cons = rootClass.getDeclaredConstructor();
         cons.setAccessible(true);
         Object obj = cons.newInstance();
 
-        String RDFType;
-        if(rootClass.isAnnotationPresent(RdfType.class))
-            RDFType = ((RdfType) rootClass.getAnnotation(RdfType.class)).value();
-        else
-            throw new ReflectiveOperationException("RdfType for the Class "+ rootClass.getName()+" is not provided.");
-
-
-        Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(data.getBytes()), null, "TURTLE");
-
-        ResIterator iter = model.listResourcesWithProperty(RDF.type, RDFType);
-        Resource resource = iter.hasNext()? iter.nextResource(): null;
-
-        if(resource==null) return null;
+        if(resource==null) throw new ReflectiveOperationException("No matching resource found in rdf");
 
         final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
         for(Field field: allFields) {
