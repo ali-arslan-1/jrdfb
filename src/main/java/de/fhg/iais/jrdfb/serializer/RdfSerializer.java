@@ -47,7 +47,9 @@ public class RdfSerializer {
         for(Field field: allFields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
-                id = field.get(obj);
+                Resolver resolver = resolverFactory.createResolver(field, model);
+                RDFNode resolvedNode = resolver.resolveField(obj);
+                id = resolvedNode.toString();
                 uriTemplate = field.getAnnotation(RdfId.class).uriTemplate();
                 break;
             }

@@ -11,4 +11,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RdfId {
     String uriTemplate() default "";
+    String path() default "";
 }

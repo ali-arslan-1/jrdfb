@@ -1,5 +1,6 @@
 package de.fhg.iais.jrdfb.resolver;
 
+import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.Model;
@@ -24,12 +25,11 @@ public abstract class ObjectResolver implements Resolver {
         this.model = model;
     }
 
-
     protected Object extractFieldValue(Object object) throws ReflectiveOperationException {
-        if(getRdfProperty().path().isEmpty()){
+        if(getFieldPath().isEmpty()){
             return field.get(object);
         }else{
-            return ReflectUtils.getNestedField(object, field , getRdfProperty().path());
+            return ReflectUtils.getNestedField(object, field , getFieldPath());
         }
     }
 
@@ -70,5 +70,17 @@ public abstract class ObjectResolver implements Resolver {
     protected RdfProperty getRdfProperty(){
         RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
         return rdfPropertyInfo;
+    }
+
+    protected String getFieldPath(){
+        RdfProperty rdfPropertyInfo = getRdfProperty();
+        RdfId rdfIdInfo = field.getAnnotation(RdfId.class);
+
+        if(rdfPropertyInfo!=null && !rdfPropertyInfo.path().isEmpty())
+            return rdfPropertyInfo.path();
+        else if(rdfIdInfo!=null && !rdfIdInfo.path().isEmpty())
+            return rdfIdInfo.path();
+
+        return "";
     }
 }
