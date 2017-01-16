@@ -31,6 +31,7 @@ public class IDS {
     public static final String BROKER_DATA_REQUEST = uri + "BrokerDataRequest" ;
     public static final String BROKER_DATA_RESPONSE = uri + "BrokerDataResponse" ;
     public static final String BROKER_QUERY_REQUEST = uri + "BrokerQueryRequest" ;
+    public static final String BROKER_QUERY_RESPONSE = uri + "BrokerQueryResponse" ;
 
     public static final String DATA_REQUEST_ACTION = uri + "dataRequestAction" ;
     public static final String REQUEST_ID = uri + "requestId" ;
