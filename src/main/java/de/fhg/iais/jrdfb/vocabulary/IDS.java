@@ -30,12 +30,16 @@ public class IDS {
     // BrokerMessage Vocabulary
     public static final String BROKER_DATA_REQUEST = uri + "BrokerDataRequest" ;
     public static final String BROKER_DATA_RESPONSE = uri + "BrokerDataResponse" ;
+    public static final String BROKER_QUERY_REQUEST = uri + "BrokerQueryRequest" ;
 
     public static final String DATA_REQUEST_ACTION = uri + "dataRequestAction" ;
     public static final String REQUEST_ID = uri + "requestId" ;
     public static final String PAYLOAD = uri + "payload" ;
     public static final String COVERED_ENTITY = uri + "coveredEntity" ;
     public static final String ORIGIN_REQUEST_ID = uri + "originRequestId" ;
+
+    public static final String QUERY_REQUEST_ACTION = uri + "queryRequestAction" ;
+    public static final String QUERY_SCOPE = uri + "queryScope" ;
 
 
 }
