@@ -21,14 +21,14 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class RdfSerializerTest {
+public class HeaderSerializationTest {
     RdfSerializer serializer;
     String rdf_turtle;
 
-    public RdfSerializerTest() throws IOException {
+    public HeaderSerializationTest() throws IOException {
         serializer = new RdfSerializer(HeaderSerializableImpl.class);
         rdf_turtle = FileUtils
-                .readResource("transferedDataset_test_all.ttl",
+                .readResource("Header.ttl",
                         this.getClass());
     }
 
@@ -116,5 +116,6 @@ public class RdfSerializerTest {
 
         assertEquals(actualHeader.getId(), UUID.fromString("12345678-1234-1234-1234-123456789012"));
     }
+
 
 }
