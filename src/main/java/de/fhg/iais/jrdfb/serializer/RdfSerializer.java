@@ -25,10 +25,12 @@ public class RdfSerializer {
 
     private Class[] tClasses;
     private ResolverFactory resolverFactory = new ResolverFactoryImpl();
+    private Model model;
 
     public RdfSerializer(Class... tClasses){
         //this.rootClass = rootClass;
         this.tClasses = tClasses;
+        model = ModelFactory.createDefaultModel();
     }
     public String serialize(Object obj) throws ReflectiveOperationException {
         assert (obj != null);
@@ -37,13 +39,30 @@ public class RdfSerializer {
             if(clazz.isInstance(obj))
                 rootClass = clazz;
         }
-        Model model = ModelFactory.createDefaultModel();
 
-        Resource resource;
+        this.createResource(rootClass, obj);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        model.write(out, "TURTLE");
+
+        String result = null;
+        try {
+            result = out.toString("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private Resource createResource(Class clazz, Object obj) throws
+            ReflectiveOperationException{
+        Resource resource = null;
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
-        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
+        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(clazz, Object.class);
         for(Field field: allFields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
@@ -64,8 +83,9 @@ public class RdfSerializer {
         metaData = model.createResource();
 
 
-        if(rootClass.isAnnotationPresent(RdfType.class))
-            resource.addProperty(RDF.type, ((RdfType) rootClass.getAnnotation(RdfType.class)).value());
+        if(clazz.isAnnotationPresent(RdfType.class))
+            resource.addProperty(RDF.type, ((RdfType) clazz.getAnnotation(RdfType.class))
+                    .value());
 
 
         for(Field field: allFields) {
@@ -75,30 +95,31 @@ public class RdfSerializer {
                 RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
                 Resolver resolver = resolverFactory.createResolver(field, model);
-                RDFNode resolvedNode = resolver.resolveField(obj);
-                if(resolvedNode != null) {
-                    resource.addProperty(jenaProperty, resolvedNode);
-                    metaData.addProperty(jenaProperty, resolver.resolveFieldClassName(obj));
+                boolean resolved = false;
+                for(Class tClass: tClasses){
+                    if(tClass.getName().equals(resolver.resolveFieldClassName(obj))){
+                        resource.addProperty(jenaProperty,
+                                this.createResource(tClass, field.get(obj)));
+                        resolved = true;
+                        break;
+                    }
                 }
 
+                if(!resolved){
+                    RDFNode resolvedNode = resolver.resolveField(obj);
+                    if(resolvedNode != null) {
+                        resource.addProperty(jenaProperty, resolvedNode);
+                        metaData.addProperty(jenaProperty, resolver.resolveFieldClassName(obj));
+                    }
+                }
             }
         }
 
         resource.addProperty(VOID.dataDump, metaData);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        model.write(out, "TURTLE");
-
-        String result = null;
-        try {
-            result = out.toString("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return resource;
     }
+
 
     public Object deserialize(String data) throws ReflectiveOperationException {
         assert (data != null);
@@ -125,7 +146,8 @@ public class RdfSerializer {
         cons.setAccessible(true);
         Object obj = cons.newInstance();
 
-        if(resource==null) throw new ReflectiveOperationException("No matching resource found in rdf");
+        if(resource==null)
+            throw new ReflectiveOperationException("No matching resource found in rdf");
 
         final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
         for(Field field: allFields) {
@@ -133,7 +155,8 @@ public class RdfSerializer {
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
 
-                Object propertyVal = resolverFactory.createResolver(field, model).resolveProperty(resource);
+                Object propertyVal = resolverFactory.createResolver(field, model)
+                        .resolveProperty(resource);
 
                 field.set(obj, propertyVal);
             }

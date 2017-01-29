@@ -1,0 +1,6 @@
+<student/111111>
+        <http://rdfs.org/ns/void#dataDump>
+                [ <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String" ] ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Ali Arslan" .
