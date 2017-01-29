@@ -1,6 +1,27 @@
-<student/111111>
+<111111>  <http://purl.org/dc/terms/identifier>
+                "111111" ;
         <http://rdfs.org/ns/void#dataDump>
-                [ <https://www.w3.org/2006/vcard/ns#fn>
-                          "java.lang.String" ] ;
+                [ <http://purl.org/dc/terms/identifier>
+                          "java.lang.Integer" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String"
+                ] ;
         <https://www.w3.org/2006/vcard/ns#fn>
-                "Ali Arslan" .
+                "Ali Arslan" ;
+        <https://www.w3.org/2006/vcard/ns#hasAddress >
+                <1399701152> .
+
+<1399701152>  <http://rdfs.org/ns/void#dataDump>
+                [ <https://www.w3.org/2006/vcard/ns#country-name>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#locality >
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#street-address>
+                          "java.lang.String"
+                ] ;
+        <https://www.w3.org/2006/vcard/ns#country-name>
+                "Germany" ;
+        <https://www.w3.org/2006/vcard/ns#locality >
+                "Bonn" ;
+        <https://www.w3.org/2006/vcard/ns#street-address>
+                "Romerstraße" .
