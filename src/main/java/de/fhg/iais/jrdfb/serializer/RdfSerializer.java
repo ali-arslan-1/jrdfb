@@ -16,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.UUID;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -73,7 +72,7 @@ public class RdfSerializer {
                 break;
             }
         }
-        id = (id == null || id.toString().isEmpty()) ? UUID.randomUUID() : id;
+        id = (id == null || id.toString().isEmpty()) ? obj.hashCode() : id;
 
         if(uriTemplate.contains("{RfdId}")){
             id = uriTemplate.replace("{RfdId}", id.toString());
