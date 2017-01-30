@@ -40,10 +40,10 @@ public class PersonSerializationTest {
 
     @Test
     public void testDeserializeNestedProperties() throws Exception{
-        Person student = (Person)serializer.deserialize(rdf_turtle);
+        Student student = (Student)serializer.deserialize(rdf_turtle);
 
         assertEquals(student.getName(), "Ali Arslan");
-        //assertEquals(student.getMatrNo(), 111111);
+        assertEquals(student.getMatrNo(), 111111);
 
         assertEquals(student.getAddress().getCity(), "Bonn");
         assertEquals(student.getAddress().getCountry(), "Germany");

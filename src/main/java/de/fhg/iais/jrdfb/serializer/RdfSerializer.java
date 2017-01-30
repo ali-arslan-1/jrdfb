@@ -57,7 +57,7 @@ public class RdfSerializer {
 
     private Resource createResource(Class clazz, Object obj) throws
             ReflectiveOperationException{
-        Resource resource = null;
+        Resource resource;
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
@@ -81,12 +81,15 @@ public class RdfSerializer {
         resource = model.createResource(id.toString());
         metaData = model.createResource();
 
+        String rdfType = null;
+        if(clazz.isAnnotationPresent(RdfType.class)) {
+            rdfType = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
 
-        if(clazz.isAnnotationPresent(RdfType.class))
-            resource.addProperty(RDF.type, ((RdfType) clazz.getAnnotation(RdfType.class))
-                    .value());
-
-
+            resource.addProperty(RDF.type, rdfType);
+            metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
+        }else
+            throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
+                    "Not provided");
         for(Field field: allFields) {
             field.setAccessible(true);
 
@@ -131,12 +134,22 @@ public class RdfSerializer {
         Resource resource = null;
         for(Class clazz: tClasses){
             if(clazz.isAnnotationPresent(RdfType.class)){
-                String RDFType  = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
-                ResIterator iter = model.listResourcesWithProperty(RDF.type, RDFType);
+                String rdfType  = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
+                ResIterator iter = model.listResourcesWithProperty(RDF.type, rdfType);
                 if(iter!=null && iter.hasNext()){
-                    rootClass = clazz;
                     resource = iter.nextResource();
-                    break;
+
+                    Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
+                    Statement metaProperty = metadata.getProperty(model.createProperty(rdfType));
+                    if(metaProperty==null)
+                        throw new NoSuchFieldException("Metadata for Java Class Name Not provided" +
+                                " " +
+                                "in RDF Resource: "+resource.getURI());
+                    if(clazz.getName().equals(metaProperty.getObject().toString()
+                    )){
+                        rootClass = clazz;
+                        break;
+                    }
                 }
             }
         }

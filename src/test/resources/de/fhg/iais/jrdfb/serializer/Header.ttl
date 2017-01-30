@@ -24,7 +24,9 @@
         <http://purl.org/dc/terms/identifier>
                 "12345678-1234-1234-1234-123456789012" ;
         <http://rdfs.org/ns/void#dataDump>
-                [ <http://industrialdataspace.org/2016/10/idsv/core#authToken>
+                [ <http://industrialdataspace.org/2016/10/idsv/core#TransferedDataset>
+                          "de.fhg.iml.ids.metadata.impl.HeaderSerializableImpl" ;
+                  <http://industrialdataspace.org/2016/10/idsv/core#authToken>
                           "de.fhg.iml.ids.metadata.impl.StringToken" ;
                   <http://industrialdataspace.org/2016/10/idsv/core#createdAt>
                           "java.time.LocalDateTime" ;

@@ -4,6 +4,8 @@
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://purl.org/dc/terms/identifier>
                           "java.lang.Integer" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fhg.iais.jrdfb.serializer.example.Student" ;
                   <https://www.w3.org/2006/vcard/ns#fn>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#hasAddress>
@@ -17,7 +19,9 @@
 <90173435778412055613082541087178914018495460923>
         a       "https://www.w3.org/2006/vcard/ns#Address" ;
         <http://rdfs.org/ns/void#dataDump>
-                [ <https://www.w3.org/2006/vcard/ns#country-name>
+                [ <https://www.w3.org/2006/vcard/ns#Address>
+                          "de.fhg.iais.jrdfb.serializer.example.Address" ;
+                  <https://www.w3.org/2006/vcard/ns#country-name>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#locality>
                           "java.lang.String" ;
