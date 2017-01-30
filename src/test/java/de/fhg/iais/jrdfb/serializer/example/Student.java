@@ -11,10 +11,6 @@ public class Student extends Person
     @RdfId(uriTemplate = "student/{RdfId}")
     private int matrNo;
 
-	public Student(){
-		super();
-	}
-
     public Student(String name, int matrNo) {
         super(name);
         this.matrNo = matrNo;

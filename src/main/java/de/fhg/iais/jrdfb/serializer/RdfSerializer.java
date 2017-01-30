@@ -10,11 +10,12 @@ import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 /**
@@ -162,9 +163,13 @@ public class RdfSerializer {
 
     private Object createObject(Class clazz, Resource resource)
             throws ReflectiveOperationException {
-        Constructor cons = clazz.getDeclaredConstructor();
-        cons.setAccessible(true);
-        Object obj = cons.newInstance();
+//        Constructor cons = clazz.getDeclaredConstructor();
+//        cons.setAccessible(true);
+//        Object obj = cons.newInstance();
+
+        Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
+        Object obj = objenesis.newInstance(clazz);
+
 
         if(resource==null)
             throw new ReflectiveOperationException("No matching resource found in rdf");

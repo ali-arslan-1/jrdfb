@@ -19,9 +19,6 @@ public class Address implements Addressable, Serializable
     @RdfProperty(VCARD.STREET_ADDRESS)
 	private String street;
 
-    public Address() {
-    }
-
     public Address(String city, String country){
 		super();
 		this.city = city;

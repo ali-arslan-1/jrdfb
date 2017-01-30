@@ -27,9 +27,7 @@ public class PersonSerializationTest {
 
     @Test
     public void testSerializeNestedProperties() throws Exception{
-        Student student = new Student();
-        student.setName("Ali Arslan");
-        student.setMatrNo(111111);
+        Student student = new Student("Ali Arslan", 111111);
 
         Address address = new Address("Bonn", "Germany");
         address.setStreet("Romerstraße");

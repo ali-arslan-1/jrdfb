@@ -14,9 +14,9 @@
         <https://www.w3.org/2006/vcard/ns#fn>
                 "Ali Arslan" ;
         <https://www.w3.org/2006/vcard/ns#hasAddress>
-                <90173435778412055613082541087178914018495460923> .
+                <371023585939990525043672460268989302121425673271> .
 
-<90173435778412055613082541087178914018495460923>
+<371023585939990525043672460268989302121425673271>
         a       "https://www.w3.org/2006/vcard/ns#Address" ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <https://www.w3.org/2006/vcard/ns#Address>

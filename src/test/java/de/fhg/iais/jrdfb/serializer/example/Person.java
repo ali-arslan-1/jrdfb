@@ -16,9 +16,6 @@ public class Person
 
 	private List<Person> friends;
 
-    public Person() {
-    }
-
     public Person(String name){
         this.name = name;
     }
