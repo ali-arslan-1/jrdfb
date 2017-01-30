@@ -1,28 +1,32 @@
-<111111>  <http://purl.org/dc/terms/identifier>
+<111111>  a     "https://www.w3.org/2006/vcard/ns#Individual" ;
+        <http://purl.org/dc/terms/identifier>
                 "111111" ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://purl.org/dc/terms/identifier>
                           "java.lang.Integer" ;
                   <https://www.w3.org/2006/vcard/ns#fn>
-                          "java.lang.String"
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#hasAddress>
+                          "de.fhg.iais.jrdfb.serializer.example.Address"
                 ] ;
         <https://www.w3.org/2006/vcard/ns#fn>
                 "Ali Arslan" ;
-        <https://www.w3.org/2006/vcard/ns#hasAddress >
+        <https://www.w3.org/2006/vcard/ns#hasAddress>
                 <90173435778412055613082541087178914018495460923> .
 
 <90173435778412055613082541087178914018495460923>
+        a       "https://www.w3.org/2006/vcard/ns#Address" ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <https://www.w3.org/2006/vcard/ns#country-name>
                           "java.lang.String" ;
-                  <https://www.w3.org/2006/vcard/ns#locality >
+                  <https://www.w3.org/2006/vcard/ns#locality>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#street-address>
                           "java.lang.String"
                 ] ;
         <https://www.w3.org/2006/vcard/ns#country-name>
                 "Germany" ;
-        <https://www.w3.org/2006/vcard/ns#locality >
+        <https://www.w3.org/2006/vcard/ns#locality>
                 "Bonn" ;
         <https://www.w3.org/2006/vcard/ns#street-address>
                 "Romerstraße" .

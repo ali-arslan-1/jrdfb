@@ -108,9 +108,9 @@ public class RdfSerializer {
                     RDFNode resolvedNode = resolver.resolveField(obj);
                     if(resolvedNode != null) {
                         resource.addProperty(jenaProperty, resolvedNode);
-                        metaData.addProperty(jenaProperty, resolver.resolveFieldClassName(obj));
                     }
                 }
+                metaData.addProperty(jenaProperty, resolver.resolveFieldClassName(obj));
             }
         }
 
@@ -141,6 +141,9 @@ public class RdfSerializer {
             }
         }
 
+        if(rootClass ==null)
+            throw new ClassNotFoundException("No matching java class found for rdf resource: " +
+                    ""+data);
         return createObject( rootClass, resource);
     }
 
@@ -167,7 +170,7 @@ public class RdfSerializer {
                 for(Class tClass: tClasses){
                     if(tClass.getName().equals(resolver.resolveFieldClassName(resource))){
                         propertyVal = this.createObject(tClass,
-                                (Resource)resource.getProperty(jenaProperty));
+                                (Resource)resource.getProperty(jenaProperty).getObject());
                         resolved = true;
                         break;
                     }

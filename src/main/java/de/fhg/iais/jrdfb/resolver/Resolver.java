@@ -12,5 +12,5 @@ public interface Resolver {
     @Nullable RDFNode resolveField(@NotNull Object object) throws ReflectiveOperationException;
     @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException;
     @NotNull String resolveFieldClassName(@NotNull Object object) throws ReflectiveOperationException;
-    @Nullable String resolveFieldClassName(@NotNull Resource resource);
+    @Nullable String resolveFieldClassName(@NotNull Resource resource) throws ReflectiveOperationException;
 }

@@ -20,8 +20,10 @@ public class VCARD {
     public static final String FN = uri + "fn";
     public static final String STREET_ADDRESS = uri + "street-address";
     public static final String COUNTRY_NAME = uri + "country-name";
-    public static final String LOCALITY  = uri + "locality ";
-    public static final String HAS_ADDRESS  = uri + "hasAddress ";
+    public static final String LOCALITY  = uri + "locality";
+    public static final String HAS_ADDRESS  = uri + "hasAddress";
+    public static final String INDIVIDUAL  = uri + "Individual";
+    public static final String ADDRESS  = uri + "Address";
 
 }
 

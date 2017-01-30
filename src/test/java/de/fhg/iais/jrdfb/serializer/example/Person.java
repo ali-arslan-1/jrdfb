@@ -1,10 +1,11 @@
 package de.fhg.iais.jrdfb.serializer.example;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
+import de.fhg.iais.jrdfb.annotation.RdfType;
 import de.fhg.iais.jrdfb.vocabulary.VCARD;
 
 import java.util.List;
 
-
+@RdfType(VCARD.INDIVIDUAL)
 public class Person
 {
     @RdfProperty(VCARD.FN)

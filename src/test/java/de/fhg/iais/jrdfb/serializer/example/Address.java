@@ -1,10 +1,12 @@
 package de.fhg.iais.jrdfb.serializer.example;
 
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
+import de.fhg.iais.jrdfb.annotation.RdfType;
 import de.fhg.iais.jrdfb.vocabulary.VCARD;
 
 import java.io.Serializable;
 
+@RdfType(VCARD.ADDRESS)
 public class Address implements Addressable, Serializable
 {
 

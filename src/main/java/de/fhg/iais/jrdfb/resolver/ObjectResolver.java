@@ -60,10 +60,14 @@ public abstract class ObjectResolver implements Resolver {
 
     @Override
     @Nullable
-    public String resolveFieldClassName(@NotNull Resource resource){
+    public String resolveFieldClassName(@NotNull Resource resource)
+            throws ReflectiveOperationException{
         Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
-
-        return metadata.getProperty(getJenaProperty()).getObject().toString();
+        Statement metaProperty = metadata.getProperty(getJenaProperty());
+        if(metaProperty==null)
+            throw new NoSuchFieldException("Metadata for field '"+field.getName()+"' Not provided" +
+                    " in RDF Resource: "+resource.getURI());
+        return metaProperty.getObject().toString();
     }
 
     protected Property getJenaProperty(){
