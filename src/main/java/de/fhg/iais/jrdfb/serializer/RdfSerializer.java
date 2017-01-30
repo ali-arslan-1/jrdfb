@@ -24,13 +24,14 @@ import java.lang.reflect.Field;
 public class RdfSerializer {
 
     private Class[] tClasses;
-    private ResolverFactory resolverFactory = new ResolverFactoryImpl();
+    private ResolverFactory resolverFactory;
     private Model model;
 
     public RdfSerializer(Class... tClasses){
         //this.rootClass = rootClass;
         this.tClasses = tClasses;
         model = ModelFactory.createDefaultModel();
+        resolverFactory = new ResolverFactoryImpl();
     }
     public String serialize(Object obj) throws ReflectiveOperationException {
         assert (obj != null);
@@ -68,6 +69,7 @@ public class RdfSerializer {
             if (field.isAnnotationPresent(RdfId.class)) {
                 Resolver resolver = resolverFactory.createResolver(field, model);
                 RDFNode resolvedNode = resolver.resolveField(obj);
+                assert resolvedNode != null;
                 id = resolvedNode.toString();
                 uriTemplate = field.getAnnotation(RdfId.class).uriTemplate();
                 break;
@@ -82,7 +84,7 @@ public class RdfSerializer {
         resource = model.createResource(id.toString());
         metaData = model.createResource();
 
-        String rdfType = null;
+        String rdfType;
         if(clazz.isAnnotationPresent(RdfType.class)) {
             rdfType = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
 
@@ -163,13 +165,9 @@ public class RdfSerializer {
 
     private Object createObject(Class clazz, Resource resource)
             throws ReflectiveOperationException {
-//        Constructor cons = clazz.getDeclaredConstructor();
-//        cons.setAccessible(true);
-//        Object obj = cons.newInstance();
 
         Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
         Object obj = objenesis.newInstance(clazz);
-
 
         if(resource==null)
             throw new ReflectiveOperationException("No matching resource found in rdf");
