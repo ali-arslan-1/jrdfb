@@ -5,10 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.beans.*;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -189,6 +193,26 @@ public class ReflectUtils {
         }
 
         return currentClassFields;
+    }
+
+    public static BigInteger getChecksum(Object obj) {
+        if (obj == null) {
+            return BigInteger.ZERO;
+        }
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(obj);
+            oos.close();
+
+            MessageDigest m = MessageDigest.getInstance("SHA1");
+            m.update(baos.toByteArray());
+
+            return new BigInteger(1, m.digest());
+        }catch (Exception e){
+            return BigInteger.valueOf(obj.hashCode());
+        }
     }
 
 }

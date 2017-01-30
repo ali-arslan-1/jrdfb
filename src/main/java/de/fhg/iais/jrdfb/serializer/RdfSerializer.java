@@ -72,7 +72,7 @@ public class RdfSerializer {
                 break;
             }
         }
-        id = (id == null || id.toString().isEmpty()) ? obj.hashCode() : id;
+        id = (id == null || id.toString().isEmpty()) ? ReflectUtils.getChecksum(obj) : id;
 
         if(uriTemplate.contains("{RfdId}")){
             id = uriTemplate.replace("{RfdId}", id.toString());
@@ -141,21 +141,39 @@ public class RdfSerializer {
             }
         }
 
-        Constructor cons = rootClass.getDeclaredConstructor();
+        return createObject( rootClass, resource);
+    }
+
+    private Object createObject(Class clazz, Resource resource)
+            throws ReflectiveOperationException {
+        Constructor cons = clazz.getDeclaredConstructor();
         cons.setAccessible(true);
         Object obj = cons.newInstance();
 
         if(resource==null)
             throw new ReflectiveOperationException("No matching resource found in rdf");
 
-        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(rootClass, Object.class);
+        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(clazz, Object.class);
         for(Field field: allFields) {
             field.setAccessible(true);
 
             if (field.isAnnotationPresent(RdfProperty.class)) {
 
-                Object propertyVal = resolverFactory.createResolver(field, model)
-                        .resolveProperty(resource);
+                Resolver resolver = resolverFactory.createResolver(field, model);
+                boolean resolved = false;
+                Object propertyVal = null;
+                RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
+                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
+                for(Class tClass: tClasses){
+                    if(tClass.getName().equals(resolver.resolveFieldClassName(resource))){
+                        propertyVal = this.createObject(tClass,
+                                (Resource)resource.getProperty(jenaProperty));
+                        resolved = true;
+                        break;
+                    }
+                }
+                if(!resolved)
+                    propertyVal = resolver.resolveProperty(resource);
 
                 field.set(obj, propertyVal);
             }
@@ -163,5 +181,4 @@ public class RdfSerializer {
 
         return obj;
     }
-
 }

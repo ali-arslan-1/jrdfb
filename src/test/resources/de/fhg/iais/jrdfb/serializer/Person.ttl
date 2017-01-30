@@ -9,9 +9,10 @@
         <https://www.w3.org/2006/vcard/ns#fn>
                 "Ali Arslan" ;
         <https://www.w3.org/2006/vcard/ns#hasAddress >
-                <1399701152> .
+                <90173435778412055613082541087178914018495460923> .
 
-<1399701152>  <http://rdfs.org/ns/void#dataDump>
+<90173435778412055613082541087178914018495460923>
+        <http://rdfs.org/ns/void#dataDump>
                 [ <https://www.w3.org/2006/vcard/ns#country-name>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#locality >

@@ -3,7 +3,9 @@ package de.fhg.iais.jrdfb.serializer.example;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.vocabulary.VCARD;
 
-public class Address implements Addressable
+import java.io.Serializable;
+
+public class Address implements Addressable, Serializable
 {
 
     @RdfProperty(VCARD.LOCALITY)
