@@ -33,7 +33,7 @@ public class RdfSerializer {
         model = ModelFactory.createDefaultModel();
         resolverFactory = new ResolverFactoryImpl();
     }
-    public String serialize(Object obj) throws ReflectiveOperationException {
+    public String serialize(Object obj) throws JrdfbException {
         assert (obj != null);
         Class rootClass = tClasses[0];
         for(Class clazz: tClasses){
@@ -41,7 +41,11 @@ public class RdfSerializer {
                 rootClass = clazz;
         }
 
-        this.createResource(rootClass, obj);
+        try {
+            this.createResource(rootClass, obj);
+        } catch (ReflectiveOperationException e) {
+            throw new JrdfbException(e);
+        }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -51,7 +55,7 @@ public class RdfSerializer {
         try {
             result = out.toString("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new JrdfbException(e.getMessage(), e);
         }
 
         return result;
@@ -126,7 +130,7 @@ public class RdfSerializer {
     }
 
 
-    public Object deserialize(String data) throws ReflectiveOperationException {
+    public Object deserialize(String data) throws JrdfbException {
         assert (data != null);
 
         Class rootClass = null;
@@ -145,7 +149,7 @@ public class RdfSerializer {
                     Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
                     Statement metaProperty = metadata.getProperty(model.createProperty(rdfType));
                     if(metaProperty==null)
-                        throw new NoSuchFieldException("Metadata for Java Class Name Not provided" +
+                        throw new JrdfbException("Metadata for Java Class Name Not provided" +
                                 " " +
                                 "in RDF Resource: "+resource.getURI());
                     if(clazz.getName().equals(metaProperty.getObject().toString()
@@ -158,9 +162,13 @@ public class RdfSerializer {
         }
 
         if(rootClass ==null)
-            throw new ClassNotFoundException("No matching java class found for rdf resource: " +
+            throw new JrdfbException("No matching java class found for rdf resource: " +
                     ""+data);
-        return createObject( rootClass, resource);
+        try {
+            return createObject( rootClass, resource);
+        } catch (ReflectiveOperationException e) {
+            throw new JrdfbException(e.getMessage(), e);
+        }
     }
 
     private Object createObject(Class clazz, Resource resource)
