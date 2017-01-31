@@ -1,4 +1,4 @@
-package de.fhg.iais.jrdfb.serializer;
+package de.fhg.iais.jrdfb;
 
 import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;

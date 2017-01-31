@@ -1,5 +1,6 @@
 package de.fhg.iais.jrdfb.serializer;
 
+import de.fhg.iais.jrdfb.RdfSerializer;
 import de.fhg.iais.jrdfb.serializer.example.Address;
 import de.fhg.iais.jrdfb.serializer.example.Person;
 import de.fhg.iais.jrdfb.serializer.example.Student;

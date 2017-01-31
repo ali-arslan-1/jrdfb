@@ -1,5 +1,6 @@
 package de.fhg.iais.jrdfb.serializer;
 
+import de.fhg.iais.jrdfb.RdfSerializer;
 import de.fhg.iais.jrdfb.util.FileUtils;
 import de.fhg.iais.jrdfb.vocabulary.IDS;
 import de.fhg.iml.ids.metadata.Addressable;
