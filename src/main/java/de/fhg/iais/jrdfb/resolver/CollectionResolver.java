@@ -16,7 +16,7 @@ public class CollectionResolver extends ObjectResolver {
     }
 
     @Override
-    public RDFNode resolveField(Object object) throws ReflectiveOperationException {
+    public RDFNode resolveMember(Object object) throws ReflectiveOperationException {
         Object value = extractFieldValue(object);
         RDFNode rdfNode = null;
 

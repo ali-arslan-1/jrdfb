@@ -18,14 +18,14 @@ public class LiteralResolver extends ObjectResolver {
     }
 
     @Override
-    public RDFNode resolveField(@NotNull Object object) throws ReflectiveOperationException {
+    public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
         Object value = extractFieldValue(object);
         if(value == null) return null;
         RDFNode rdfNode;
 
-        if(field.isAnnotationPresent(RdfTypedLiteral.class)){
+        if(memberWrapper.isAnnotationPresent(RdfTypedLiteral.class)){
             rdfNode =  model.createTypedLiteral(value.toString(),
-                field.getAnnotation(RdfTypedLiteral.class).value());
+                memberWrapper.getAnnotation(RdfTypedLiteral.class).value());
         }else{
             rdfNode = model.createLiteral(value.toString());
         }

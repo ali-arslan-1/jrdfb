@@ -18,35 +18,36 @@ import java.lang.reflect.Field;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public abstract class ObjectResolver implements Resolver {
-    protected Field field;
+    protected MemberWrapper memberWrapper;
     protected Model model;
 
     public ObjectResolver(Field field, Model model) {
-        this.field = field;
+        this.memberWrapper = new MemberWrapper(field);
         this.model = model;
     }
 
     protected Object extractFieldValue(Object object) throws ReflectiveOperationException {
         if(getFieldPath().isEmpty()){
-            return field.get(object);
+            return memberWrapper.getValue(object);
         }else{
-            return ReflectUtils.getNestedField(object, field , getFieldPath());
+            return memberWrapper.getNestedObject(object, getFieldPath());
         }
     }
 
     @Override
-    public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+    public @Nullable Object resolveProperty(@NotNull Resource resource)
+            throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
         if(getFieldPath().isEmpty()){
-            return ReflectUtils.stringToObject(resolveFieldClassName(resource),
+            return ReflectUtils.stringToObject(resolveMemberClassName(resource),
                     value.getLiteral().getString());
         }else{
             Constructor cons = Class.forName(
-                    field.getDeclaringClass().getName()).getDeclaredConstructor();
+                    memberWrapper.getDeclaringClass().getName())
+                    .getDeclaredConstructor();
             cons.setAccessible(true);
-            return ReflectUtils.initNestedField(cons.newInstance(),
-                    field,
+            return memberWrapper.initNestedObject(cons.newInstance(),
                     getFieldPath(),
                     value.getObject().toString());
         }
@@ -54,18 +55,19 @@ public abstract class ObjectResolver implements Resolver {
 
     @NotNull
     @Override
-    public String resolveFieldClassName(@NotNull Object object) throws ReflectiveOperationException {
+    public String resolveMemberClassName(@NotNull Object object) throws ReflectiveOperationException {
         return extractFieldValue(object).getClass().getName();
     }
 
     @Override
     @Nullable
-    public String resolveFieldClassName(@NotNull Resource resource)
+    public String resolveMemberClassName(@NotNull Resource resource)
             throws ReflectiveOperationException{
         Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
         Statement metaProperty = metadata.getProperty(getJenaProperty());
         if(metaProperty==null)
-            throw new NoSuchFieldException("Metadata for field '"+field.getName()+"' Not provided" +
+            throw new NoSuchFieldException("Metadata for memberWrapper '"
+                    + memberWrapper.getName()+"' Not provided" +
                     " in RDF Resource: "+resource.getURI());
         return metaProperty.getObject().toString();
     }
@@ -75,13 +77,13 @@ public abstract class ObjectResolver implements Resolver {
     }
 
     protected RdfProperty getRdfProperty(){
-        RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
+        RdfProperty rdfPropertyInfo = memberWrapper.getAnnotation(RdfProperty.class);
         return rdfPropertyInfo;
     }
 
     protected String getFieldPath(){
         RdfProperty rdfPropertyInfo = getRdfProperty();
-        RdfId rdfIdInfo = field.getAnnotation(RdfId.class);
+        RdfId rdfIdInfo = memberWrapper.getAnnotation(RdfId.class);
 
         if(rdfPropertyInfo!=null && !rdfPropertyInfo.path().isEmpty())
             return rdfPropertyInfo.path();

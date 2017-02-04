@@ -28,7 +28,6 @@ public class RdfSerializer {
     private Model model;
 
     public RdfSerializer(Class... tClasses){
-        //this.rootClass = rootClass;
         this.tClasses = tClasses;
         model = ModelFactory.createDefaultModel();
         resolverFactory = new ResolverFactoryImpl();
@@ -51,7 +50,7 @@ public class RdfSerializer {
 
         model.write(out, "TURTLE");
 
-        String result = null;
+        String result;
         try {
             result = out.toString("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -72,7 +71,7 @@ public class RdfSerializer {
             field.setAccessible(true);
             if (field.isAnnotationPresent(RdfId.class)) {
                 Resolver resolver = resolverFactory.createResolver(field, model);
-                RDFNode resolvedNode = resolver.resolveField(obj);
+                RDFNode resolvedNode = resolver.resolveMember(obj);
                 assert resolvedNode != null;
                 id = resolvedNode.toString();
                 uriTemplate = field.getAnnotation(RdfId.class).uriTemplate();
@@ -106,7 +105,7 @@ public class RdfSerializer {
                 Resolver resolver = resolverFactory.createResolver(field, model);
                 boolean resolved = false;
                 for(Class tClass: tClasses){
-                    if(tClass.getName().equals(resolver.resolveFieldClassName(obj))){
+                    if(tClass.getName().equals(resolver.resolveMemberClassName(obj))){
                         resource.addProperty(jenaProperty,
                                 this.createResource(tClass, field.get(obj)));
                         resolved = true;
@@ -115,12 +114,12 @@ public class RdfSerializer {
                 }
 
                 if(!resolved){
-                    RDFNode resolvedNode = resolver.resolveField(obj);
+                    RDFNode resolvedNode = resolver.resolveMember(obj);
                     if(resolvedNode != null) {
                         resource.addProperty(jenaProperty, resolvedNode);
                     }
                 }
-                metaData.addProperty(jenaProperty, resolver.resolveFieldClassName(obj));
+                metaData.addProperty(jenaProperty, resolver.resolveMemberClassName(obj));
             }
         }
 
@@ -192,7 +191,7 @@ public class RdfSerializer {
                 RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
                 for(Class tClass: tClasses){
-                    if(tClass.getName().equals(resolver.resolveFieldClassName(resource))){
+                    if(tClass.getName().equals(resolver.resolveMemberClassName(resource))){
                         propertyVal = this.createObject(tClass,
                                 (Resource)resource.getProperty(jenaProperty).getObject());
                         resolved = true;

@@ -92,7 +92,7 @@ public class ReflectUtils {
      * @param value
      * @return Object
      */
-    private static Object toObject( Class clazz, String value ) {
+    public static Object toObject( Class clazz, String value ) {
         if( UUID.class == clazz ) return UUID.fromString(value);
         if( LocalDateTime.class == clazz ) return LocalDateTime.parse(value);
 
@@ -122,10 +122,10 @@ public class ReflectUtils {
 
 
     /**
-     * @param bean Bean which contain the field
-     * @param field Field whose nested field is to be extracted
-     * @param fieldPath Path of the nested field
-     * @return the nested field value
+     * @param bean Bean which contain the memberWrapper
+     * @param field Field whose nested memberWrapper is to be extracted
+     * @param fieldPath Path of the nested memberWrapper
+     * @return the nested memberWrapper value
      */
     public static Object getNestedField(final Object bean, final Field field, final String
             fieldPath)
@@ -141,7 +141,7 @@ public class ReflectUtils {
         return nestedBean;
     }
 
-    private static Field getFieldFromHierarchy(Class<?> clazz, String fieldName) {
+    public static Field getFieldFromHierarchy(Class<?> clazz, String fieldName) {
         Class<?> tmpClass = clazz;
         do {
             try {

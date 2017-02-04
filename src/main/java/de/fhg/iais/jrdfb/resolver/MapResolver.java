@@ -22,12 +22,12 @@ public class MapResolver extends ObjectResolver {
     }
 
     @Override
-    public @Nullable RDFNode resolveField(@NotNull Object object) throws ReflectiveOperationException {
+    public @Nullable RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
         Object value = extractFieldValue(object);
         if(value == null) return null;
 
         RDFNode rdfNode = null;
-        if(field.isAnnotationPresent(RdfBag.class)){
+        if(memberWrapper.isAnnotationPresent(RdfBag.class)){
             Map map = (Map) value;
             Bag propertiesBag = model.createBag();
 
@@ -47,7 +47,7 @@ public class MapResolver extends ObjectResolver {
     @Override
     public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
-        if(field.isAnnotationPresent(RdfBag.class)){
+        if(memberWrapper.isAnnotationPresent(RdfBag.class)){
             SortedMap<String, String> map = null;
 
             NodeIterator bagItr = value.getBag().iterator();
