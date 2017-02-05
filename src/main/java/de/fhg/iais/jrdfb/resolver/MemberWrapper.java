@@ -27,7 +27,7 @@ public class MemberWrapper implements AnnotatedElement, Member{
         if(member instanceof Field)
             return ((Field) member) .get(object);
         else if(member instanceof Method)
-            ((Method) member).invoke(object);
+            return ((Method) member).invoke(object);
         return null;
     }
 

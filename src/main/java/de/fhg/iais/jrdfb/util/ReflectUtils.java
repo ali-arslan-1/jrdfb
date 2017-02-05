@@ -14,8 +14,7 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -179,7 +178,7 @@ public class ReflectUtils {
         return nestedBean;
     }
 
-    public static Iterable<Field> getFieldsUpTo(@NotNull Class<?> startClass,
+    public static List<Field> getFieldsUpTo(@NotNull Class<?> startClass,
                                                 @Nullable Class<?> exclusiveParent) {
 
         List<Field> currentClassFields = Lists.newArrayList(startClass.getDeclaredFields());
@@ -213,6 +212,28 @@ public class ReflectUtils {
         }catch (Exception e){
             return BigInteger.valueOf(obj.hashCode());
         }
+    }
+
+    /**
+     * https://coderwall.com/p/wrqcsg/java-reflection-get-all-methods-in-hierarchy
+     *
+     * Gets an array of all methods in a class hierarchy walking up to parent classes
+     * @param objectClass the class
+     * @param exclusiveParent full stop class
+     * @return the methods array
+     */
+    public static Set<Method> getAllMethodsInHierarchy(Class<?> objectClass,
+                                                       Class<?> exclusiveParent) {
+        Set<Method> allMethods = new HashSet<>();
+        Method[] declaredMethods = objectClass.getDeclaredMethods();
+        if (objectClass.getSuperclass() != null && !(objectClass.getSuperclass().equals
+                (exclusiveParent))) {
+            Class<?> superClass = objectClass.getSuperclass();
+            Set<Method> superClassMethods = getAllMethodsInHierarchy(superClass, exclusiveParent);
+            allMethods.addAll(superClassMethods);
+        }
+        allMethods.addAll(Arrays.asList(declaredMethods));
+        return allMethods;
     }
 
 }

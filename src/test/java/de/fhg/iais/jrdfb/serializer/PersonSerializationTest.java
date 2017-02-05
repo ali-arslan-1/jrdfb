@@ -32,7 +32,8 @@ public class PersonSerializationTest {
 
         Address address = new Address("Bonn", "Germany");
         address.setStreet("Romerstraße");
-
+        address.setLongitude(7.1847);
+        address.setLatitude(50.7323);
         student.setAddress(address);
         assertEquals(serializer.serialize(student).trim(), rdf_turtle.trim());
     }

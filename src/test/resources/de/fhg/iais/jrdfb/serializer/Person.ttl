@@ -1,3 +1,30 @@
+<720425312100590322225992849518851884103874794126>
+        a       "https://www.w3.org/2006/vcard/ns#Address" ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+                          "java.lang.Double" ;
+                  <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+                          "java.lang.Double" ;
+                  <https://www.w3.org/2006/vcard/ns#Address>
+                          "de.fhg.iais.jrdfb.serializer.example.Address" ;
+                  <https://www.w3.org/2006/vcard/ns#country-name>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#locality>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#street-address>
+                          "java.lang.String"
+                ] ;
+        <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+                "50.7323" ;
+        <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+                "7.1847" ;
+        <https://www.w3.org/2006/vcard/ns#country-name>
+                "Germany" ;
+        <https://www.w3.org/2006/vcard/ns#locality>
+                "Bonn" ;
+        <https://www.w3.org/2006/vcard/ns#street-address>
+                "Romerstraße" .
+
 <111111>  a     "https://www.w3.org/2006/vcard/ns#Individual" ;
         <http://purl.org/dc/terms/identifier>
                 "111111" ;
@@ -14,23 +41,4 @@
         <https://www.w3.org/2006/vcard/ns#fn>
                 "Ali Arslan" ;
         <https://www.w3.org/2006/vcard/ns#hasAddress>
-                <371023585939990525043672460268989302121425673271> .
-
-<371023585939990525043672460268989302121425673271>
-        a       "https://www.w3.org/2006/vcard/ns#Address" ;
-        <http://rdfs.org/ns/void#dataDump>
-                [ <https://www.w3.org/2006/vcard/ns#Address>
-                          "de.fhg.iais.jrdfb.serializer.example.Address" ;
-                  <https://www.w3.org/2006/vcard/ns#country-name>
-                          "java.lang.String" ;
-                  <https://www.w3.org/2006/vcard/ns#locality>
-                          "java.lang.String" ;
-                  <https://www.w3.org/2006/vcard/ns#street-address>
-                          "java.lang.String"
-                ] ;
-        <https://www.w3.org/2006/vcard/ns#country-name>
-                "Germany" ;
-        <https://www.w3.org/2006/vcard/ns#locality>
-                "Bonn" ;
-        <https://www.w3.org/2006/vcard/ns#street-address>
-                "Romerstraße" .
+                <720425312100590322225992849518851884103874794126> .

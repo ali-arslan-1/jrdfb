@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -26,12 +27,23 @@ public abstract class ObjectResolver implements Resolver {
         this.model = model;
     }
 
-    protected Object extractFieldValue(Object object) throws ReflectiveOperationException {
-        if(getFieldPath().isEmpty()){
-            return memberWrapper.getValue(object);
+    public ObjectResolver(Method method, Model model) {
+        this.memberWrapper = new MemberWrapper(method);
+        this.model = model;
+    }
+
+    protected Object extractMemberValue(Object object) throws ReflectiveOperationException {
+        if(getMemberPath().isEmpty()){
+            return resolveMemberValue(object);
         }else{
-            return memberWrapper.getNestedObject(object, getFieldPath());
+            return memberWrapper.getNestedObject(object, getMemberPath());
         }
+    }
+
+    @Override
+    public @Nullable Object resolveMemberValue(@NotNull Object object)
+            throws ReflectiveOperationException {
+        return memberWrapper.getValue(object);
     }
 
     @Override
@@ -39,7 +51,7 @@ public abstract class ObjectResolver implements Resolver {
             throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
-        if(getFieldPath().isEmpty()){
+        if(getMemberPath().isEmpty()){
             return ReflectUtils.stringToObject(resolveMemberClassName(resource),
                     value.getLiteral().getString());
         }else{
@@ -48,7 +60,7 @@ public abstract class ObjectResolver implements Resolver {
                     .getDeclaredConstructor();
             cons.setAccessible(true);
             return memberWrapper.initNestedObject(cons.newInstance(),
-                    getFieldPath(),
+                    getMemberPath(),
                     value.getObject().toString());
         }
     }
@@ -56,7 +68,7 @@ public abstract class ObjectResolver implements Resolver {
     @NotNull
     @Override
     public String resolveMemberClassName(@NotNull Object object) throws ReflectiveOperationException {
-        return extractFieldValue(object).getClass().getName();
+        return extractMemberValue(object).getClass().getName();
     }
 
     @Override
@@ -81,7 +93,7 @@ public abstract class ObjectResolver implements Resolver {
         return rdfPropertyInfo;
     }
 
-    protected String getFieldPath(){
+    protected String getMemberPath(){
         RdfProperty rdfPropertyInfo = getRdfProperty();
         RdfId rdfIdInfo = memberWrapper.getAnnotation(RdfId.class);
 

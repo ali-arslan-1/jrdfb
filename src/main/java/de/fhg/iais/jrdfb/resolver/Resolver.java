@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Resolver {
     @Nullable RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException;
+    @Nullable Object resolveMemberValue(@NotNull Object object) throws ReflectiveOperationException;
     @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException;
     @NotNull String resolveMemberClassName(@NotNull Object object) throws ReflectiveOperationException;
     @Nullable String resolveMemberClassName(@NotNull Resource resource) throws ReflectiveOperationException;

@@ -12,11 +12,16 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -66,15 +71,28 @@ public class RdfSerializer {
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
-        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(clazz, Object.class);
-        for(Field field: allFields) {
-            field.setAccessible(true);
-            if (field.isAnnotationPresent(RdfId.class)) {
-                Resolver resolver = resolverFactory.createResolver(field, model);
+        Collection allFields = ReflectUtils.getFieldsUpTo(clazz, Object
+                .class);
+
+        Collection allMethods = ReflectUtils.getAllMethodsInHierarchy
+                (clazz, Object.class);
+
+        Collection allAccessibleObjects = new ArrayList();
+        allAccessibleObjects.addAll(allFields);
+        allAccessibleObjects.addAll(allMethods);
+
+        Collection<AccessibleObject> allMembers = (Collection<AccessibleObject>)(Collection<?>)
+                allAccessibleObjects;
+
+        for(AccessibleObject member: allMembers) {
+
+            member.setAccessible(true);
+            if (member.isAnnotationPresent(RdfId.class)) {
+                Resolver resolver = resolverFactory.createResolver(member, model);
                 RDFNode resolvedNode = resolver.resolveMember(obj);
                 assert resolvedNode != null;
                 id = resolvedNode.toString();
-                uriTemplate = field.getAnnotation(RdfId.class).uriTemplate();
+                uriTemplate = member.getAnnotation(RdfId.class).uriTemplate();
                 break;
             }
         }
@@ -96,18 +114,22 @@ public class RdfSerializer {
         }else
             throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
                     "Not provided");
-        for(Field field: allFields) {
-            field.setAccessible(true);
+        for(AccessibleObject member: allMembers) {
+            member.setAccessible(true);
+            RdfProperty rdfPropertyInfo;
+            if(member instanceof Method)
+                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty.class);
+            else
+                rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
 
-            if (field.isAnnotationPresent(RdfProperty.class)) {
-                RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
+            if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                Resolver resolver = resolverFactory.createResolver(field, model);
+                Resolver resolver = resolverFactory.createResolver(member, model);
                 boolean resolved = false;
                 for(Class tClass: tClasses){
                     if(tClass.getName().equals(resolver.resolveMemberClassName(obj))){
                         resource.addProperty(jenaProperty,
-                                this.createResource(tClass, field.get(obj)));
+                                this.createResource(tClass, resolver.resolveMemberValue(obj)));
                         resolved = true;
                         break;
                     }

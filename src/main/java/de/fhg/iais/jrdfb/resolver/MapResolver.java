@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -21,9 +22,13 @@ public class MapResolver extends ObjectResolver {
         super(field, model);
     }
 
+    public MapResolver(Method method, Model model) {
+        super(method, model);
+    }
+
     @Override
     public @Nullable RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
-        Object value = extractFieldValue(object);
+        Object value = extractMemberValue(object);
         if(value == null) return null;
 
         RDFNode rdfNode = null;

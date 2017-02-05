@@ -9,6 +9,8 @@ import java.io.Serializable;
 @RdfType(VCARD.ADDRESS)
 public class Address implements Addressable, Serializable
 {
+	private double longitude;
+	private double latitude;
 
     @RdfProperty(VCARD.LOCALITY)
 	private String city;
@@ -49,15 +51,20 @@ public class Address implements Addressable, Serializable
         this.street = street;
     }
 
-    public double getLat() {
-		// TODO implement me
-		return 0.0;
+    public double getLatitude() {
+		return latitude;
 	}
 
-	public double getLong() {
-		// TODO implement me
-		return 0.0;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
 
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 }
 
