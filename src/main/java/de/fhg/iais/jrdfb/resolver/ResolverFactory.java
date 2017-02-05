@@ -8,5 +8,5 @@ import java.lang.reflect.AccessibleObject;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public interface ResolverFactory {
-    Resolver createResolver(AccessibleObject accessibleObject, Model model);
+    ObjectResolver createResolver(AccessibleObject accessibleObject, Model model);
 }

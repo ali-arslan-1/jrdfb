@@ -34,16 +34,20 @@ public abstract class ObjectResolver implements Resolver {
 
     protected Object extractMemberValue(Object object) throws ReflectiveOperationException {
         if(getMemberPath().isEmpty()){
-            return resolveMemberValue(object);
+            return getMemberValue(object);
         }else{
             return memberWrapper.getNestedObject(object, getMemberPath());
         }
     }
 
-    @Override
-    public @Nullable Object resolveMemberValue(@NotNull Object object)
+    public @Nullable Object getMemberValue(@NotNull Object object)
             throws ReflectiveOperationException {
         return memberWrapper.getValue(object);
+    }
+
+    public void setMemberValue(@NotNull Object object, @NotNull Object value)
+            throws ReflectiveOperationException {
+        memberWrapper.setValue(object, value);
     }
 
     @Override

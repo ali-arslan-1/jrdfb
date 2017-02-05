@@ -48,6 +48,8 @@ public class PersonSerializationTest {
         assertEquals(student.getAddress().getCity(), "Bonn");
         assertEquals(student.getAddress().getCountry(), "Germany");
         assertEquals(student.getAddress().getStreet(), "Romerstraße");
+        assertEquals(student.getAddress().getLongitude(), 7.1847);
+        assertEquals(student.getAddress().getLatitude(), 50.7323);
 
     }
 }

@@ -1,6 +1,7 @@
 package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.util.ReflectUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -29,6 +30,13 @@ public class MemberWrapper implements AnnotatedElement, Member{
         else if(member instanceof Method)
             return ((Method) member).invoke(object);
         return null;
+    }
+
+    public void setValue(Object object, Object value) throws ReflectiveOperationException {
+        if(member instanceof Field)
+            ((Field) member) .set(object, value);
+        else if(member instanceof Method)
+            (ReflectUtils.getSetterMethod((Method) member)).invoke(object, value);
     }
 
     public Object getNestedObject(final Object bean, final String fieldPath)
@@ -76,7 +84,10 @@ public class MemberWrapper implements AnnotatedElement, Member{
 
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-        return member.getAnnotation(annotationClass);
+        if(member instanceof Method)
+            return AnnotationUtils.findAnnotation((Method)member, annotationClass);
+        else
+            return member.getAnnotation(annotationClass);
     }
 
     @Override

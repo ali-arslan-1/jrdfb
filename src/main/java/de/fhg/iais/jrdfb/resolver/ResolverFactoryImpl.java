@@ -14,8 +14,8 @@ import java.util.Map;
 public class ResolverFactoryImpl implements ResolverFactory {
 
     @Override
-    public Resolver createResolver(AccessibleObject accessibleObject, Model model) {
-        Resolver resolver = null;
+    public ObjectResolver createResolver(AccessibleObject accessibleObject, Model model) {
+        ObjectResolver resolver = null;
         if(accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
             resolver = new LiteralResolver(field, model);

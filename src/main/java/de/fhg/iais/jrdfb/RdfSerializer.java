@@ -3,6 +3,7 @@ package de.fhg.iais.jrdfb;
 import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.annotation.RdfType;
+import de.fhg.iais.jrdfb.resolver.ObjectResolver;
 import de.fhg.iais.jrdfb.resolver.Resolver;
 import de.fhg.iais.jrdfb.resolver.ResolverFactory;
 import de.fhg.iais.jrdfb.resolver.ResolverFactoryImpl;
@@ -18,7 +19,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -124,12 +124,12 @@ public class RdfSerializer {
 
             if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                Resolver resolver = resolverFactory.createResolver(member, model);
+                ObjectResolver resolver = resolverFactory.createResolver(member, model);
                 boolean resolved = false;
                 for(Class tClass: tClasses){
                     if(tClass.getName().equals(resolver.resolveMemberClassName(obj))){
                         resource.addProperty(jenaProperty,
-                                this.createResource(tClass, resolver.resolveMemberValue(obj)));
+                                this.createResource(tClass, resolver.getMemberValue(obj)));
                         resolved = true;
                         break;
                     }
@@ -201,16 +201,33 @@ public class RdfSerializer {
         if(resource==null)
             throw new ReflectiveOperationException("No matching resource found in rdf");
 
-        final Iterable<Field> allFields = ReflectUtils.getFieldsUpTo(clazz, Object.class);
-        for(Field field: allFields) {
-            field.setAccessible(true);
+        Collection allFields = ReflectUtils.getFieldsUpTo(clazz, Object
+                .class);
 
-            if (field.isAnnotationPresent(RdfProperty.class)) {
+        Collection allMethods = ReflectUtils.getAllMethodsInHierarchy
+                (clazz, Object.class);
 
-                Resolver resolver = resolverFactory.createResolver(field, model);
+        Collection allAccessibleObjects = new ArrayList();
+        allAccessibleObjects.addAll(allFields);
+        allAccessibleObjects.addAll(allMethods);
+
+        Collection<AccessibleObject> allMembers = (Collection<AccessibleObject>)(Collection<?>)
+                allAccessibleObjects;
+
+
+        for(AccessibleObject member: allMembers) {
+            member.setAccessible(true);
+
+            RdfProperty rdfPropertyInfo;
+            if(member instanceof Method)
+                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty.class);
+            else
+                rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
+            if (rdfPropertyInfo != null) {
+
+                ObjectResolver resolver = resolverFactory.createResolver(member, model);
                 boolean resolved = false;
                 Object propertyVal = null;
-                RdfProperty rdfPropertyInfo = field.getAnnotation(RdfProperty.class);
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
                 for(Class tClass: tClasses){
                     if(tClass.getName().equals(resolver.resolveMemberClassName(resource))){
@@ -223,7 +240,7 @@ public class RdfSerializer {
                 if(!resolved)
                     propertyVal = resolver.resolveProperty(resource);
 
-                field.set(obj, propertyVal);
+                resolver.setMemberValue(obj, propertyVal);
             }
         }
 
