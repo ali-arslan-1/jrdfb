@@ -1,5 +1,5 @@
 <720425312100590322225992849518851884103874794126>
-        a       "https://www.w3.org/2006/vcard/ns#Address" ;
+        a       <https://www.w3.org/2006/vcard/ns#Address> ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
                           "java.lang.Double" ;
@@ -25,7 +25,7 @@
         <https://www.w3.org/2006/vcard/ns#street-address>
                 "Romerstraße" .
 
-<111111>  a     "https://www.w3.org/2006/vcard/ns#Individual" ;
+<111111>  a     <https://www.w3.org/2006/vcard/ns#Individual> ;
         <http://purl.org/dc/terms/identifier>
                 "111111" ;
         <http://rdfs.org/ns/void#dataDump>

@@ -109,7 +109,7 @@ public class RdfSerializer {
         if(clazz.isAnnotationPresent(RdfType.class)) {
             rdfType = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
 
-            resource.addProperty(RDF.type, rdfType);
+            resource.addProperty(RDF.type, model.createProperty(rdfType));
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
         }else
             throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
@@ -163,7 +163,8 @@ public class RdfSerializer {
         for(Class clazz: tClasses){
             if(clazz.isAnnotationPresent(RdfType.class)){
                 String rdfType  = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
-                ResIterator iter = model.listResourcesWithProperty(RDF.type, rdfType);
+                ResIterator iter = model.listResourcesWithProperty(RDF.type,
+                        model.createProperty(rdfType));
                 if(iter!=null && iter.hasNext()){
                     resource = iter.nextResource();
 
