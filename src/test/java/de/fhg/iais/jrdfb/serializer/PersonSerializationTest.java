@@ -8,6 +8,13 @@ import de.fhg.iais.jrdfb.util.FileUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -34,7 +41,15 @@ public class PersonSerializationTest {
         address.setStreet("Romerstraße");
         address.setLongitude(7.1847);
         address.setLatitude(50.7323);
+        address.setUrl(new URL("http://example.com/ali-arslan"));
         student.setAddress(address);
+
+        GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+        c.set(1989, 8, 1, 0, 0, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        XMLGregorianCalendar birthDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+        student.setBirthDate(birthDate);
         assertEquals(serializer.serialize(student).trim(), rdf_turtle.trim());
     }
 
@@ -50,6 +65,9 @@ public class PersonSerializationTest {
         assertEquals(student.getAddress().getStreet(), "Romerstraße");
         assertEquals(student.getAddress().getLongitude(), 7.1847);
         assertEquals(student.getAddress().getLatitude(), 50.7323);
+        assertEquals(student.getBirthDate().getDay(), 1);
+        assertEquals(student.getBirthDate().getMonth(), 9);
+        assertEquals(student.getBirthDate().getYear(), 1989);
 
     }
 }

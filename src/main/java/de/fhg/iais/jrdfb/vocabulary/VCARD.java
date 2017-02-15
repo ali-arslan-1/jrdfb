@@ -24,6 +24,7 @@ public class VCARD {
     public static final String HAS_ADDRESS  = uri + "hasAddress";
     public static final String INDIVIDUAL  = uri + "Individual";
     public static final String ADDRESS  = uri + "Address";
+    public static final String BDAY  = uri + "bday";
 
 }
 

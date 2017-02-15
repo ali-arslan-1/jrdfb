@@ -91,7 +91,11 @@ public class RdfSerializer {
                 Resolver resolver = resolverFactory.createResolver(member, model);
                 RDFNode resolvedNode = resolver.resolveMember(obj);
                 assert resolvedNode != null;
-                id = resolvedNode.toString();
+                if(resolvedNode.isLiteral())
+                    id =   ((Literal)resolvedNode).getString();
+                else
+                    id = resolvedNode.toString();
+
                 uriTemplate = member.getAnnotation(RdfId.class).uriTemplate();
                 break;
             }

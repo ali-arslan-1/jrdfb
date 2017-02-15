@@ -1,14 +1,20 @@
 package de.fhg.iais.jrdfb.serializer.example;
 
+import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.annotation.RdfType;
 import de.fhg.iais.jrdfb.vocabulary.VCARD;
 
 import java.io.Serializable;
+import java.net.URL;
 
 @RdfType(VCARD.ADDRESS)
 public class Address implements Addressable, Serializable
 {
+
+	@RdfId
+	private URL url;
+
 	private double longitude;
 	private double latitude;
 
@@ -65,6 +71,14 @@ public class Address implements Addressable, Serializable
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+
+	public URL getUrl() {
+		return url;
+	}
+
+	public void setUrl(URL url) {
+		this.url = url;
 	}
 }
 

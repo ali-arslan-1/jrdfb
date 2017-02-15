@@ -135,4 +135,12 @@ public class MemberWrapper implements AnnotatedElement, Member{
             ((Method) member).isSynthetic();
         return false;
     }
+
+    public Type getType(){
+        if(member instanceof Field)
+            return ((Field) member) .getType();
+        else if(member instanceof Method)
+            return ((Method) member).getReturnType();
+        return null;
+    }
 }

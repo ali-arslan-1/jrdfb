@@ -1,4 +1,26 @@
-<720425312100590322225992849518851884103874794126>
+<111111>  a     <https://www.w3.org/2006/vcard/ns#Individual> ;
+        <http://purl.org/dc/terms/identifier>
+                "111111"^^<xsd:int> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://purl.org/dc/terms/identifier>
+                          "java.lang.Integer" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fhg.iais.jrdfb.serializer.example.Student" ;
+                  <https://www.w3.org/2006/vcard/ns#bday>
+                          "org.apache.xerces.jaxp.datatype.XMLGregorianCalendarImpl" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#hasAddress>
+                          "de.fhg.iais.jrdfb.serializer.example.Address"
+                ] ;
+        <https://www.w3.org/2006/vcard/ns#bday>
+                "1989-09-01T00:00:00.000Z"^^<xsd:dateTime> ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Ali Arslan" ;
+        <https://www.w3.org/2006/vcard/ns#hasAddress>
+                <http://example.com/ali-arslan> .
+
+<http://example.com/ali-arslan>
         a       <https://www.w3.org/2006/vcard/ns#Address> ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
@@ -15,30 +37,12 @@
                           "java.lang.String"
                 ] ;
         <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
-                "50.7323" ;
+                "50.7323"^^<xsd:long> ;
         <http://www.w3.org/2003/01/geo/wgs84_pos#long>
-                "7.1847" ;
+                "7.1847"^^<xsd:long> ;
         <https://www.w3.org/2006/vcard/ns#country-name>
                 "Germany" ;
         <https://www.w3.org/2006/vcard/ns#locality>
                 "Bonn" ;
         <https://www.w3.org/2006/vcard/ns#street-address>
                 "Romerstraße" .
-
-<111111>  a     <https://www.w3.org/2006/vcard/ns#Individual> ;
-        <http://purl.org/dc/terms/identifier>
-                "111111" ;
-        <http://rdfs.org/ns/void#dataDump>
-                [ <http://purl.org/dc/terms/identifier>
-                          "java.lang.Integer" ;
-                  <https://www.w3.org/2006/vcard/ns#Individual>
-                          "de.fhg.iais.jrdfb.serializer.example.Student" ;
-                  <https://www.w3.org/2006/vcard/ns#fn>
-                          "java.lang.String" ;
-                  <https://www.w3.org/2006/vcard/ns#hasAddress>
-                          "de.fhg.iais.jrdfb.serializer.example.Address"
-                ] ;
-        <https://www.w3.org/2006/vcard/ns#fn>
-                "Ali Arslan" ;
-        <https://www.w3.org/2006/vcard/ns#hasAddress>
-                <720425312100590322225992849518851884103874794126> .

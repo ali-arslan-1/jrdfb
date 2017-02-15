@@ -3,6 +3,7 @@ import de.fhg.iais.jrdfb.annotation.RdfProperty;
 import de.fhg.iais.jrdfb.annotation.RdfType;
 import de.fhg.iais.jrdfb.vocabulary.VCARD;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.List;
 
 @RdfType(VCARD.INDIVIDUAL)
@@ -13,6 +14,9 @@ public class Person
 
     @RdfProperty(VCARD.HAS_ADDRESS)
 	private Address address;
+
+    @RdfProperty(VCARD.BDAY)
+	private XMLGregorianCalendar birthDate;
 
 	private List<Person> friends;
 
@@ -43,5 +47,13 @@ public class Person
     public void setName(String name) {
         this.name = name;
     }
+
+	public XMLGregorianCalendar getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(XMLGregorianCalendar birthDate) {
+		this.birthDate = birthDate;
+	}
 }
 
