@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -56,8 +57,13 @@ public abstract class ObjectResolver implements Resolver {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
         if(getMemberPath().isEmpty()){
+            String stringValue;
+            if(memberWrapper.getType().equals(URL.class))
+                stringValue = value.getObject().toString();
+            else
+                stringValue = value.getLiteral().getString();
             return ReflectUtils.stringToObject(resolveMemberClassName(resource),
-                    value.getLiteral().getString());
+                    stringValue);
         }else{
             Constructor cons = Class.forName(
                     memberWrapper.getDeclaringClass().getName())

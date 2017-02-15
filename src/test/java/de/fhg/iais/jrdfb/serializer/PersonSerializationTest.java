@@ -41,8 +41,9 @@ public class PersonSerializationTest {
         address.setStreet("Romerstraße");
         address.setLongitude(7.1847);
         address.setLatitude(50.7323);
-        address.setUrl(new URL("http://example.com/ali-arslan"));
+        address.setMapUrl(new URL("http://example.com/address/1"));
         student.setAddress(address);
+        student.setProfileUrl(new URL("http://example.com/profile/1"));
 
         GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         c.set(1989, 8, 1, 0, 0, 0);
@@ -68,6 +69,7 @@ public class PersonSerializationTest {
         assertEquals(student.getBirthDate().getDay(), 1);
         assertEquals(student.getBirthDate().getMonth(), 9);
         assertEquals(student.getBirthDate().getYear(), 1989);
-
+        assertEquals(student.getProfileUrl().toExternalForm(),
+                "http://example.com/profile/1");
     }
 }

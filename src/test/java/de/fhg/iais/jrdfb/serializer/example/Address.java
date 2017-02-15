@@ -13,7 +13,7 @@ public class Address implements Addressable, Serializable
 {
 
 	@RdfId
-	private URL url;
+	private URL mapUrl;
 
 	private double longitude;
 	private double latitude;
@@ -73,12 +73,12 @@ public class Address implements Addressable, Serializable
 		this.longitude = longitude;
 	}
 
-	public URL getUrl() {
-		return url;
+	public URL getMapUrl() {
+		return mapUrl;
 	}
 
-	public void setUrl(URL url) {
-		this.url = url;
+	public void setMapUrl(URL mapUrl) {
+		this.mapUrl = mapUrl;
 	}
 }
 

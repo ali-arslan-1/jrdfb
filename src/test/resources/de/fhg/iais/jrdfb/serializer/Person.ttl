@@ -11,16 +11,20 @@
                   <https://www.w3.org/2006/vcard/ns#fn>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#hasAddress>
-                          "de.fhg.iais.jrdfb.serializer.example.Address"
+                          "de.fhg.iais.jrdfb.serializer.example.Address" ;
+                  <https://www.w3.org/2006/vcard/ns#url>
+                          "java.net.URL"
                 ] ;
         <https://www.w3.org/2006/vcard/ns#bday>
                 "1989-09-01T00:00:00.000Z"^^<xsd:dateTime> ;
         <https://www.w3.org/2006/vcard/ns#fn>
                 "Ali Arslan" ;
         <https://www.w3.org/2006/vcard/ns#hasAddress>
-                <http://example.com/ali-arslan> .
+                <http://example.com/address/1> ;
+        <https://www.w3.org/2006/vcard/ns#url>
+                <http://example.com/profile/1> .
 
-<http://example.com/ali-arslan>
+<http://example.com/address/1>
         a       <https://www.w3.org/2006/vcard/ns#Address> ;
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://www.w3.org/2003/01/geo/wgs84_pos#lat>

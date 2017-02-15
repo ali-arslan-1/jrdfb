@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -41,7 +42,10 @@ public class LiteralResolver extends ObjectResolver {
         } else if(LiteralMapping.containsKey(memberWrapper.getType())){
             rdfNode =  model.createTypedLiteral(value.toString(),
                                                     LiteralMapping.get(memberWrapper.getType()));
-        } else{
+        }else if(memberWrapper.getType().equals(URL.class)){
+            rdfNode =  model.createProperty(value.toString());
+        }
+        else{
             rdfNode = model.createLiteral(value.toString());
         }
 

@@ -25,6 +25,7 @@ public class VCARD {
     public static final String INDIVIDUAL  = uri + "Individual";
     public static final String ADDRESS  = uri + "Address";
     public static final String BDAY  = uri + "bday";
+    public static final String URL  = uri + "url";
 
 }
 
