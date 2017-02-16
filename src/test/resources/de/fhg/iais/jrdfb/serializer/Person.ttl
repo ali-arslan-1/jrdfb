@@ -1,4 +1,4 @@
-<111111>  a     <https://www.w3.org/2006/vcard/ns#Individual> ;
+<student/111111>  a  <https://www.w3.org/2006/vcard/ns#Individual> ;
         <http://purl.org/dc/terms/identifier>
                 "111111"^^<xsd:int> ;
         <http://rdfs.org/ns/void#dataDump>

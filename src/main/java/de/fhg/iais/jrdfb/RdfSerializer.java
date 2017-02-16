@@ -102,8 +102,8 @@ public class RdfSerializer {
         }
         id = (id == null || id.toString().isEmpty()) ? ReflectUtils.getChecksum(obj) : id;
 
-        if(uriTemplate.contains("{RfdId}")){
-            id = uriTemplate.replace("{RfdId}", id.toString());
+        if(uriTemplate.contains("{RdfId}")){
+            id = uriTemplate.replace("{RdfId}", id.toString());
         }
 
         resource = model.createResource(id.toString());
