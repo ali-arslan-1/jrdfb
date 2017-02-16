@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -71,5 +72,28 @@ public class PersonSerializationTest {
         assertEquals(student.getBirthDate().getYear(), 1989);
         assertEquals(student.getProfileUrl().toExternalForm(),
                 "http://example.com/profile/1");
+    }
+
+
+    /**
+     * Test serialization of Null valued annotated property
+     * Related to: EISMASTER-4
+     * @throws Exception
+     */
+    @Test
+    public void testWithNullValuedProperties(){
+        Student student = new Student(null, 111111);
+        boolean exceptionThrown = false;
+        String rdf = null;
+        try {
+            rdf = serializer.serialize(student);
+            System.out.println(rdf);
+            Student deserialized = (Student)serializer.deserialize(rdf);
+            assertEquals(deserialized.getMatrNo(), 111111);
+        } catch (Exception e) {
+            exceptionThrown = true;
+            e.printStackTrace();
+        }
+        assertFalse(exceptionThrown);
     }
 }

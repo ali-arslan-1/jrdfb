@@ -145,7 +145,9 @@ public class RdfSerializer {
                         resource.addProperty(jenaProperty, resolvedNode);
                     }
                 }
-                metaData.addProperty(jenaProperty, resolver.resolveMemberClassName(obj));
+                String memberClassName = resolver.resolveMemberClassName(obj);
+                if(memberClassName != null)
+                    metaData.addProperty(jenaProperty, memberClassName);
             }
         }
 
@@ -245,7 +247,9 @@ public class RdfSerializer {
                 if(!resolved)
                     propertyVal = resolver.resolveProperty(resource);
 
-                resolver.setMemberValue(obj, propertyVal);
+                if (propertyVal != null) {
+                    resolver.setMemberValue(obj, propertyVal);
+                }
             }
         }
 

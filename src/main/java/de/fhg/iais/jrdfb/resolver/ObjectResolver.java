@@ -75,10 +75,12 @@ public abstract class ObjectResolver implements Resolver {
         }
     }
 
-    @NotNull
+    @Nullable
     @Override
     public String resolveMemberClassName(@NotNull Object object) throws ReflectiveOperationException {
-        return extractMemberValue(object).getClass().getName();
+        Object extractedValue = extractMemberValue(object);
+        if(extractedValue == null) return null;
+        return extractedValue.getClass().getName();
     }
 
     @Override
@@ -88,9 +90,10 @@ public abstract class ObjectResolver implements Resolver {
         Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
         Statement metaProperty = metadata.getProperty(getJenaProperty());
         if(metaProperty==null)
-            throw new NoSuchFieldException("Metadata for memberWrapper '"
-                    + memberWrapper.getName()+"' Not provided" +
-                    " in RDF Resource: "+resource.getURI());
+            return null;
+//            throw new NoSuchFieldException("Metadata for memberWrapper '"
+//                    + memberWrapper.getName()+"' Not provided" +
+//                    " in RDF Resource: "+resource.getURI());
         return metaProperty.getObject().toString();
     }
 
