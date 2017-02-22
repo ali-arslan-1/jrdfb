@@ -46,11 +46,11 @@ public class ReflectUtils {
     public static Method getSetterMethod(Method getter) throws NoSuchMethodException {
         PropertyDescriptor desc = getPropertyDescriptor(getter);
 
-        if(desc != null)
+        if(desc != null && desc.getWriteMethod() != null)
             return desc.getWriteMethod();
 
-        throw new NoSuchMethodException("There is no setter method for getter method "
-                + getter.getName());
+        throw new NoSuchMethodException("There is no setter method against getter method '"
+                + getter.getName()+"'");
     }
 
 

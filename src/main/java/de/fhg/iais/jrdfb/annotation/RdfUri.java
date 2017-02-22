@@ -5,9 +5,9 @@ import java.lang.annotation.*;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RdfResourceId {
+public @interface RdfUri {
     String value();
 }

@@ -109,9 +109,10 @@ public class RdfSerializer {
         resource = model.createResource(id.toString());
         metaData = model.createResource();
 
+        RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(clazz, RdfType.class);
         String rdfType;
-        if(clazz.isAnnotationPresent(RdfType.class)) {
-            rdfType = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
+        if(rdfTypeAnnotation != null) {
+            rdfType = rdfTypeAnnotation.value();
 
             resource.addProperty(RDF.type, model.createProperty(rdfType));
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
@@ -170,8 +171,9 @@ public class RdfSerializer {
 
         Resource resource = null;
         for(Class clazz: tClasses){
-            if(clazz.isAnnotationPresent(RdfType.class)){
-                String rdfType  = ((RdfType) clazz.getAnnotation(RdfType.class)).value();
+            RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(clazz, RdfType.class);
+            if(rdfTypeAnnotation != null){
+                String rdfType  = rdfTypeAnnotation.value();
                 ResIterator iter = model.listResourcesWithProperty(RDF.type,
                         model.createProperty(rdfType));
                 if(iter!=null && iter.hasNext()){
