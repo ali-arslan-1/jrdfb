@@ -5,11 +5,14 @@ import de.fhg.iais.jrdfb.serializer.example.Address;
 import de.fhg.iais.jrdfb.serializer.example.Person;
 import de.fhg.iais.jrdfb.serializer.example.Student;
 import de.fhg.iais.jrdfb.util.FileUtils;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -17,6 +20,7 @@ import java.util.TimeZone;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -24,6 +28,7 @@ import static org.testng.Assert.assertFalse;
 public class PersonSerializationTest {
     RdfSerializer serializer;
     String rdf_turtle;
+    Model expectedModel;
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -31,7 +36,8 @@ public class PersonSerializationTest {
         rdf_turtle = FileUtils
                 .readResource("Person.ttl",
                         this.getClass());
-
+        expectedModel = ModelFactory.createDefaultModel();
+        expectedModel.read(new ByteArrayInputStream(rdf_turtle.getBytes()), null, "TURTLE");
     }
 
     @Test
@@ -52,7 +58,14 @@ public class PersonSerializationTest {
 
         XMLGregorianCalendar birthDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         student.setBirthDate(birthDate);
-        assertEquals(serializer.serialize(student).trim(), rdf_turtle.trim());
+
+        Model actualModel = ModelFactory.createDefaultModel();
+        String serializedTurtle = serializer.serialize(student).trim();
+        System.out.println("Serialized Turtle:");
+        System.out.println(serializedTurtle);
+        actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
+                null, "TURTLE");
+        assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test

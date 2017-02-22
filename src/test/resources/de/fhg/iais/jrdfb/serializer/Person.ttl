@@ -24,6 +24,7 @@
         <https://www.w3.org/2006/vcard/ns#url>
                 <http://example.com/profile/1> .
 
+
 <http://example.com/address/1>
         a       <https://www.w3.org/2006/vcard/ns#Address> ;
         <http://rdfs.org/ns/void#dataDump>

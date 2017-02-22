@@ -50,9 +50,9 @@ public class SingleEnumTest {
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
                     null, "TURTLE");
-        ResIterator iter = actualModel.listResourcesWithProperty(RDF.type,
-                actualModel.createProperty("http://www.w3.org/2006/time#day"));
-        Resource actualRes = iter.nextResource();
+//        ResIterator iter = actualModel.listResourcesWithProperty(RDF.type,
+//                actualModel.createProperty("http://www.w3.org/2006/time#day"));
+//        Resource actualRes = iter.nextResource();
 
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
