@@ -8,18 +8,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>de.fhg.iml</groupId>
-            <artifactId>ids-metadata-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.fhg.iml</groupId>
-            <artifactId>ids-metadata-header</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng-release-version}</version>
@@ -52,8 +40,6 @@
         </dependency>
 
     </dependencies>
-
-
 
     <properties>
         <testng-release-version>6.8.21</testng-release-version>
