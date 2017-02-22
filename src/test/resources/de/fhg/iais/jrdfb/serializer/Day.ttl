@@ -1,0 +1,7 @@
+<104070628427071654581537169694382339607338128277>
+        a       <http://www.w3.org/2006/time#day> ;
+        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
+                "FRIDAY" ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://www.w3.org/2006/time#day>
+                    "de.fhg.iais.jrdfb.serializer.example.Day" ] .

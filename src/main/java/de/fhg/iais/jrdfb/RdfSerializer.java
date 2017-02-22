@@ -115,6 +115,9 @@ public class RdfSerializer {
 
             resource.addProperty(RDF.type, model.createProperty(rdfType));
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
+            if(clazz.isEnum()){
+                resource.addProperty(RDF.value, obj.toString());
+            }
         }else
             throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
                     "Not provided");
@@ -202,8 +205,14 @@ public class RdfSerializer {
     private Object createObject(Class clazz, Resource resource)
             throws ReflectiveOperationException {
 
-        Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
-        Object obj = objenesis.newInstance(clazz);
+        Object obj;
+        Statement rdfValue = resource.getProperty(RDF.value);
+        if(rdfValue != null){
+            obj = ReflectUtils.stringToObject(clazz.getName(), rdfValue.getObject().toString());
+        }else{
+            Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
+            obj = objenesis.newInstance(clazz);
+        }
 
         if(resource==null)
             throw new ReflectiveOperationException("No matching resource found in rdf");
