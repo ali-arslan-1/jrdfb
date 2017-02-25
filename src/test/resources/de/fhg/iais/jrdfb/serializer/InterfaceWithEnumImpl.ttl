@@ -1,7 +1,0 @@
-<http://example.com/InterfaceWithEnumImpl>
-        a                         <http://exampleClass.org> ;
-        <http://example.org/day>  <http://www.example.com/day/friday> ;
-        <http://rdfs.org/ns/void#dataDump>
-                [ <http://example.org/day>   "de.fhg.iais.jrdfb.serializer.example.DayEnum" ;
-                  <http://exampleClass.org>  "de.fhg.iais.jrdfb.serializer.example.InterfaceWithEnumImpl"
-                ] .

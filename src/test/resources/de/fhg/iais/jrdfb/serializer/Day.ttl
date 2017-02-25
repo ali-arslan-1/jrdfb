@@ -1,7 +1,0 @@
-<example.com/enum/day>
-        a       <http://www.w3.org/2006/time#day> ;
-        <http://www.w3.org/1999/02/22-rdf-syntax-ns#value>
-                <http://www.example.com/day/friday> ;
-        <http://rdfs.org/ns/void#dataDump>
-                [ <http://www.w3.org/2006/time#day>
-                    "de.fhg.iais.jrdfb.serializer.example.Day" ] .

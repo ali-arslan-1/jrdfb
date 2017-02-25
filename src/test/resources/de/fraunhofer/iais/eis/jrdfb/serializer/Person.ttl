@@ -1,0 +1,53 @@
+<student/111111>  a  <https://www.w3.org/2006/vcard/ns#Individual> ;
+        <http://purl.org/dc/terms/identifier>
+                "111111"^^<xsd:int> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://purl.org/dc/terms/identifier>
+                          "java.lang.Integer" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                  <https://www.w3.org/2006/vcard/ns#bday>
+                          "org.apache.xerces.jaxp.datatype.XMLGregorianCalendarImpl" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#hasAddress>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Address" ;
+                  <https://www.w3.org/2006/vcard/ns#url>
+                          "java.net.URL"
+                ] ;
+        <https://www.w3.org/2006/vcard/ns#bday>
+                "1989-09-01T00:00:00.000Z"^^<xsd:dateTime> ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Ali Arslan" ;
+        <https://www.w3.org/2006/vcard/ns#hasAddress>
+                <http://example.com/address/1> ;
+        <https://www.w3.org/2006/vcard/ns#url>
+                <http://example.com/profile/1> .
+
+
+<http://example.com/address/1>
+        a       <https://www.w3.org/2006/vcard/ns#Address> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+                          "java.lang.Double" ;
+                  <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+                          "java.lang.Double" ;
+                  <https://www.w3.org/2006/vcard/ns#Address>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Address" ;
+                  <https://www.w3.org/2006/vcard/ns#country-name>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#locality>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#street-address>
+                          "java.lang.String"
+                ] ;
+        <http://www.w3.org/2003/01/geo/wgs84_pos#lat>
+                "50.7323"^^<xsd:long> ;
+        <http://www.w3.org/2003/01/geo/wgs84_pos#long>
+                "7.1847"^^<xsd:long> ;
+        <https://www.w3.org/2006/vcard/ns#country-name>
+                "Germany" ;
+        <https://www.w3.org/2006/vcard/ns#locality>
+                "Bonn" ;
+        <https://www.w3.org/2006/vcard/ns#street-address>
+                "Romerstraße" .
