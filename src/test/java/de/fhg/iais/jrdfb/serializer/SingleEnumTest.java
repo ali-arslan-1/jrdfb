@@ -9,12 +9,8 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -39,28 +35,28 @@ public class SingleEnumTest {
                 expectedModel.createProperty("http://www.w3.org/2006/time#day"));
         expectedRes = iter.nextResource();
     }
-
-    @Test
-    public void testSerializeSingleEnum() throws Exception{
-        DayEnum dayEnum = DayEnum.FRIDAY;
-
-        Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(dayEnum).trim();
-        System.out.println("Serialized Turtle:");
-        System.out.println(serializedTurtle);
-        actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
-                    null, "TURTLE");
-//        ResIterator iter = actualModel.listResourcesWithProperty(RDF.type,
-//                actualModel.createProperty("http://www.w3.org/2006/time#day"));
-//        Resource actualRes = iter.nextResource();
-
-        assertTrue(expectedModel.isIsomorphicWith(actualModel));
-    }
-
-    @Test
-    public void testDeserializeSingleEnum() throws Exception{
-        DayEnum dayEnum = (DayEnum)serializer.deserialize(rdf_turtle);
-        assertEquals(dayEnum, DayEnum.FRIDAY);
-    }
+//
+//    @Test
+//    public void testSerializeSingleEnum() throws Exception{
+//        DayEnum dayEnum = DayEnum.FRIDAY;
+//
+//        Model actualModel = ModelFactory.createDefaultModel();
+//        String serializedTurtle = serializer.serialize(dayEnum).trim();
+//        System.out.println("Serialized Turtle:");
+//        System.out.println(serializedTurtle);
+//        actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
+//                    null, "TURTLE");
+////        ResIterator iter = actualModel.listResourcesWithProperty(RDF.type,
+////                actualModel.createProperty("http://www.w3.org/2006/time#day"));
+////        Resource actualRes = iter.nextResource();
+//
+//        assertTrue(expectedModel.isIsomorphicWith(actualModel));
+//    }
+//
+//    @Test
+//    public void testDeserializeSingleEnum() throws Exception{
+//        DayEnum dayEnum = (DayEnum)serializer.deserialize(rdf_turtle);
+//        assertEquals(dayEnum, DayEnum.FRIDAY);
+//    }
 
 }
