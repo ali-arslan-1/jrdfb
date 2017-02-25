@@ -24,6 +24,9 @@ public class ResolverFactoryImpl implements ResolverFactory {
                 resolver = new CollectionResolver(field, model);
             } else if (Map.class.isAssignableFrom(field.getType())) {
                 resolver = new MapResolver(field, model);
+            } else if (field.getType() instanceof Class
+                    && (field.getType()).isEnum() ){
+                resolver = new EnumResolver(field, model);
             }
         }else if(accessibleObject instanceof Method){
             Method method = (Method) accessibleObject;
@@ -33,6 +36,9 @@ public class ResolverFactoryImpl implements ResolverFactory {
                 resolver = new CollectionResolver(method, model);
             }else if(Map.class.isAssignableFrom(method.getReturnType())){
                 resolver = new MapResolver(method, model);
+            }else if (method.getReturnType() instanceof Class
+                    && (method.getReturnType()).isEnum()){
+                resolver = new EnumResolver(method, model);
             }
         }
         return resolver;

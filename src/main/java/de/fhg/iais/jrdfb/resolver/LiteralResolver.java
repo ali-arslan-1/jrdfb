@@ -1,7 +1,6 @@
 package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfTypedLiteral;
-import de.fhg.iais.jrdfb.annotation.RdfUri;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
@@ -45,15 +44,6 @@ public class LiteralResolver extends ObjectResolver {
                                                     LiteralMapping.get(memberWrapper.getType()));
         }else if(memberWrapper.getType().equals(URL.class)){
             rdfNode =  model.createProperty(value.toString());
-        }else if(memberWrapper.getType() instanceof Class
-                && ((Class<?>)memberWrapper.getType()).isEnum()){
-            RdfUri rdfUri = ((Class<?>)memberWrapper.getType()).getField(((Enum)value).name())
-                     .getAnnotation(RdfUri.class);
-            if(rdfUri != null){
-                rdfNode =  model.createProperty(rdfUri.value());
-            }else{
-                rdfNode = model.createLiteral(value.toString());
-            }
         }
         else{
             rdfNode = model.createLiteral(value.toString());

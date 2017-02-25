@@ -2,7 +2,6 @@ package de.fhg.iais.jrdfb.resolver;
 
 import de.fhg.iais.jrdfb.annotation.RdfId;
 import de.fhg.iais.jrdfb.annotation.RdfProperty;
-import de.fhg.iais.jrdfb.annotation.RdfUri;
 import de.fhg.iais.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
@@ -58,21 +57,9 @@ public abstract class ObjectResolver implements Resolver {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
         if(getMemberPath().isEmpty()){
-            String stringValue = null;
+            String stringValue;
             if(memberWrapper.getType().equals(URL.class))
                 stringValue = value.getObject().toString();
-            else if(memberWrapper.getType() instanceof Class
-                    && ((Class<?>)memberWrapper.getType()).isEnum()
-                    && value.getObject().isURIResource()){
-                String uri = value.getObject().toString();
-                Field [] enumValues = ((Class<?>)memberWrapper.getType()).getDeclaredFields();
-                for (Field enumVal : enumValues){
-                    RdfUri rdfUri  = enumVal.getAnnotation(RdfUri.class);
-                    if(rdfUri != null && rdfUri.value().equals(uri)){
-                        stringValue = enumVal.getName();
-                    }
-                }
-            }
             else
                 stringValue = value.getLiteral().getString();
             return ReflectUtils.stringToObject(resolveMemberClassName(resource),
