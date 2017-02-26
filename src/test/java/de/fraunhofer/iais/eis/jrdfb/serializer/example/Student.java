@@ -22,6 +22,10 @@ public class Student extends Person
         this.matrNo = matrNo;
     }
 
+    public Student(String name, String ssn) {
+        super(name, ssn);
+    }
+
     public int getMatrNo() {
         return matrNo;
     }

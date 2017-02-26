@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -141,6 +141,14 @@ public class MemberWrapper implements AnnotatedElement, Member{
             return ((Field) member) .getType();
         else if(member instanceof Method)
             return ((Method) member).getReturnType();
+        return null;
+    }
+
+    public Type getGenericType(){
+        if(member instanceof Field)
+            return ((Field) member) .getGenericType();
+        else if(member instanceof Method)
+            return ((Method) member).getGenericReturnType();
         return null;
     }
 }

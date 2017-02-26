@@ -1,6 +1,8 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.example;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
+import de.fraunhofer.iais.eis.jrdfb.vocabulary.DcTerms;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.VCARD;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -9,6 +11,10 @@ import java.util.List;
 @RdfType(VCARD.INDIVIDUAL)
 public class Person
 {
+	@RdfProperty(DcTerms.IDENTIFIER)
+	@RdfId(uriTemplate = "person/{RdfId}")
+	private String ssn;
+
     @RdfProperty(VCARD.FN)
     private String name;
 
@@ -18,10 +24,16 @@ public class Person
     @RdfProperty(VCARD.BDAY)
 	private XMLGregorianCalendar birthDate;
 
+    @RdfProperty("example:hasFriends")
 	private List<Person> friends;
 
     public Person(String name){
         this.name = name;
+    }
+
+    public Person(String name, String ssn){
+        this.name = name;
+        this.ssn = ssn;
     }
 
 	public Address getAddress() {

@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;

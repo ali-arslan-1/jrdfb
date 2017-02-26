@@ -1,6 +1,5 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
-import de.fraunhofer.iais.eis.jrdfb.RdfSerializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Parameter;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterDataType;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl;

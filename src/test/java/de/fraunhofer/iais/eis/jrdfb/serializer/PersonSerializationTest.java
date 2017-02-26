@@ -1,6 +1,5 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
-import de.fraunhofer.iais.eis.jrdfb.RdfSerializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Address;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Person;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Student;

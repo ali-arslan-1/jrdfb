@@ -1,0 +1,51 @@
+<student/111111>  a           <https://www.w3.org/2006/vcard/ns#Individual> ;
+        <http://purl.org/dc/terms/identifier>
+                "111111"^^<xsd:int> ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Ali Arslan" ;
+        <https://www.w3.org/2006/vcard/ns#url>
+              <http://example.com/profile/1> ;
+        <example:hasFriends>  [ a       <http://www.w3.org/2004/02/skos/core#Collection> ;
+                                <http://www.w3.org/2004/02/skos/core#member>
+                                        <person/333333> , <person/222222>
+                              ] ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <example:hasFriends>  "java.util.ArrayList" ;
+                  <http://purl.org/dc/terms/identifier>
+                          "java.lang.Integer" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#url>
+                          "java.net.URL"
+                ] ;.
+
+
+<person/222222>  a  <https://www.w3.org/2006/vcard/ns#Individual> ;
+        <http://purl.org/dc/terms/identifier>
+                "222222" ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Nabeel Muneer" ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://purl.org/dc/terms/identifier>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String"
+                ] ; .
+
+<person/333333>  a  <https://www.w3.org/2006/vcard/ns#Individual> ;
+        <http://purl.org/dc/terms/identifier>
+                "333333" ;
+        <https://www.w3.org/2006/vcard/ns#fn>
+                "Abdullah Hamid";
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://purl.org/dc/terms/identifier>
+                          "java.lang.String" ;
+                  <https://www.w3.org/2006/vcard/ns#Individual>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                  <https://www.w3.org/2006/vcard/ns#fn>
+                          "java.lang.String"
+                ] ; .

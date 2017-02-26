@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfBag;
 import org.apache.jena.rdf.model.*;
@@ -18,12 +18,12 @@ import java.util.TreeMap;
  */
 public class MapResolver extends ObjectResolver {
 
-    public MapResolver(Field field, Model model) {
-        super(field, model);
+    public MapResolver(Field field, RdfSerializer rdfSerializer) {
+        super(field, rdfSerializer);
     }
 
-    public MapResolver(Method method, Model model) {
-        super(method, model);
+    public MapResolver(Method method, RdfSerializer rdfSerializer) {
+        super(method, rdfSerializer);
     }
 
     @Override

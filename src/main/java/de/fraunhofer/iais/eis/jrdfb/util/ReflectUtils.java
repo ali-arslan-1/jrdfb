@@ -237,4 +237,20 @@ public class ReflectUtils {
         return allMethods;
     }
 
+    /**
+     * Returns the matching Class if class with @param className is present in array else null
+     *
+     * @param array the array of classes
+     * @param className the class name to be found in the array
+     * @return returns the Class if it exists in array
+     */
+    public static Class<?> getIfExists(Class[] array, String className){
+        for(Class clazz: array){
+            if(clazz.getName().equals(className)){
+                return clazz;
+            }
+        }
+        return null;
+    }
+
 }

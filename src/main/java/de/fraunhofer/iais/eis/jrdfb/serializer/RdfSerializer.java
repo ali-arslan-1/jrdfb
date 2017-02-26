@@ -1,12 +1,9 @@
-package de.fraunhofer.iais.eis.jrdfb;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
+import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
-import de.fraunhofer.iais.eis.jrdfb.resolver.ObjectResolver;
-import de.fraunhofer.iais.eis.jrdfb.resolver.Resolver;
-import de.fraunhofer.iais.eis.jrdfb.resolver.ResolverFactory;
-import de.fraunhofer.iais.eis.jrdfb.resolver.ResolverFactoryImpl;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
@@ -28,9 +25,9 @@ import java.util.Collection;
  */
 public class RdfSerializer {
 
-    private Class[] tClasses;
-    private ResolverFactory resolverFactory;
-    private Model model;
+    protected Class[] tClasses;
+    protected ResolverFactory resolverFactory;
+    protected Model model;
 
     public RdfSerializer(Class... tClasses){
         this.tClasses = tClasses;
@@ -65,7 +62,7 @@ public class RdfSerializer {
         return result;
     }
 
-    private Resource createResource(Class clazz, Object obj) throws
+    protected Resource createResource(Class clazz, Object obj) throws
             ReflectiveOperationException{
         Resource resource;
         Resource metaData;
@@ -88,7 +85,7 @@ public class RdfSerializer {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
-                Resolver resolver = resolverFactory.createResolver(member, model);
+                Resolver resolver = resolverFactory.createResolver(member, this);
                 RDFNode resolvedNode = resolver.resolveMember(obj);
                 assert resolvedNode != null;
                 if(resolvedNode.isLiteral())
@@ -132,16 +129,17 @@ public class RdfSerializer {
 
             if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                ObjectResolver resolver = resolverFactory.createResolver(member, model);
+                ObjectResolver resolver = resolverFactory.createResolver(member,this);
                 boolean resolved = false;
-                for(Class tClass: tClasses){
-                    if(tClass.getName().equals(resolver.resolveMemberClassName(obj))){
-                        resource.addProperty(jenaProperty,
-                                this.createResource(tClass, resolver.getMemberValue(obj)));
-                        resolved = true;
-                        break;
-                    }
+
+                Class tClass = ReflectUtils.getIfExists(tClasses, resolver.resolveMemberClassName
+                        (obj));
+                if(tClass != null){
+                    resource.addProperty(jenaProperty,
+                            this.createResource(tClass, resolver.getMemberValue(obj)));
+                    resolved = true;
                 }
+
 
                 if(!resolved){
                     RDFNode resolvedNode = resolver.resolveMember(obj);
@@ -204,7 +202,7 @@ public class RdfSerializer {
         }
     }
 
-    private Object createObject(Class clazz, Resource resource)
+    protected Object createObject(Class clazz, Resource resource)
             throws ReflectiveOperationException {
 
         Object obj;
@@ -243,18 +241,20 @@ public class RdfSerializer {
                 rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
             if (rdfPropertyInfo != null) {
 
-                ObjectResolver resolver = resolverFactory.createResolver(member, model);
+                ObjectResolver resolver = resolverFactory.createResolver(member,this);
                 boolean resolved = false;
                 Object propertyVal = null;
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                for(Class tClass: tClasses){
-                    if(tClass.getName().equals(resolver.resolveMemberClassName(resource))){
-                        propertyVal = this.createObject(tClass,
-                                (Resource)resource.getProperty(jenaProperty).getObject());
-                        resolved = true;
-                        break;
-                    }
+
+                Class<?> tClass = ReflectUtils.getIfExists(tClasses,
+                        resolver.resolveMemberClassName(resource));
+
+                if(tClass != null){
+                    propertyVal = this.createObject(tClass,
+                            (Resource)resource.getProperty(jenaProperty).getObject());
+                    resolved = true;
                 }
+
                 if(!resolved)
                     propertyVal = resolver.resolveProperty(resource);
 

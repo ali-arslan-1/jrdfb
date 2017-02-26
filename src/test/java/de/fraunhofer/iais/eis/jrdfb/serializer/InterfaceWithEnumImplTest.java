@@ -1,6 +1,5 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
-import de.fraunhofer.iais.eis.jrdfb.RdfSerializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl;

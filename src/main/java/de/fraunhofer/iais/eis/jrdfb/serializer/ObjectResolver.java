@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
@@ -22,18 +22,22 @@ import java.net.URL;
 public abstract class ObjectResolver implements Resolver {
     protected MemberWrapper memberWrapper;
     protected Model model;
+    protected RdfSerializer rdfSerializer;
 
-    public ObjectResolver(Field field, Model model) {
+    public ObjectResolver(Field field, RdfSerializer rdfSerializer) {
         this.memberWrapper = new MemberWrapper(field);
-        this.model = model;
+        this.model = rdfSerializer.model;
+        this.rdfSerializer = rdfSerializer;
     }
 
-    public ObjectResolver(Method method, Model model) {
+    public ObjectResolver(Method method, RdfSerializer rdfSerializer) {
         this.memberWrapper = new MemberWrapper(method);
-        this.model = model;
+        this.model = rdfSerializer.model;
+        this.rdfSerializer = rdfSerializer;
     }
 
-    protected Object extractMemberValue(Object object) throws ReflectiveOperationException {
+    protected Object extractMemberValue(Object object)
+            throws ReflectiveOperationException {
         if(getMemberPath().isEmpty()){
             return getMemberValue(object);
         }else{

@@ -1,7 +1,6 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfTypedLiteral;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,13 +20,12 @@ import java.util.Map;
  */
 public class LiteralResolver extends ObjectResolver {
 
-
-    public LiteralResolver(Field field, Model model) {
-        super(field, model);
+    public LiteralResolver(Field field, RdfSerializer rdfSerializer) {
+        super(field, rdfSerializer);
     }
 
-    public LiteralResolver(Method method, Model model) {
-        super(method, model);
+    public LiteralResolver(Method method, RdfSerializer rdfSerializer) {
+        super(method, rdfSerializer);
     }
 
     @Override

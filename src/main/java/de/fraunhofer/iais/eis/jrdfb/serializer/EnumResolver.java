@@ -1,8 +1,7 @@
-package de.fraunhofer.iais.eis.jrdfb.resolver;
+package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfUri;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -17,12 +16,12 @@ import java.lang.reflect.Method;
  */
 public class EnumResolver extends ObjectResolver {
 
-    public EnumResolver(Field field, Model model) {
-        super(field, model);
+    public EnumResolver(Field field, RdfSerializer rdfSerializer) {
+        super(field, rdfSerializer);
     }
 
-    public EnumResolver(Method method, Model model) {
-        super(method, model);
+    public EnumResolver(Method method, RdfSerializer rdfSerializer) {
+        super(method, rdfSerializer);
     }
 
     @Override
