@@ -45,7 +45,10 @@ public class CollectionResolver extends ObjectResolver {
             if(tClass != null){
                 rdfNode = rdfSerializer.createResource(tClass, elem);
             }else{
-                rdfNode = model.createLiteral(value.toString());
+                if(memberWrapper.getType().equals(URL.class))
+                    rdfNode =  model.createProperty(elem.toString());
+                else
+                    rdfNode = model.createLiteral(elem.toString());
             }
             resource.addProperty(SKOS.member, rdfNode);
         }
