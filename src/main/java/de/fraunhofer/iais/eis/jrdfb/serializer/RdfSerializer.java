@@ -8,8 +8,6 @@ import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.ByteArrayInputStream;
@@ -210,8 +208,7 @@ public class RdfSerializer {
         if(rdfValue != null){
             obj = ReflectUtils.stringToObject(clazz.getName(), rdfValue.getObject().toString());
         }else{
-            Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
-            obj = objenesis.newInstance(clazz);
+            obj = ReflectUtils.initClassInstance(clazz);
         }
 
         if(resource==null)

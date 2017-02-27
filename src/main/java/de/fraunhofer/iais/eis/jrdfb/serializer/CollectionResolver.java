@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.net.URL;
 import java.util.Collection;
 
 /**
@@ -64,12 +65,30 @@ public class CollectionResolver extends ObjectResolver {
 
         StmtIterator it  = collectionRes.listProperties(SKOS.member);
 
+        Collection collection = (Collection)ReflectUtils.
+                                    initClassDefaultInstance(resolveMemberClassName(resource));
+
         while( it.hasNext() ) {
             Statement stmt = it.nextStatement();
+            if(tClass != null){
+                Object object = rdfSerializer.createObject(getGenericType(),
+                        (Resource) stmt.getObject());
+                collection.add(object);
+            }else{
+                String stringValue;
+                if(memberWrapper.getType().equals(URL.class)){
+                    stringValue = stmt.getObject().toString();
+                }
+                else{
+                    stringValue = stmt.getLiteral().getString();
+                }
+                collection.add(ReflectUtils.stringToObject(getGenericType().getName(),
+                        stringValue));
+            }
 
         }
 
-        return super.resolveProperty(resource);
+        return collection;
     }
 
     private Class<?> getGenericType(){

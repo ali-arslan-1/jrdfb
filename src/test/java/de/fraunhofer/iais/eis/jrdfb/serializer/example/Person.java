@@ -67,5 +67,9 @@ public class Person
 	public void setBirthDate(XMLGregorianCalendar birthDate) {
 		this.birthDate = birthDate;
 	}
+
+	public String getSsn() {
+		return ssn;
+	}
 }
 

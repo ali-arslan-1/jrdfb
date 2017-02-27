@@ -67,14 +67,14 @@ public class CollectionsTest {
         assertEquals(student.getProfileUrl().toExternalForm(),
                 "http://example.com/profile/1");
 
-        Student friend1 = (Student)friends.get(0);
-        Student friend2 = (Student)friends.get(1);
+        Person friend1 = friends.get(0);
+        Person friend2 = friends.get(1);
 
         assertEquals(friend1.getName(), "Nabeel Muneer");
-        assertEquals(friend1.getMatrNo(), 222222);
+        assertEquals(friend1.getSsn(), "222222");
 
         assertEquals(friend2.getName(), "Abdullah Hamid");
-        assertEquals(friend2.getMatrNo(), 333333);
+        assertEquals(friend2.getSsn(), "333333");
 
     }
 

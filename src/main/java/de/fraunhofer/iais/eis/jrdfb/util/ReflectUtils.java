@@ -1,8 +1,11 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 import java.beans.*;
 import java.io.ByteArrayOutputStream;
@@ -179,6 +182,15 @@ public class ReflectUtils {
         return nestedBean;
     }
 
+    /**
+     * Get all the fields in the hierarchy until exclusiveParent. exclusiveParent fields are not
+     * included.
+     * If the same property is annotated more than one in the hierarchy, field which is present on
+     * the lowest level with that property is included.
+     * @param startClass
+     * @param exclusiveParent
+     * @return
+     */
     public static List<Field> getFieldsUpTo(@NotNull Class<?> startClass,
                                                 @Nullable Class<?> exclusiveParent) {
 
@@ -187,12 +199,143 @@ public class ReflectUtils {
 
         if (parentClass != null &&
                 (exclusiveParent == null || !(parentClass.equals(exclusiveParent)))) {
-            List<Field> parentClassFields =
-                    (List<Field>) getFieldsUpTo(parentClass, exclusiveParent);
-            currentClassFields.addAll(parentClassFields);
+            List<Field> parentClassFields = getFieldsUpTo(parentClass, exclusiveParent);
+            for(Field field: parentClassFields){
+                if(field.isAnnotationPresent(RdfProperty.class)){
+                    RdfProperty property = field.getAnnotation(RdfProperty.class);
+
+                    // if the same property is annotated already do not add field from parent
+                    // with the same property
+                    if(!currentClassFields
+                            .stream()
+                            .anyMatch( f -> f.isAnnotationPresent(RdfProperty.class)
+                                            && f.getAnnotation(RdfProperty.class)
+                                                .value().equals(property.value())
+                            )){
+                        currentClassFields.add(field);
+                    }
+
+                }else{
+                    currentClassFields.add(field);
+                }
+            }
         }
 
         return currentClassFields;
+    }
+
+    /**
+     * Gets an array of all methods in a class hierarchy walking up to parent classes
+     *
+     * If the same property is annotated more than one in the hierarchy, field which is present on
+     * the lowest level with that property is included.
+     * @param objectClass the class
+     * @param exclusiveParent full stop class
+     * @return the methods array
+     */
+    public static Set<Method> getAllMethodsInHierarchy(Class<?> objectClass,
+                                                       Class<?> exclusiveParent) {
+        Set<Method> allMethods = new HashSet<>();
+        Method[] declaredMethods = objectClass.getDeclaredMethods();
+        if (objectClass.getSuperclass() != null && !(objectClass.getSuperclass().equals
+                (exclusiveParent))) {
+            Class<?> superClass = objectClass.getSuperclass();
+            Set<Method> superClassMethods = getAllMethodsInHierarchy(superClass, exclusiveParent);
+            // if the same property is annotated already do not add method from parent
+            // with the same property
+            for (Method method: superClassMethods){
+                if(method.isAnnotationPresent(RdfProperty.class)){
+                    RdfProperty property = method.getAnnotation(RdfProperty.class);
+                    if(!Arrays.stream(declaredMethods)
+                            .anyMatch( m -> m.isAnnotationPresent(RdfProperty.class)
+                                    && m.getAnnotation(RdfProperty.class)
+                                    .value().equals(property.value())
+                            )){
+                        allMethods.add(method);
+                    }
+                }else{
+                    allMethods.add(method);
+                }
+            }
+            //allMethods.addAll(superClassMethods);
+        }
+        allMethods.addAll(Arrays.asList(declaredMethods));
+        return allMethods;
+    }
+
+    /**
+     * Returns the matching Class if class with @param className is present in array else null
+     *
+     * @param array the array of classes
+     * @param className the class name to be found in the array
+     * @return returns the Class if it exists in array
+     */
+    public static Class<?> getIfExists(Class[] array, String className){
+        for(Class clazz: array){
+            if(clazz.getName().equals(className)){
+                return clazz;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Takes the class as parameter and returns the instance of the class
+     *
+     * @param clazz class whose instance has to be initialized
+     * @return returns the instance of the class
+     */
+    @NotNull
+    public static Object initClassInstance(@NotNull Class<?> clazz){
+        Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
+        return objenesis.newInstance(clazz);
+    }
+
+
+    /**
+     * Takes the class as parameter and returns the instance of the class by invoking default
+     * constructor
+     *
+     * @param clazz class whose instance has to be initialized
+     * @return returns the instance of the class
+     */
+    @NotNull
+    public static Object initClassDefaultInstance(@NotNull Class<?> clazz)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+                InstantiationException {
+        Constructor<?> cons = clazz.getDeclaredConstructor();
+        cons.setAccessible(true);
+        return cons.newInstance();
+    }
+
+    /**
+     * Takes the class name as parameter and returns the instance of the class
+     *
+     * @param className class name whose instance has to be initialized
+     * @return returns the instance of the class
+     */
+    @NotNull
+    public static Object initClassInstance(String className) throws ClassNotFoundException {
+        Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
+        Class<?> targetType = Class.forName(className);
+        return objenesis.newInstance(targetType);
+    }
+
+    /**
+     * Takes the class name as parameter and returns the instance of the class by invoking default
+     * constructor
+     * @param className class name whose instance has to be initialized
+     * @return returns the instance of the class
+     */
+    @NotNull
+    public static Object initClassDefaultInstance(String className)
+            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+                    InvocationTargetException, InstantiationException {
+        Class<?> targetType = Class.forName(className);
+        Constructor<?> cons = targetType.getDeclaredConstructor();
+        cons.setAccessible(true);
+        return cons.newInstance();
     }
 
     public static BigInteger getChecksum(Object obj) {
@@ -213,44 +356,6 @@ public class ReflectUtils {
         }catch (Exception e){
             return BigInteger.valueOf(obj.hashCode());
         }
-    }
-
-    /**
-     * https://coderwall.com/p/wrqcsg/java-reflection-get-all-methods-in-hierarchy
-     *
-     * Gets an array of all methods in a class hierarchy walking up to parent classes
-     * @param objectClass the class
-     * @param exclusiveParent full stop class
-     * @return the methods array
-     */
-    public static Set<Method> getAllMethodsInHierarchy(Class<?> objectClass,
-                                                       Class<?> exclusiveParent) {
-        Set<Method> allMethods = new HashSet<>();
-        Method[] declaredMethods = objectClass.getDeclaredMethods();
-        if (objectClass.getSuperclass() != null && !(objectClass.getSuperclass().equals
-                (exclusiveParent))) {
-            Class<?> superClass = objectClass.getSuperclass();
-            Set<Method> superClassMethods = getAllMethodsInHierarchy(superClass, exclusiveParent);
-            allMethods.addAll(superClassMethods);
-        }
-        allMethods.addAll(Arrays.asList(declaredMethods));
-        return allMethods;
-    }
-
-    /**
-     * Returns the matching Class if class with @param className is present in array else null
-     *
-     * @param array the array of classes
-     * @param className the class name to be found in the array
-     * @return returns the Class if it exists in array
-     */
-    public static Class<?> getIfExists(Class[] array, String className){
-        for(Class clazz: array){
-            if(clazz.getName().equals(className)){
-                return clazz;
-            }
-        }
-        return null;
     }
 
 }
