@@ -45,7 +45,7 @@ public class CollectionResolver extends ObjectResolver {
             if(tClass != null){
                 rdfNode = rdfSerializer.createResource(tClass, elem);
             }else{
-                if(memberWrapper.getType().equals(URL.class))
+                if(memberWrapper.getGenericType().equals(URL.class))
                     rdfNode =  model.createProperty(elem.toString());
                 else
                     rdfNode = model.createLiteral(elem.toString());
@@ -79,7 +79,7 @@ public class CollectionResolver extends ObjectResolver {
                 collection.add(object);
             }else{
                 String stringValue;
-                if(memberWrapper.getType().equals(URL.class)){
+                if(memberWrapper.getGenericType().equals(URL.class)){
                     stringValue = stmt.getObject().toString();
                 }
                 else{
