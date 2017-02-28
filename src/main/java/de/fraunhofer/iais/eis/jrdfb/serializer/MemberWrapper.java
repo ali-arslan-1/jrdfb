@@ -35,8 +35,15 @@ public class MemberWrapper implements AnnotatedElement, Member{
     public void setValue(Object object, Object value) throws ReflectiveOperationException {
         if(member instanceof Field)
             ((Field) member) .set(object, value);
-        else if(member instanceof Method)
-            (ReflectUtils.getSetterMethod((Method) member)).invoke(object, value);
+        else if(member instanceof Method){
+            try{
+                (ReflectUtils.getSetterMethod((Method) member)).invoke(object, value);
+            }catch(NoSuchMethodException e){
+                Field property = ReflectUtils.getProperty((Method) member, object.getClass());
+                property.setAccessible(true);
+                property.set(object, value);
+            }
+        }
     }
 
     public Object getNestedObject(final Object bean, final String fieldPath)

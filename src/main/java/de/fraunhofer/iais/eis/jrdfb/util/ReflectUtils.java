@@ -42,6 +42,26 @@ public class ReflectUtils {
 
     /**
      * @param getter
+     * @param clazz the class where the property is declared
+     * @return Property name
+     *
+     * Takes getter Method and returns property which it returns
+     */
+    public static Field getProperty(@NotNull Method getter, Class<?> clazz)
+            throws NoSuchFieldException {
+        PropertyDescriptor desc = getPropertyDescriptor(getter);
+
+        if(desc != null){
+            String name =  desc.getName();
+            return clazz.getDeclaredField(name);
+        }
+
+        throw new NoSuchFieldException("There is no such field against getter method '"
+                + getter.getName()+"'");
+    }
+
+    /**
+     * @param getter
      * @return write method
      *
      * Takes getter Method and returns setter method

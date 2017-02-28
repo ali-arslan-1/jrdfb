@@ -20,8 +20,8 @@ public class InterfaceWithEnumImpl implements InterfaceWithEnum{
         return this.someEnum;
     }
 
-    public void setSomeEnum(DayEnum someEnum) {
-        this.someEnum = someEnum;
-    }
+//    public void setSomeEnum(DayEnum someEnum) {
+//        this.someEnum = someEnum;
+//    }
 
 }
