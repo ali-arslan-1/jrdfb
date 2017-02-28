@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Collection;
 
@@ -40,15 +41,21 @@ public class CollectionResolver extends ObjectResolver {
         resource.addProperty(RDF.type, SKOS.Collection);
 
         Class tClass = ReflectUtils.getIfExists(rdfSerializer.tClasses,
-                getGenericType().getName());
+                getGenericType().getTypeName());
         for (Object elem : collection) {
             if(tClass != null){
                 rdfNode = rdfSerializer.createResource(tClass, elem);
             }else{
-                if(memberWrapper.getGenericType().equals(URL.class))
+                if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());
-                else
+                }
+                else if(getGenericType() instanceof Class && RDFNode.class
+                        .isAssignableFrom((Class<?>) getGenericType())){
+                    rdfNode = (RDFNode)elem;
+                }
+                else{
                     rdfNode = model.createLiteral(elem.toString());
+                }
             }
             resource.addProperty(SKOS.member, rdfNode);
         }
@@ -64,7 +71,7 @@ public class CollectionResolver extends ObjectResolver {
         Resource collectionRes = (Resource)value.getObject();
 
         Class tClass = ReflectUtils.getIfExists(rdfSerializer.tClasses,
-                getGenericType().getName());
+                getGenericType().getTypeName());
 
         StmtIterator it  = collectionRes.listProperties(SKOS.member);
 
@@ -73,19 +80,23 @@ public class CollectionResolver extends ObjectResolver {
 
         while( it.hasNext() ) {
             Statement stmt = it.nextStatement();
-            if(tClass != null){
-                Object object = rdfSerializer.createObject(getGenericType(),
+            if(tClass != null && getGenericType() instanceof Class){
+                Object object = rdfSerializer.createObject((Class<?>)getGenericType(),
                         (Resource) stmt.getObject());
                 collection.add(object);
             }else{
                 String stringValue;
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     stringValue = stmt.getObject().toString();
+                }else if(getGenericType() instanceof Class && RDFNode.class
+                        .isAssignableFrom((Class<?>) getGenericType())){
+                    collection.add(stmt.getObject());
+                    continue;
                 }
                 else{
                     stringValue = stmt.getLiteral().getString();
                 }
-                collection.add(ReflectUtils.stringToObject(getGenericType().getName(),
+                collection.add(ReflectUtils.stringToObject(getGenericType().getTypeName(),
                         stringValue));
             }
 
@@ -94,9 +105,9 @@ public class CollectionResolver extends ObjectResolver {
         return collection;
     }
 
-    private Class<?> getGenericType(){
+    private Type getGenericType(){
         ParameterizedType genericType = (ParameterizedType) memberWrapper
                 .getGenericType();
-        return (Class<?>) genericType.getActualTypeArguments()[0];
+        return genericType.getActualTypeArguments()[0];
     }
 }

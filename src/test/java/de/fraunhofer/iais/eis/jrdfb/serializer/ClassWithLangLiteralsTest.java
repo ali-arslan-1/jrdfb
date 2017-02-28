@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -26,7 +27,7 @@ public class ClassWithLangLiteralsTest {
     public void setUp() throws Exception {
         serializer = new RdfSerializer(ClassWithLangLiterals.class);
         rdf_turtle = FileUtils
-                .readResource("PersonWithCollection.ttl",
+                .readResource("ClassWithLangLiterals.ttl",
                         this.getClass());
         expectedModel = ModelFactory.createDefaultModel();
         expectedModel.read(new ByteArrayInputStream(rdf_turtle.getBytes()), null, "TURTLE");
@@ -56,6 +57,23 @@ public class ClassWithLangLiteralsTest {
                 null, "TURTLE");
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
 
+    }
+
+    @Test
+    public void testDeserialize() throws Exception{
+        ClassWithLangLiterals classWithLangLiterals = (ClassWithLangLiterals)serializer
+                                                                        .deserialize(rdf_turtle);
+
+        assertEquals(classWithLangLiterals.getSingleLiteral().getLanguage(), "en");
+        assertEquals(classWithLangLiterals.getSingleLiteral().getString(), "test_literal_single");
+
+        Literal first = ((ArrayList<Literal>)classWithLangLiterals.getLiteralCollection()).get(0);
+        Literal second = ((ArrayList<Literal>)classWithLangLiterals.getLiteralCollection()).get(1);
+        assertEquals(first.getLanguage(), "en");
+        assertEquals(first.getString(), "test_literal_1");
+
+        assertEquals(second.getLanguage(), "de");
+        assertEquals(second.getString(), "test_literal_2");
 
     }
 

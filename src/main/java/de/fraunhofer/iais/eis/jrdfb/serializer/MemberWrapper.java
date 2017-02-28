@@ -136,7 +136,7 @@ public class MemberWrapper implements AnnotatedElement, Member{
         return false;
     }
 
-    public Type getType(){
+    public Class<?> getType(){
         if(member instanceof Field)
             return ((Field) member) .getType();
         else if(member instanceof Method)

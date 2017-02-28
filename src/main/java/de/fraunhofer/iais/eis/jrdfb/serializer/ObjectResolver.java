@@ -3,10 +3,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +61,9 @@ public abstract class ObjectResolver implements Resolver {
             String stringValue;
             if(memberWrapper.getType().equals(URL.class))
                 stringValue = value.getObject().toString();
+            else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())){
+                return value.getObject();
+            }
             else
                 stringValue = value.getLiteral().getString();
             return ReflectUtils.stringToObject(resolveMemberClassName(resource),

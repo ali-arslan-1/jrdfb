@@ -42,6 +42,8 @@ public class LiteralResolver extends ObjectResolver {
                                                     LiteralMapping.get(memberWrapper.getType()));
         }else if(memberWrapper.getType().equals(URL.class)){
             rdfNode =  model.createProperty(value.toString());
+        }else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())){
+            rdfNode = (RDFNode)value;
         }
         else{
             rdfNode = model.createLiteral(value.toString());

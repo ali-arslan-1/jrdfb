@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.example;
 
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 import org.apache.jena.rdf.model.Literal;
@@ -11,6 +12,10 @@ import java.util.Collection;
  */
 @RdfType("example:ClassWithLangLiterals")
 public class ClassWithLangLiterals {
+
+    @RdfId
+    private String id = "example.com/classWithLangLiterals";
+
     @RdfProperty("example:singleLiteral")
     private Literal singleLiteral;
 

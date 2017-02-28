@@ -1,0 +1,13 @@
+<example.com/classWithLangLiterals>
+        a                            <example:ClassWithLangLiterals> ;
+        <example:literalCollection>  [ a       <http://www.w3.org/2004/02/skos/core#Collection> ;
+                                       <http://www.w3.org/2004/02/skos/core#member>
+                                               "test_literal_2"@de , "test_literal_1"@en
+                                     ] ;
+        <example:singleLiteral>      "test_literal_single"@en ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <example:ClassWithLangLiterals>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals" ;
+                  <example:literalCollection>  "java.util.ArrayList" ;
+                  <example:singleLiteral>      "org.apache.jena.rdf.model.impl.LiteralImpl"
+                ] .
