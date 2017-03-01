@@ -6,7 +6,7 @@ import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
@@ -24,7 +24,7 @@ public class ParameterImplTest {
     Model expectedModel;
 
 
-    @BeforeClass
+    @BeforeMethod
     public void setUp() throws Exception {
         serializer = new RdfSerializer(ParameterImpl.class);
         rdf_turtle = FileUtils

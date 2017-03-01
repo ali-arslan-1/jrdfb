@@ -7,7 +7,7 @@ import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
@@ -25,7 +25,7 @@ public class InterfaceWithEnumImplTest {
     Model expectedModel;
 
 
-    @BeforeClass
+    @BeforeMethod
     public void setUp() throws Exception {
         serializer = new RdfSerializer(InterfaceWithEnumImpl.class);
         rdf_turtle = FileUtils
