@@ -31,7 +31,7 @@ public class EnumResolver extends ObjectResolver {
         if(value == null) return null;
 
         RDFNode rdfNode;
-        RdfUri rdfUri = ((Class<?>)memberWrapper.getType()).getField(((Enum)value).name())
+        RdfUri rdfUri = memberWrapper.getType().getField(((Enum)value).name())
                 .getAnnotation(RdfUri.class);
         if(rdfUri != null){
             rdfNode =  model.createProperty(rdfUri.value());
@@ -49,7 +49,7 @@ public class EnumResolver extends ObjectResolver {
         String stringValue = null;
         if(value.getObject().isURIResource()){
             String uri = value.getObject().toString();
-            Field [] enumValues = ((Class<?>)memberWrapper.getType()).getDeclaredFields();
+            Field [] enumValues = memberWrapper.getType().getDeclaredFields();
             for (Field enumVal : enumValues){
                 RdfUri rdfUri  = enumVal.getAnnotation(RdfUri.class);
                 if(rdfUri != null && rdfUri.value().equals(uri)){

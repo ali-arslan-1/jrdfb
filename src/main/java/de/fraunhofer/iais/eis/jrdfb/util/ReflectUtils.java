@@ -43,7 +43,7 @@ public class ReflectUtils {
     /**
      * @param getter
      * @param clazz the class where the property is declared
-     * @return Property name
+     * @return Property
      *
      * Takes getter Method and returns property which it returns
      */

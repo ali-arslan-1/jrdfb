@@ -111,9 +111,7 @@ public class RdfSerializer {
 
             resource.addProperty(RDF.type, model.createProperty(rdfType));
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
-            if(clazz.isEnum()){
-                resource.addProperty(RDF.value, obj.toString());
-            }
+
         }else
             throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
                     "Not provided");
