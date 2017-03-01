@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -76,6 +76,41 @@ public class CollectionsTest {
         assertEquals(friend2.getName(), "Abdullah Hamid");
         assertEquals(friend2.getSsn(), "333333");
 
+    }
+
+    @Test
+    public void testCollectionWithNullValues() throws Exception{
+        Student student = new Student("Ali Arslan", 111111);
+        student.setProfileUrl(new URL("http://example.com/profile/1"));
+
+        Student friend1 = new Student("Nabeel Muneer", "222222");
+
+        List<Person> friends = new ArrayList<>();
+        friends.add(friend1);
+        friends.add(null);
+
+        student.setFriends(friends);
+
+        boolean exceptionThrown = false;
+        String rdf;
+        try {
+            rdf = serializer.serialize(student);
+            System.out.println(rdf);
+            Student deserialized = (Student)serializer.deserialize(rdf);
+            assertEquals(deserialized.getMatrNo(), 111111);
+            Person p1 = student.getFriends().get(0);
+            Person p2 = student.getFriends().get(1);
+
+            assertEquals(p1.getName(), "Nabeel Muneer");
+            assertEquals(p1.getSsn(), "222222");
+
+            assertNull(p2);
+        } catch (Exception e) {
+            exceptionThrown = true;
+            e.printStackTrace();
+        }
+
+        assertFalse(exceptionThrown);
     }
 
 }

@@ -8,6 +8,7 @@ import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.ByteArrayInputStream;
@@ -32,8 +33,7 @@ public class RdfSerializer {
         model = ModelFactory.createDefaultModel();
         resolverFactory = new ResolverFactoryImpl();
     }
-    public String serialize(Object obj) throws JrdfbException {
-        assert (obj != null);
+    public String serialize(@NotNull Object obj) throws JrdfbException {
         Class rootClass = tClasses[0];
         for(Class clazz: tClasses){
             if(clazz.isInstance(obj))
@@ -60,7 +60,7 @@ public class RdfSerializer {
         return result;
     }
 
-    protected Resource createResource(Class clazz, Object obj) throws
+    protected Resource createResource(@NotNull Class clazz, @NotNull Object obj) throws
             ReflectiveOperationException{
         Resource resource;
         Resource metaData;
@@ -155,8 +155,7 @@ public class RdfSerializer {
     }
 
 
-    public Object deserialize(String data) throws JrdfbException {
-        assert (data != null);
+    public Object deserialize(@NotNull String data) throws JrdfbException {
 
         Class rootClass = null;
 
@@ -198,7 +197,7 @@ public class RdfSerializer {
         }
     }
 
-    protected Object createObject(Class clazz, Resource resource)
+    protected Object createObject(@NotNull Class clazz, @NotNull Resource resource)
             throws ReflectiveOperationException {
 
         Object obj;

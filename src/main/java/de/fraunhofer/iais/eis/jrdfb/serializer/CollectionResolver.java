@@ -44,7 +44,8 @@ public class CollectionResolver extends ObjectResolver {
                 getGenericType().getTypeName());
         for (Object elem : collection) {
             if(tClass != null){
-                rdfNode = rdfSerializer.createResource(tClass, elem);
+                rdfNode = elem == null? RDF.nil: rdfSerializer.createResource
+                        (tClass, elem);
             }else{
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());
@@ -81,8 +82,10 @@ public class CollectionResolver extends ObjectResolver {
         while( it.hasNext() ) {
             Statement stmt = it.nextStatement();
             if(tClass != null && getGenericType() instanceof Class){
-                Object object = rdfSerializer.createObject((Class<?>)getGenericType(),
-                        (Resource) stmt.getObject());
+                RDFNode elem = stmt.getObject();
+                Object object = elem.equals(RDF.nil)? null : rdfSerializer.createObject((Class<?>)
+                                getGenericType(),
+                        (Resource) elem);
                 collection.add(object);
             }else{
                 String stringValue;
