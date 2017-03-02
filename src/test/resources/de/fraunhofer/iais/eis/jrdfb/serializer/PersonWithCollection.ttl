@@ -17,6 +17,8 @@
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
                   <https://www.w3.org/2006/vcard/ns#fn>
                           "java.lang.String" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                                            <student/111111> ;
                   <https://www.w3.org/2006/vcard/ns#url>
                           "java.net.URL"
                 ] ;.

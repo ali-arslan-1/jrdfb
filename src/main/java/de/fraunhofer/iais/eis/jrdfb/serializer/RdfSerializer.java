@@ -28,6 +28,8 @@ public class RdfSerializer {
     protected ResolverFactory resolverFactory;
     protected Model model;
 
+    private boolean isRoot = true;
+
     public RdfSerializer(Class... tClasses){
         this.tClasses = tClasses;
         model = ModelFactory.createDefaultModel();
@@ -112,6 +114,11 @@ public class RdfSerializer {
             resource.addProperty(RDF.type, model.createProperty(rdfType));
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
 
+            if(isRoot){
+                metaData.addProperty(VOID.rootResource, resource);
+                isRoot = false;
+            }
+
         }else
             throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
                     "Not provided");
@@ -163,25 +170,26 @@ public class RdfSerializer {
         model.read(new ByteArrayInputStream(data.getBytes()), null, "TURTLE");
 
         Resource resource = null;
+        outerloop:
         for(Class clazz: tClasses){
             RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(clazz, RdfType.class);
             if(rdfTypeAnnotation != null){
                 String rdfType  = rdfTypeAnnotation.value();
                 ResIterator iter = model.listResourcesWithProperty(RDF.type,
                         model.createProperty(rdfType));
-                if(iter!=null && iter.hasNext()){
+                while(iter!=null && iter.hasNext()){
                     resource = iter.nextResource();
 
                     Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
-                    Statement metaProperty = metadata.getProperty(model.createProperty(rdfType));
-                    if(metaProperty==null)
+                    Statement metaRdfType = metadata.getProperty(model.createProperty(rdfType));
+                    if(metaRdfType==null)
                         throw new JrdfbException("Metadata for Java Class Name Not provided" +
                                 " " +
                                 "in RDF Resource: "+resource.getURI());
-                    if(clazz.getName().equals(metaProperty.getObject().toString()
-                    )){
+                    if(clazz.getName().equals(metaRdfType.getObject().toString())
+                            && (metadata.getProperty(VOID.rootResource) != null)){
                         rootClass = clazz;
-                        break;
+                        break outerloop;
                     }
                 }
             }

@@ -8,6 +8,8 @@
         <http://rdfs.org/ns/void#dataDump>
                 [ <example:ClassWithLangLiterals>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                                 <example.com/classWithLangLiterals> ;
                   <example:literalCollection>  "java.util.ArrayList" ;
                   <example:singleLiteral>      "org.apache.jena.rdf.model.impl.LiteralImpl"
                 ] .

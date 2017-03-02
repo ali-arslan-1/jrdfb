@@ -12,6 +12,8 @@
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#hasAddress>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.Address" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                          <student/111111> ;
                   <https://www.w3.org/2006/vcard/ns#url>
                           "java.net.URL"
                 ] ;

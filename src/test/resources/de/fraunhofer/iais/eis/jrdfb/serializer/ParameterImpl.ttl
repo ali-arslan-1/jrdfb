@@ -9,6 +9,8 @@
         <http://rdfs.org/ns/void#dataDump>
                 [ <http://industrialdataspace.org/2016/10/ids/core#Parameter>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                                     <http://example.com/ParameterImpl> ;
                   <http://industrialdataspace.org/2016/10/ids/core#dataType>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterDataType"
                 ] .
