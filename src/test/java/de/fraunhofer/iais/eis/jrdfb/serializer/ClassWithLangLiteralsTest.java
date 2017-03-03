@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals;
+import de.fraunhofer.iais.eis.jrdfb.serializer.util.SerializerSingleton;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -19,13 +20,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class ClassWithLangLiteralsTest {
-    RdfSerializer serializer;
+    RdfSerializer serializer = SerializerSingleton.getInstance();
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(ClassWithLangLiterals.class);
         rdf_turtle = FileUtils
                 .readResource("ClassWithLangLiterals.ttl",
                         this.getClass());

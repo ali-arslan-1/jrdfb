@@ -3,6 +3,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Parameter;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterDataType;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.util.SerializerSingleton;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -19,7 +20,7 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class ParameterImplTest {
 
-    RdfSerializer serializer;
+    RdfSerializer serializer = SerializerSingleton.getInstance();
     String rdf_turtle;
     Model expectedModel;
 
@@ -36,7 +37,6 @@ public class ParameterImplTest {
 
     @Test
     public void testSerializeParameter_oneClass() throws Exception {
-        serializer = new RdfSerializer(ParameterImpl.class);
         Model actualModel = createSerializedParameterModel();
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
@@ -56,14 +56,12 @@ public class ParameterImplTest {
 
     @Test
     public void testSerializeParameter_multiClasses() throws Exception {
-        serializer = new RdfSerializer(ParameterImpl.class, Parameter.class, ParameterDataType.class);
         Model actualModel = createSerializedParameterModel();
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test
     public void testDeserialize() throws Exception{
-        serializer = new RdfSerializer(ParameterImpl.class);
         ParameterImpl parameter =
                 (ParameterImpl)serializer.deserialize(rdf_turtle);
         assertEquals(parameter.getDataType(), ParameterDataType.XSD_STRING);

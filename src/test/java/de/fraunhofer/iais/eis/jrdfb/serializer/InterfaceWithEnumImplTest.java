@@ -3,6 +3,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.util.SerializerSingleton;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -20,7 +21,7 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class InterfaceWithEnumImplTest {
-    RdfSerializer serializer;
+    RdfSerializer serializer = SerializerSingleton.getInstance();
     String rdf_turtle;
     Resource expectedRes;
     Model expectedModel;
@@ -28,7 +29,6 @@ public class InterfaceWithEnumImplTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(InterfaceWithEnumImpl.class);
         rdf_turtle = FileUtils
                 .readResource("InterfaceWithEnumImpl.ttl",
                         this.getClass());

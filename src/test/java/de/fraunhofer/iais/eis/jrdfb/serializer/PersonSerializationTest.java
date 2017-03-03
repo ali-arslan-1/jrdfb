@@ -3,6 +3,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Address;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Person;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Student;
+import de.fraunhofer.iais.eis.jrdfb.serializer.util.SerializerSingleton;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -25,13 +26,12 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class PersonSerializationTest {
-    RdfSerializer serializer;
+    RdfSerializer serializer = SerializerSingleton.getInstance();
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(Person.class, Student.class, Address.class);
         rdf_turtle = FileUtils
                 .readResource("Person.ttl",
                         this.getClass());
