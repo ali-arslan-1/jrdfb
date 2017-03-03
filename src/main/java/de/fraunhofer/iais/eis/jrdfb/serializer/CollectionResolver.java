@@ -31,7 +31,7 @@ public class CollectionResolver extends ObjectResolver {
     }
 
     @Override
-    public RDFNode resolveMember(Object object) throws ReflectiveOperationException {
+    public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
         Object value = extractMemberValue(object);
         if(value == null) return null;
         RDFNode rdfNode;

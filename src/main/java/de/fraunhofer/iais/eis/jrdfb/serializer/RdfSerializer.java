@@ -24,9 +24,9 @@ import java.util.Collection;
  */
 public class RdfSerializer {
 
-    protected Class[] tClasses;
-    protected ResolverFactory resolverFactory;
-    protected Model model;
+    Class[] tClasses;
+    private ResolverFactory resolverFactory;
+    Model model;
 
     private boolean isRoot = true;
 
@@ -62,7 +62,7 @@ public class RdfSerializer {
         return result;
     }
 
-    protected Resource createResource(@NotNull Class clazz, @NotNull Object obj) throws
+    Resource createResource(@NotNull Class clazz, @NotNull Object obj) throws
             ReflectiveOperationException{
         Resource resource;
         Resource metaData;
@@ -138,8 +138,11 @@ public class RdfSerializer {
                 Class tClass = ReflectUtils.getIfExists(tClasses, resolver.resolveMemberClassName
                         (obj));
                 if(tClass != null){
-                    resource.addProperty(jenaProperty,
-                            this.createResource(tClass, resolver.getMemberValue(obj)));
+                    Object resolvedObj = resolver.getMemberValue(obj);
+                    if(resolvedObj!= null)
+                        resource.addProperty(jenaProperty,
+                                this.createResource(tClass, resolvedObj));
+
                     resolved = true;
                 }
 
@@ -195,7 +198,7 @@ public class RdfSerializer {
             }
         }
 
-        if(rootClass ==null)
+        if(rootClass == null)
             throw new JrdfbException("No matching java class found for rdf resource: " +
                     ""+data);
         try {
@@ -205,7 +208,7 @@ public class RdfSerializer {
         }
     }
 
-    protected Object createObject(@NotNull Class clazz, @NotNull Resource resource)
+    Object createObject(@NotNull Class clazz, @NotNull Resource resource)
             throws ReflectiveOperationException {
 
         Object obj;
@@ -215,9 +218,6 @@ public class RdfSerializer {
         }else{
             obj = ReflectUtils.initClassInstance(clazz);
         }
-
-        if(resource==null)
-            throw new ReflectiveOperationException("No matching resource found in rdf");
 
         Collection allFields = ReflectUtils.getFieldsUpTo(clazz, Object
                 .class);
