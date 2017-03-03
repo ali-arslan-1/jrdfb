@@ -63,6 +63,7 @@ public class ParameterImplTest {
 
     @Test
     public void testDeserialize() throws Exception{
+        serializer = new RdfSerializer(ParameterImpl.class);
         ParameterImpl parameter =
                 (ParameterImpl)serializer.deserialize(rdf_turtle);
         assertEquals(parameter.getDataType(), ParameterDataType.XSD_STRING);
