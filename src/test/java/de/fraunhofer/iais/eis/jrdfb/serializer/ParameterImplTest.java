@@ -26,7 +26,6 @@ public class ParameterImplTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(ParameterImpl.class);
         rdf_turtle = FileUtils
                 .readResource("ParameterImpl.ttl",
                         this.getClass());
@@ -36,7 +35,13 @@ public class ParameterImplTest {
     }
 
     @Test
-    public void testSerializeParameter() throws Exception{
+    public void testSerializeParameter_oneClass() throws Exception {
+        serializer = new RdfSerializer(ParameterImpl.class);
+        Model actualModel = createSerializedParameterModel();
+        assertTrue(expectedModel.isIsomorphicWith(actualModel));
+    }
+
+    private Model createSerializedParameterModel() throws Exception{
         Parameter parameter = new ParameterImpl(ParameterDataType.XSD_STRING);
 
         Model actualModel = ModelFactory.createDefaultModel();
@@ -46,6 +51,13 @@ public class ParameterImplTest {
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
                 null, "TURTLE");
 
+        return actualModel;
+    }
+
+    @Test
+    public void testSerializeParameter_multiClasses() throws Exception {
+        serializer = new RdfSerializer(ParameterImpl.class, Parameter.class, ParameterDataType.class);
+        Model actualModel = createSerializedParameterModel();
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 

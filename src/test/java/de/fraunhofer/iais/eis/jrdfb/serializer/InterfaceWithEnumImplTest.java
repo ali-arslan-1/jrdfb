@@ -3,6 +3,9 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.Parameter;
+import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.ParameterDataType;
+import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.ParameterImpl;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -11,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
+import java.net.URL;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
