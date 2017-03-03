@@ -55,13 +55,6 @@ public class ParameterImplTest {
     }
 
     @Test
-    public void testSerializeParameter_multiClasses() throws Exception {
-        serializer = new RdfSerializer(ParameterImpl.class, Parameter.class, ParameterDataType.class);
-        Model actualModel = createSerializedParameterModel();
-        assertTrue(expectedModel.isIsomorphicWith(actualModel));
-    }
-
-    @Test
     public void testDeserialize() throws Exception{
         serializer = new RdfSerializer(ParameterImpl.class);
         ParameterImpl parameter =
