@@ -106,8 +106,7 @@ public abstract class ObjectResolver implements Resolver {
     }
 
     protected RdfProperty getRdfProperty(){
-        RdfProperty rdfPropertyInfo = memberWrapper.getAnnotation(RdfProperty.class);
-        return rdfPropertyInfo;
+        return memberWrapper.getAnnotation(RdfProperty.class);
     }
 
     protected String getMemberPath(){

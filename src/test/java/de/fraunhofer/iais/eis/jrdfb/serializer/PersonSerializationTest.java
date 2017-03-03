@@ -90,7 +90,7 @@ public class PersonSerializationTest {
     /**
      * Test serialization of Null valued annotated property
      * Related to: EISMASTER-4
-     * @throws Exception
+     *
      */
     @Test
     public void testWithNullValuedProperties(){

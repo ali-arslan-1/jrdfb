@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
+import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ import java.util.*;
 public class ReflectUtils {
 
     /**
-     * @param getter
+     * @param getter the getter Method
      * @return Property name
      *
      * Takes getter Method and returns property name which it returns
@@ -41,7 +42,7 @@ public class ReflectUtils {
     }
 
     /**
-     * @param getter
+     * @param getter the getter Method
      * @param clazz the class where the property is declared
      * @return Property
      *
@@ -61,7 +62,7 @@ public class ReflectUtils {
     }
 
     /**
-     * @param getter
+     * @param getter the getter Method
      * @return write method
      *
      * Takes getter Method and returns setter method
@@ -78,7 +79,7 @@ public class ReflectUtils {
 
 
     /**
-     * @param getter
+     * @param getter the getter Method
      * @return PropertyDescriptor
      *
      * Takes getter Method and returns corresponding PropertyDescriptor
@@ -97,14 +98,9 @@ public class ReflectUtils {
                     return pd;
                 }
             }
-        }
-        catch (IntrospectionException e)
+        } catch (IntrospectionException e)
         {
-            e.printStackTrace();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+            throw new NoSuchElementException(e.getMessage());
         }
 
         return null;
@@ -115,18 +111,15 @@ public class ReflectUtils {
      * @param value
      * @return Object
      */
-    public static Object toObject( Class clazz, String value ) {
+    public static Object toObject( Class clazz, String value ) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException, InstantiationException {
         if( UUID.class == clazz ) return UUID.fromString(value);
         if( LocalDateTime.class == clazz ) return LocalDateTime.parse(value);
 
-        try {
-            Constructor<?> cons = clazz.getDeclaredConstructor(String.class);
-            cons.setAccessible(true);
-            return cons.newInstance(value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return value;
+        Constructor<?> cons = clazz.getDeclaredConstructor(String.class);
+        cons.setAccessible(true);
+        return cons.newInstance(value);
+
     }
 
     /**
@@ -135,7 +128,8 @@ public class ReflectUtils {
      * @return
      */
     public static Object stringToObject(String className, String text)
-            throws ClassNotFoundException {
+            throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
         Class<?> targetType = Class.forName(className);
         PropertyEditor editor = PropertyEditorManager.findEditor(targetType);
         if(editor==null) return toObject(targetType, text);
@@ -168,8 +162,7 @@ public class ReflectUtils {
         Class<?> tmpClass = clazz;
         do {
             try {
-                Field f = tmpClass.getDeclaredField(fieldName);
-                return f;
+                return tmpClass.getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
                 tmpClass = tmpClass.getSuperclass();
             }
@@ -197,7 +190,9 @@ public class ReflectUtils {
             if(i + 1 < fieldNames.length ) nestedBean = nestedField.get(nestedBean);
         }
 
-        nestedField.set(nestedBean, toObject(nestedField.getType(), value.toString()));
+        if (nestedField != null) {
+            nestedField.set(nestedBean, toObject(nestedField.getType(), value.toString()));
+        }
 
         return nestedBean;
     }
@@ -226,9 +221,9 @@ public class ReflectUtils {
 
                     // if the same property is annotated already do not add field from parent
                     // with the same property
-                    if(!currentClassFields
+                    if(currentClassFields
                             .stream()
-                            .anyMatch( f -> f.isAnnotationPresent(RdfProperty.class)
+                            .noneMatch(f -> f.isAnnotationPresent(RdfProperty.class)
                                             && f.getAnnotation(RdfProperty.class)
                                                 .value().equals(property.value())
                             )){
@@ -266,8 +261,8 @@ public class ReflectUtils {
             for (Method method: superClassMethods){
                 if(method.isAnnotationPresent(RdfProperty.class)){
                     RdfProperty property = method.getAnnotation(RdfProperty.class);
-                    if(!Arrays.stream(declaredMethods)
-                            .anyMatch( m -> m.isAnnotationPresent(RdfProperty.class)
+                    if(Arrays.stream(declaredMethods)
+                            .noneMatch(m -> m.isAnnotationPresent(RdfProperty.class)
                                     && m.getAnnotation(RdfProperty.class)
                                     .value().equals(property.value())
                             )){

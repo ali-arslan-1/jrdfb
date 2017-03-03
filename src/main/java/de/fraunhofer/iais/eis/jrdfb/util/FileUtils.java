@@ -40,12 +40,11 @@ public class FileUtils {
     }
 
     public static String readResource(String fileName, Class<?> resourceClass) throws IOException {
-        String content = IOUtils.toString(
+
+        return IOUtils.toString(
                 resourceClass.getResourceAsStream(fileName),
                 "UTF-8"
         );
-
-        return content;
     }
 
 }

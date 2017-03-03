@@ -80,8 +80,10 @@ public class MemberWrapper implements AnnotatedElement, Member{
                 if(i + 1 < fieldNames.length ) nestedBean = nestedField.get(nestedBean);
             }
 
-            nestedField.set(nestedBean, ReflectUtils.toObject(nestedField.getType(), value
-                    .toString()));
+            if (nestedField != null) {
+                nestedField.set(nestedBean, ReflectUtils.toObject(nestedField.getType(), value
+                        .toString()));
+            }
 
             return nestedBean;
         }
