@@ -135,7 +135,7 @@ public class RdfSerializer {
                 ObjectResolver resolver = resolverFactory.createResolver(member,this);
                 boolean resolved = false;
 
-                Class tClass = ReflectUtils.getIfExists(tClasses, resolver.resolveMemberClassName
+                Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses, resolver.resolveMemberClassName
                         (obj));
                 if(tClass != null){
                     Object resolvedObj = resolver.getMemberValue(obj);
@@ -189,10 +189,15 @@ public class RdfSerializer {
                         throw new JrdfbException("Metadata for Java Class Name Not provided" +
                                 " " +
                                 "in RDF Resource: "+resource.getURI());
-                    if(clazz.getName().equals(metaRdfType.getObject().toString())
-                            && (metadata.getProperty(VOID.rootResource) != null)){
-                        rootClass = clazz;
-                        break outerloop;
+                    try {
+                        if(ReflectUtils.getIfAssignableFromAny(tClasses, metaRdfType.getObject()
+                                .toString()) != null
+                                && (metadata.getProperty(VOID.rootResource) != null)){
+                            rootClass = clazz;
+                            break outerloop;
+                        }
+                    } catch (ClassNotFoundException e) {
+                        throw new JrdfbException(e.getMessage(), e);
                     }
                 }
             }
@@ -202,14 +207,16 @@ public class RdfSerializer {
             throw new JrdfbException("No matching java class found for rdf resource: " +
                     ""+data);
         try {
-            return createObject( rootClass, resource);
+            return createObject(resource);
         } catch (ReflectiveOperationException e) {
             throw new JrdfbException(e.getMessage(), e);
         }
     }
 
-    Object createObject(@NotNull Class clazz, @NotNull Resource resource)
+    Object createObject(@NotNull Resource resource)
             throws ReflectiveOperationException {
+
+        Class<?> clazz = ReflectUtils.getResourceClass(resource);
 
         Object obj;
         Statement rdfValue = resource.getProperty(RDF.value);
@@ -248,11 +255,11 @@ public class RdfSerializer {
                 Object propertyVal = null;
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
 
-                Class<?> tClass = ReflectUtils.getIfExists(tClasses,
+                Class<?> tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
                         resolver.resolveMemberClassName(resource));
 
                 if(tClass != null){
-                    propertyVal = this.createObject(tClass,
+                    propertyVal = this.createObject(
                             (Resource)resource.getProperty(jenaProperty).getObject());
                     resolved = true;
                 }

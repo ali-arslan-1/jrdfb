@@ -68,6 +68,6 @@ public class MapResolver extends ObjectResolver {
             }
             return map;
         }
-        return super.resolveProperty(resource);
+        return null;
     }
 }

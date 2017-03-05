@@ -39,8 +39,8 @@ public class CollectionsTest {
         Student student = new Student("Ali Arslan", 111111);
         student.setProfileUrl(new URL("http://example.com/profile/1"));
 
-        Student friend1 = new Student("Nabeel Muneer", "222222");
-        Student friend2 = new Student("Abdullah Hamid", "333333");
+        Person friend1 = new Person("Nabeel Muneer", "222222");
+        Person friend2 = new Person("Abdullah Hamid", "333333");
 
         List<Person> friends = new ArrayList<>();
         friends.add(friend1);

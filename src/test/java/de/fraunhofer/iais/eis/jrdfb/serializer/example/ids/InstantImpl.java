@@ -22,7 +22,8 @@ public class InstantImpl implements Instant {
 
 	// accessor method implementations as derived from vocabulary
 
-	final public 
+
+	final public
 	javax.xml.datatype.XMLGregorianCalendar getInXSDDateTime() {
 		return inXSDDateTime;
 	}

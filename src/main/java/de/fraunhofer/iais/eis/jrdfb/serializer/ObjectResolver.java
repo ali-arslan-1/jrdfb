@@ -3,6 +3,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
@@ -49,34 +50,8 @@ public abstract class ObjectResolver implements Resolver {
 
     public void setMemberValue(@NotNull Object object, @NotNull Object value)
             throws ReflectiveOperationException {
+        if(!ClassUtils.isAssignable(value.getClass(), memberWrapper.getType())) return;
         memberWrapper.setValue(object, value);
-    }
-
-    @Override
-    public @Nullable Object resolveProperty(@NotNull Resource resource)
-            throws ReflectiveOperationException {
-        Statement value = resource.getProperty(getJenaProperty());
-        if(value==null)return null;
-        if(getMemberPath().isEmpty()){
-            String stringValue;
-            if(memberWrapper.getType().equals(URL.class))
-                stringValue = value.getObject().toString();
-            else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())){
-                return value.getObject();
-            }
-            else
-                stringValue = value.getLiteral().getString();
-            return ReflectUtils.stringToObject(resolveMemberClassName(resource),
-                    stringValue);
-        }else{
-            Constructor cons = Class.forName(
-                    memberWrapper.getDeclaringClass().getName())
-                    .getDeclaredConstructor();
-            cons.setAccessible(true);
-            return memberWrapper.initNestedObject(cons.newInstance(),
-                    getMemberPath(),
-                    value.getObject().toString());
-        }
     }
 
     @Nullable

@@ -1,0 +1,52 @@
+<http://example.org/bla>
+        a       <http://industrialdataspace.org/2016/10/ids/core#Dataset> ;
+        <http://industrialdataspace.org/2016/10/ids/core#coversTemporal>
+                [ a       <http://www.w3.org/2004/02/skos/core#Collection> ;
+                  <http://www.w3.org/2004/02/skos/core#member>
+                          <http://example.org/interval>
+                ] ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://industrialdataspace.org/2016/10/ids/core#Dataset>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.DatasetImpl" ;
+                  <http://industrialdataspace.org/2016/10/ids/core#coversTemporal>
+                          "java.util.Arrays$ArrayList" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                          <http://example.org/bla>
+                ] .
+
+<http://example.org/end>
+        a       <http://industrialdataspace.org/2016/10/ids/core#Instant> ;
+        <http://industrialdataspace.org/2016/10/ids/core#inXSDDateTime>
+                "2017-02-02T00:00:00.000Z"^^<xsd:dateTime> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://industrialdataspace.org/2016/10/ids/core#Instant>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.InstantImpl" ;
+                  <http://industrialdataspace.org/2016/10/ids/core#inXSDDateTime>
+                          "com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl"
+                ] .
+
+<http://example.org/interval>
+        a       <http://industrialdataspace.org/2016/10/ids/core#Interval> ;
+        <http://industrialdataspace.org/2016/10/ids/core#beginning>
+                <http://example.org/begin> ;
+        <http://industrialdataspace.org/2016/10/ids/core#end>
+                <http://example.org/end> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://industrialdataspace.org/2016/10/ids/core#Interval>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.IntervalImpl" ;
+                  <http://industrialdataspace.org/2016/10/ids/core#beginning>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.InstantImpl" ;
+                  <http://industrialdataspace.org/2016/10/ids/core#end>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.InstantImpl"
+                ] .
+
+<http://example.org/begin>
+        a       <http://industrialdataspace.org/2016/10/ids/core#Instant> ;
+        <http://industrialdataspace.org/2016/10/ids/core#inXSDDateTime>
+                "2017-02-01T00:00:00.000Z"^^<xsd:dateTime> ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <http://industrialdataspace.org/2016/10/ids/core#Instant>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.InstantImpl" ;
+                  <http://industrialdataspace.org/2016/10/ids/core#inXSDDateTime>
+                          "com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl"
+                ] .

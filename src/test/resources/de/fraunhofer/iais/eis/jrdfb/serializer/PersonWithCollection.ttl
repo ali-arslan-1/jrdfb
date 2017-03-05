@@ -33,7 +33,7 @@
                 [ <http://purl.org/dc/terms/identifier>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#Individual>
-                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Person" ;
                   <https://www.w3.org/2006/vcard/ns#fn>
                           "java.lang.String"
                 ] ; .
@@ -47,7 +47,7 @@
                 [ <http://purl.org/dc/terms/identifier>
                           "java.lang.String" ;
                   <https://www.w3.org/2006/vcard/ns#Individual>
-                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Student" ;
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.Person" ;
                   <https://www.w3.org/2006/vcard/ns#fn>
                           "java.lang.String"
                 ] ; .

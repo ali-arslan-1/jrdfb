@@ -35,7 +35,7 @@ public class MemberWrapper implements AnnotatedElement, Member{
     public void setValue(Object object, Object value) throws ReflectiveOperationException {
         if(member instanceof Field)
             ((Field) member) .set(object, value);
-        else if(member instanceof Method){
+        else if(member instanceof Method ){
             try{
                 (ReflectUtils.getSetterMethod((Method) member)).invoke(object, value);
             }catch(NoSuchMethodException e){

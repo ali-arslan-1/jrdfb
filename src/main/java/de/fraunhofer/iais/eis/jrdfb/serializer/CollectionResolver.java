@@ -39,13 +39,14 @@ public class CollectionResolver extends ObjectResolver {
         Collection collection = (Collection)value;
         Resource resource = model.createResource();
         resource.addProperty(RDF.type, SKOS.Collection);
+        Class tClass = null;
 
-        Class tClass = ReflectUtils.getIfExists(rdfSerializer.tClasses,
-                getGenericType().getTypeName());
         for (Object elem : collection) {
+            if(elem != null)
+                tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
+                        elem.getClass().getName());
             if(tClass != null){
-                rdfNode = elem == null? RDF.nil: rdfSerializer.createResource
-                        (tClass, elem);
+                rdfNode = (elem == null? RDF.nil: rdfSerializer.createResource(tClass, elem));
             }else{
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());
@@ -71,7 +72,7 @@ public class CollectionResolver extends ObjectResolver {
         if(value==null)return null;
         Resource collectionRes = (Resource)value.getObject();
 
-        Class tClass = ReflectUtils.getIfExists(rdfSerializer.tClasses,
+        Class tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
                 getGenericType().getTypeName());
 
         StmtIterator it  = collectionRes.listProperties(SKOS.member);
@@ -83,9 +84,9 @@ public class CollectionResolver extends ObjectResolver {
             Statement stmt = it.nextStatement();
             if(tClass != null && getGenericType() instanceof Class){
                 RDFNode elem = stmt.getObject();
-                Object object = elem.equals(RDF.nil)? null : rdfSerializer.createObject((Class<?>)
-                                getGenericType(),
-                        (Resource) elem);
+                Object object = elem.equals(RDF.nil)? null
+                                    : rdfSerializer
+                                        .createObject((Resource) elem);
                 collection.add(object);
             }else{
                 String stringValue;

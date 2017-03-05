@@ -2,7 +2,11 @@ package de.fraunhofer.iais.eis.jrdfb.util;
 
 import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.ext.com.google.common.collect.Lists;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objenesis.Objenesis;
@@ -225,7 +229,8 @@ public class ReflectUtils {
                             .stream()
                             .noneMatch(f -> f.isAnnotationPresent(RdfProperty.class)
                                             && f.getAnnotation(RdfProperty.class)
-                                                .value().equals(property.value())
+                                                .value().equals(property.value() )
+                                            && f.getType() == field.getType()
                             )){
                         currentClassFields.add(field);
                     }
@@ -265,6 +270,7 @@ public class ReflectUtils {
                             .noneMatch(m -> m.isAnnotationPresent(RdfProperty.class)
                                     && m.getAnnotation(RdfProperty.class)
                                     .value().equals(property.value())
+                                    && m.getReturnType() == method.getReturnType()
                             )){
                         allMethods.add(method);
                     }
@@ -279,17 +285,23 @@ public class ReflectUtils {
     }
 
     /**
-     * Returns the matching Class if class with @param className is present in array else null
+     * Returns the matching Class if class with @param className is assignable from any class in the
+     * array else null
      *
      * @param array the array of classes
      * @param className the class name to be found in the array
      * @return returns the Class if it exists in array
      */
-    public static Class<?> getIfExists(Class[] array, String className){
-        for(Class clazz: array){
-            if(clazz.getName().equals(className)){
-                return clazz;
-            }
+    public static Class<?> getIfAssignableFromAny(Class[] array, String className)
+            throws ClassNotFoundException {
+        if(className == null || className.isEmpty()) return null;
+        Class<?> targetClass = Class.forName(className);
+        List<Class<?>> classes = Arrays.asList(array);
+
+        if(classes.contains(targetClass)) return targetClass;
+
+        for ( Class<?> clazz : ClassUtils.hierarchy(targetClass, ClassUtils.Interfaces.INCLUDE)){
+            if(classes.contains(clazz)) return clazz;
         }
         return null;
     }
@@ -348,6 +360,9 @@ public class ReflectUtils {
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
                     InvocationTargetException, InstantiationException {
         Class<?> targetType = Class.forName(className);
+        if(targetType.getName().equals("java.util.Arrays$ArrayList")){
+            targetType = ArrayList.class;
+        }
         Constructor<?> cons = targetType.getDeclaredConstructor();
         cons.setAccessible(true);
         return cons.newInstance();
@@ -371,6 +386,17 @@ public class ReflectUtils {
         }catch (Exception e){
             return BigInteger.valueOf(obj.hashCode());
         }
+    }
+
+
+    public static Class<?> getResourceClass(Resource resource) throws ClassNotFoundException {
+        Model model = ModelFactory.createDefaultModel();
+        Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
+        String rdfTypeProperty = ((Resource)resource.getProperty(RDF.type).getObject()).getURI();
+        org.apache.jena.rdf.model.Statement metaProperty
+                = metadata.getProperty(model.createProperty(rdfTypeProperty));
+
+        return Class.forName(metaProperty.getObject().toString());
     }
 
 }

@@ -59,6 +59,6 @@ public class EnumResolver extends ObjectResolver {
             return ReflectUtils.stringToObject(resolveMemberClassName(resource),
                     stringValue);
         }
-        return super.resolveProperty(resource);
+        return null;
     }
 }
