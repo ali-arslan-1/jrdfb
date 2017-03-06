@@ -28,14 +28,16 @@ public class RdfSerializer {
     private ResolverFactory resolverFactory;
     Model model;
 
-    private boolean isRoot = true;
+    private boolean isRoot;
 
     public RdfSerializer(Class... tClasses){
         this.tClasses = tClasses;
-        model = ModelFactory.createDefaultModel();
         resolverFactory = new ResolverFactoryImpl();
     }
     public String serialize(@NotNull Object obj) throws JrdfbException {
+        model = ModelFactory.createDefaultModel();
+        isRoot = true;
+
         Class rootClass = tClasses[0];
         for(Class clazz: tClasses){
             if(clazz.isInstance(obj))
@@ -168,8 +170,8 @@ public class RdfSerializer {
     public Object deserialize(@NotNull String data) throws JrdfbException {
 
         Class rootClass = null;
+        model = ModelFactory.createDefaultModel();
 
-        Model model = ModelFactory.createDefaultModel();
         model.read(new ByteArrayInputStream(data.getBytes()), null, "TURTLE");
 
         Resource resource = null;

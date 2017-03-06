@@ -5,23 +5,17 @@ import de.fraunhofer.iais.eis.jrdfb.serializer.example.Address;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Person;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Student;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.*;
-import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -85,6 +79,11 @@ public class MultipleSerializeDeserializeTest {
     public void testDeserializeDataset() throws Exception{
         String serializedDataset = serializer.serialize(createDataset());
         String serializedStudent = serializer.serialize(createStudent());
+
+        System.out.println("serializedDataset:");
+        System.out.println(serializedDataset);
+        System.out.println("serializedStudent:");
+        System.out.println(serializedStudent);
 
         Dataset dataset = (Dataset)serializer.deserialize(serializedDataset);
         assertNotNull(dataset);
