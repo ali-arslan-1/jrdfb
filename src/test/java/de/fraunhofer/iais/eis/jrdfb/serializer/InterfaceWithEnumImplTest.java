@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
+import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl;
@@ -14,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.net.URL;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -53,9 +55,26 @@ public class InterfaceWithEnumImplTest {
 
     @Test
     public void testDeserialize() throws Exception{
-        InterfaceWithEnumImpl interfaceWithEnum =
-                (InterfaceWithEnumImpl)serializer.deserialize(rdf_turtle);
+        InterfaceWithEnumImpl interfaceWithEnum = (InterfaceWithEnumImpl)serializer.deserialize(rdf_turtle);
+
+        assertNotNull(interfaceWithEnum.id);
         assertEquals(interfaceWithEnum.getSomeEnum(), DayEnum.FRIDAY);
+    }
+
+    @Test
+    public void enumFieldUnused() throws JrdfbException {
+        InterfaceWithEnum interfaceWithEnum = new InterfaceWithEnumImpl(null);
+        String serializedTurtle = serializer.serialize(interfaceWithEnum).trim();
+        Model serializedModel = ModelFactory.createDefaultModel();
+        serializedModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()), null, "TURTLE");
+
+        InterfaceWithEnumImpl interfaceWithEnum_fromRdf =
+                (InterfaceWithEnumImpl)serializer.deserialize(serializedTurtle);
+        String reSerializedTurtle = serializer.serialize(interfaceWithEnum_fromRdf).trim();
+        Model reSerializedModel = ModelFactory.createDefaultModel();
+        reSerializedModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()), null, "TURTLE");
+
+        assertTrue(reSerializedModel.isIsomorphicWith(serializedModel));
     }
 
 }
