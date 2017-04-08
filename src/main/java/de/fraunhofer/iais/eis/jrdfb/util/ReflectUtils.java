@@ -1,10 +1,11 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
-import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.ext.com.google.common.collect.Lists;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
@@ -134,7 +135,7 @@ public class ReflectUtils {
     public static Object stringToObject(String className, String text)
             throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        Class<?> targetType = Class.forName(className);
+        Class<?> targetType = org.springframework.util.ClassUtils.forName(className, null);
         PropertyEditor editor = PropertyEditorManager.findEditor(targetType);
         if(editor==null) return toObject(targetType, text);
         editor.setAsText(text);

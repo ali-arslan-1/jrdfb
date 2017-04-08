@@ -18,7 +18,7 @@ public class IntervalImpl implements Interval {
 	public IntervalImpl() {}
 
 	@Override
-	final public java.net.URL getId() {
+	final public java.net.URL getUrl() {
 		return url;
 	}
 

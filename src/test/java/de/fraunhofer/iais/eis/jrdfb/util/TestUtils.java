@@ -1,22 +1,32 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
-import org.apache.jena.rdf.model.Model;
+import org.testng.annotations.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
+import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class TestUtils {
 
-    public static String getModelDiff(Model first, Model second) throws UnsupportedEncodingException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    @Test
+    public void testPluckIdFromUriWhenInBetween() throws Exception {
+        assertEquals("1234",
+                Utils.pluckIdFromUri("example/1234/something",
+                                "example/{RdfId}/something"));
+    }
 
-        Model difference  = first.difference(second);
-        if(difference != null)
-            difference.write(out, "TURTLE");
+    @Test
+    public void testPluckIdFromUriWhenInEnd() throws Exception {
+        assertEquals("1234",
+                Utils.pluckIdFromUri("example/1234",
+                        "example/{RdfId}"));
+    }
 
-        return out.toString("UTF-8");
+    @Test
+    public void testPluckIdFromUriWhenTemplateEmpty() throws Exception {
+        assertEquals("example/1234",
+                Utils.pluckIdFromUri("example/1234",
+                        ""));
     }
 }

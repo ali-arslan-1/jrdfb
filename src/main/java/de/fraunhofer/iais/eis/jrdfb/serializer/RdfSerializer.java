@@ -5,6 +5,7 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
+import de.fraunhofer.iais.eis.jrdfb.util.Utils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -15,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -246,10 +248,25 @@ public class RdfSerializer {
             member.setAccessible(true);
 
             RdfProperty rdfPropertyInfo;
-            if(member instanceof Method)
-                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty.class);
-            else
+            RdfId rdfIdInfo;
+            if(member instanceof Method){
+                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty
+                        .class);
+                rdfIdInfo = AnnotationUtils.findAnnotation((Method)member, RdfId.class);
+            }
+            else{
                 rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
+                rdfIdInfo = AnnotationUtils.findAnnotation(member, RdfId.class);
+            }
+
+            if (rdfIdInfo !=null){
+                String pluckedId = Utils.pluckIdFromUri(resource.getURI(), rdfIdInfo.uriTemplate());
+                MemberWrapper wrapper = member instanceof Method?
+                        (new MemberWrapper((Method) member)):
+                        (new MemberWrapper((Field) member));
+                wrapper.setValue(obj, ReflectUtils.stringToObject(wrapper.getType().getName(),
+                                pluckedId));
+            }
             if (rdfPropertyInfo != null) {
 
                 ObjectResolver resolver = resolverFactory.createResolver(member,this);

@@ -10,7 +10,7 @@ public interface TemporalEntity {
 	// standard methods
 
 	@RdfId
-	java.net.URL getId();
+	java.net.URL getUrl();
 
 	// accessor methods as derived from vocabulary
 

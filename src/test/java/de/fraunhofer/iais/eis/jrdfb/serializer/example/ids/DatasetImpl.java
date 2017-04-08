@@ -13,7 +13,7 @@ public class DatasetImpl implements Dataset {
 	public DatasetImpl() {}
 
 	@Override
-	final public java.net.URL getId() {
+	final public java.net.URL getUrl() {
 		return url;
 	}
 

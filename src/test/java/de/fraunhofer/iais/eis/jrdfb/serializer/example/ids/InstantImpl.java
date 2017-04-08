@@ -16,7 +16,7 @@ public class InstantImpl implements Instant {
 	public InstantImpl() {}
 
 	@Override
-	final public java.net.URL getId() {
+	final public java.net.URL getUrl() {
 		return url;
 	}
 
