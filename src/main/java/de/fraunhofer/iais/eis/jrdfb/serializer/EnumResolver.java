@@ -47,7 +47,7 @@ public class EnumResolver extends ObjectResolver {
             throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         String stringValue = null;
-        if(value.getObject().isURIResource()){
+        if(value != null && value.getObject().isURIResource()){
             String uri = value.getObject().toString();
             Field [] enumValues = memberWrapper.getType().getDeclaredFields();
             for (Field enumVal : enumValues){
