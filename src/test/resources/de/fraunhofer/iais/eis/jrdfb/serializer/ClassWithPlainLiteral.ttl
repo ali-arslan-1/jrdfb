@@ -1,0 +1,10 @@
+<example.com/ClassWithPlainLiteral>
+        a <example:ClassWithPlainLiteral> ;
+        <example:singlePlainLiteral>      "test_literal_single"@en ;
+        <http://rdfs.org/ns/void#dataDump>
+                [ <example:ClassWithPlainLiteral>
+                          "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithPlainLiteral" ;
+                  <http://rdfs.org/ns/void#rootResource>
+                                 <example.com/ClassWithPlainLiteral> ;
+                  <example:singlePlainLiteral>      "de.fraunhofer.iais.eis.jrdfb.datatype.PlainLiteral"
+                ] .

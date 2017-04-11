@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfTypedLiteral;
+import de.fraunhofer.iais.eis.jrdfb.datatype.PlainLiteral;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -39,15 +40,22 @@ public class LiteralResolver extends ObjectResolver {
         if(value == null) return null;
         RDFNode rdfNode;
 
-        if(memberWrapper.isAnnotationPresent(RdfTypedLiteral.class)){
+        if (memberWrapper.isAnnotationPresent(RdfTypedLiteral.class)) {
             rdfNode =  model.createTypedLiteral(value.toString(),
-                memberWrapper.getAnnotation(RdfTypedLiteral.class).value());
-        } else if(LiteralMapping.containsKey(memberWrapper.getType())){
+            memberWrapper.getAnnotation(RdfTypedLiteral.class).value());
+        }
+        else if (LiteralMapping.containsKey(memberWrapper.getType())) {
             rdfNode =  model.createTypedLiteral(value.toString(),
-                                                    LiteralMapping.get(memberWrapper.getType()));
-        }else if(memberWrapper.getType().equals(URL.class)){
+            LiteralMapping.get(memberWrapper.getType()));
+        }
+        else if(memberWrapper.getType().equals(URL.class)) {
             rdfNode =  model.createProperty(value.toString());
-        }else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())){
+        }
+        else if(memberWrapper.getType().equals(PlainLiteral.class)) {
+            PlainLiteral plainLiteral = (PlainLiteral) value;
+            rdfNode =  model.createLiteral(plainLiteral.getValue(), plainLiteral.getLang());
+        }
+        else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())) {
             rdfNode = (RDFNode)value;
         }
         else{
