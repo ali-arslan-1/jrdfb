@@ -2,17 +2,17 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
-import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
+import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.vocabulary.VOID;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.URL;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -66,7 +66,8 @@ public abstract class ObjectResolver implements Resolver {
     @Nullable
     public String resolveMemberClassName(@NotNull Resource resource)
             throws ReflectiveOperationException{
-        Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
+        Resource metadata = (Resource)resource
+                                .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
         Statement metaProperty = metadata.getProperty(getJenaProperty());
         if(metaProperty==null)
             return null;

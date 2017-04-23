@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import de.fraunhofer.iais.eis.jrdfb.util.Utils;
+import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.VOID;
@@ -163,7 +164,7 @@ public class RdfSerializer {
             }
         }
 
-        resource.addProperty(VOID.dataDump, metaData);
+        resource.addProperty(model.createProperty(IAIS.CLASS_MAPPING), metaData);
 
         return resource;
     }
@@ -187,7 +188,8 @@ public class RdfSerializer {
                 while(iter!=null && iter.hasNext()){
                     resource = iter.nextResource();
 
-                    Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
+                    Resource metadata = (Resource)resource
+                                .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
                     Statement metaRdfType = metadata.getProperty(model.createProperty(rdfType));
                     if(metaRdfType==null)
                         throw new JrdfbException("Metadata for Java Class Name Not provided" +

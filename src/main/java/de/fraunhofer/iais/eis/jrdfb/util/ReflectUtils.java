@@ -1,13 +1,13 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
+import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objenesis.Objenesis;
@@ -392,7 +392,8 @@ public class ReflectUtils {
 
     public static Class<?> getResourceClass(Resource resource) throws ClassNotFoundException {
         Model model = ModelFactory.createDefaultModel();
-        Resource metadata = (Resource)resource.getProperty(VOID.dataDump).getObject();
+        Resource metadata = (Resource)resource
+                                .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
         String rdfTypeProperty = ((Resource)resource.getProperty(RDF.type).getObject()).getURI();
         org.apache.jena.rdf.model.Statement metaProperty
                 = metadata.getProperty(model.createProperty(rdfTypeProperty));

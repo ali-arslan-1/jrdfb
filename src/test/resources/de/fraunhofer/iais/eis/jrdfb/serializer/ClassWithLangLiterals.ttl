@@ -5,7 +5,7 @@
                                                "test_literal_2"@de , "test_literal_1"@en
                                      ] ;
         <example:singleLiteral>      "test_literal_single"@en ;
-        <http://rdfs.org/ns/void#dataDump>
+        <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
                 [ <example:ClassWithLangLiterals>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals" ;
                   <http://rdfs.org/ns/void#rootResource>

@@ -6,7 +6,7 @@
 
 
 
-        <http://rdfs.org/ns/void#dataDump>
+        <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
                 [ <http://industrialdataspace.org/2016/10/ids/core#Parameter>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl" ;
                   <http://rdfs.org/ns/void#rootResource>
