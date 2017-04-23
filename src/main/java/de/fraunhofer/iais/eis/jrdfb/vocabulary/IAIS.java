@@ -18,4 +18,5 @@ public class IAIS {
     }
 
     public static final String CLASS_MAPPING = uri + "classMapping";
+    public static final String IS_MAPPING_ROOT = uri + "isMappingRoot";
 }

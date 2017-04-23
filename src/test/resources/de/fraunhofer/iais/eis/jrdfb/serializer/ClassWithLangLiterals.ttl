@@ -8,8 +8,8 @@
         <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
                 [ <example:ClassWithLangLiterals>
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals" ;
-                  <http://rdfs.org/ns/void#rootResource>
-                                 <example.com/classWithLangLiterals> ;
+                  <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                                 "true" ;
                   <example:literalCollection>  "java.util.ArrayList" ;
                   <example:singleLiteral>      "org.apache.jena.rdf.model.impl.LiteralImpl"
                 ] .

@@ -3,7 +3,7 @@
         <http://example.org/day>  <http://www.example.com/day/friday> ;
         <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
                 [ <http://example.org/day>   "de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum" ;
-                  <http://rdfs.org/ns/void#rootResource>
-                                                       <http://example.com/InterfaceWithEnumImpl> ;
+                  <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                                                       "true" ;
                   <http://exampleClass.org>  "de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl"
                 ] .

@@ -9,7 +9,6 @@ import de.fraunhofer.iais.eis.jrdfb.util.Utils;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VOID;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 
@@ -120,7 +119,7 @@ public class RdfSerializer {
             metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
 
             if(isRoot){
-                metaData.addProperty(VOID.rootResource, resource);
+                metaData.addProperty(model.createProperty(IAIS.IS_MAPPING_ROOT), "true");
                 isRoot = false;
             }
 
@@ -198,7 +197,10 @@ public class RdfSerializer {
                     try {
                         if(ReflectUtils.getIfAssignableFromAny(tClasses, metaRdfType.getObject()
                                 .toString()) != null
-                                && (metadata.getProperty(VOID.rootResource) != null)){
+                                && (metadata
+                                    .getProperty
+                                            (model.createProperty(IAIS.IS_MAPPING_ROOT)) != null))
+                        {
                             rootClass = clazz;
                             break outerloop;
                         }

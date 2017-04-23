@@ -10,8 +10,8 @@
                           "de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.DatasetImpl" ;
                   <http://industrialdataspace.org/2016/10/ids/core#coversTemporal>
                           "java.util.Arrays$ArrayList" ;
-                  <http://rdfs.org/ns/void#rootResource>
-                          <http://example.org/bla>
+                  <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                          "true"
                 ] .
 
 <http://example.org/end>
