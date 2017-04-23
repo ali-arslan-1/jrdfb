@@ -100,7 +100,7 @@ public class MultipleSerializeDeserializeTest {
         Student student = (Student)serializer.deserialize(serializedStudent);
 
         assertEquals(student.getName(), "Ali Arslan");
-        assertEquals(student.getMatrNo(), 111111);
+        assertEquals(student.getMatrNo().intValue(), 111111);
 
         assertEquals(student.getAddress().getCity(), "Bonn");
         assertEquals(student.getAddress().getCountry(), "Germany");

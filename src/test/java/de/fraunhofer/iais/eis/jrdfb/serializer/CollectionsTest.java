@@ -63,7 +63,7 @@ public class CollectionsTest {
         List<Person> friends = student.getFriends();
 
         assertEquals(student.getName(), "Ali Arslan");
-        assertEquals(student.getMatrNo(), 111111);
+        assertEquals(student.getMatrNo().intValue(), 111111);
         assertEquals(student.getProfileUrl().toExternalForm(),
                 "http://example.com/profile/1");
 
@@ -97,7 +97,7 @@ public class CollectionsTest {
             rdf = serializer.serialize(student);
             System.out.println(rdf);
             Student deserialized = (Student)serializer.deserialize(rdf);
-            assertEquals(deserialized.getMatrNo(), 111111);
+            assertEquals(deserialized.getMatrNo().intValue(), 111111);
             Person p1 = student.getFriends().get(0);
             Person p2 = student.getFriends().get(1);
 

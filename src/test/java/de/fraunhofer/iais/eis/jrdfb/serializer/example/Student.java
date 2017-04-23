@@ -12,12 +12,12 @@ public class Student extends Person
 {
     @RdfProperty(DcTerms.IDENTIFIER)
     @RdfId(uriTemplate = "student/{RdfId}")
-    private int matrNo;
+    private Integer matrNo;
 
     @RdfProperty(VCARD.URL)
     private URL profileUrl;
 
-    public Student(String name, int matrNo) {
+    public Student(String name, Integer matrNo) {
         super(name);
         this.matrNo = matrNo;
     }
@@ -26,11 +26,11 @@ public class Student extends Person
         super(name, ssn);
     }
 
-    public int getMatrNo() {
+    public Integer getMatrNo() {
         return matrNo;
     }
 
-    public void setMatrNo(int matrNo) {
+    public void setMatrNo(Integer matrNo) {
         this.matrNo = matrNo;
     }
 

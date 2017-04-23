@@ -91,7 +91,7 @@ public class RdfSerializer {
             if (member.isAnnotationPresent(RdfId.class)) {
                 Resolver resolver = resolverFactory.createResolver(member, this);
                 RDFNode resolvedNode = resolver.resolveMember(obj);
-                assert resolvedNode != null;
+                if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
                     id =   ((Literal)resolvedNode).getString();
                 else
@@ -101,13 +101,13 @@ public class RdfSerializer {
                 break;
             }
         }
-        id = (id == null || id.toString().isEmpty()) ? ReflectUtils.getChecksum(obj) : id;
 
-        if(uriTemplate.contains("{RdfId}")){
+
+        if(id !=null && uriTemplate.contains("{RdfId}")){
             id = uriTemplate.replace("{RdfId}", id.toString());
         }
 
-        resource = model.createResource(id.toString());
+        resource = id == null? model.createResource(): model.createResource(id.toString());
         metaData = model.createResource();
 
         RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(clazz, RdfType.class);
@@ -263,7 +263,7 @@ public class RdfSerializer {
                 rdfIdInfo = AnnotationUtils.findAnnotation(member, RdfId.class);
             }
 
-            if (rdfIdInfo !=null){
+            if (resource.isURIResource() && rdfIdInfo != null){
                 String pluckedId = Utils.pluckIdFromUri(resource.getURI(), rdfIdInfo.uriTemplate());
                 MemberWrapper wrapper = member instanceof Method?
                         (new MemberWrapper((Method) member)):
