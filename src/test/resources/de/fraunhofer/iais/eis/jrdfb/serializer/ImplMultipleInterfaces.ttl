@@ -1,0 +1,12 @@
+[ a              <example:ImplMultipleInterfaces> ;
+  <example:foo>  "foo" ;
+  <example:bar>  "bar" ;
+  <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
+          [ <example:ImplMultipleInterfaces>
+                    "de.fraunhofer.iais.eis.jrdfb.serializer.example.ImplMultipleInterfaces" ;
+            <example:foo>  "java.lang.String" ;
+            <example:bar>  "java.lang.String" ;
+            <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                    "true"
+          ]
+] .
