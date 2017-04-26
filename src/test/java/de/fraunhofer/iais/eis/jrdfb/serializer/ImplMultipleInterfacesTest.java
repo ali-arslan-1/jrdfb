@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
@@ -36,7 +37,7 @@ public class ImplMultipleInterfacesTest {
     @Test
     public void testSerializeWithOrder1() throws Exception {
         serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
-        ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
         Model actualModel = TestUtils.getSerializedModel(serializer, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
@@ -44,7 +45,7 @@ public class ImplMultipleInterfacesTest {
     @Test
     public void testSerializeWithOrder2() throws Exception {
         serializer = new RdfSerializer(Foo.class, Bar.class, ImplMultipleInterfaces.class);
-        ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
         Model actualModel = TestUtils.getSerializedModel(serializer, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
@@ -52,9 +53,32 @@ public class ImplMultipleInterfacesTest {
     @Test
     public void testSerializeWithOrder3() throws Exception {
         serializer = new RdfSerializer(Bar.class, Foo.class, ImplMultipleInterfaces.class);
-        ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
         Model actualModel = TestUtils.getSerializedModel(serializer, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
+    @Test
+    public void testDeserializeWithOrder1() throws Exception {
+        serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        assertEquals(obj.getBar(), "bar");
+        assertEquals(obj.getFoo(), "foo");
+    }
+
+    @Test
+    public void testDeserializeWithOrder2() throws Exception {
+        serializer = new RdfSerializer(Foo.class, Bar.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        assertEquals(obj.getBar(), "bar");
+        assertEquals(obj.getFoo(), "foo");
+    }
+
+    @Test
+    public void testDeserializeWithOrder3() throws Exception {
+        serializer = new RdfSerializer(Bar.class, Foo.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        assertEquals(obj.getBar(), "bar");
+        assertEquals(obj.getFoo(), "foo");
+    }
 }

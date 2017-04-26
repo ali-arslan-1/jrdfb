@@ -7,13 +7,21 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
  */
 @RdfType("example:ImplMultipleInterfaces")
 public class ImplMultipleInterfaces implements Foo{
+
+    private String foo;
+    private String bar;
+
+    public ImplMultipleInterfaces(String foo, String bar) {
+        this.foo = foo;
+        this.bar = bar;
+    }
     @Override
-    public String bar() {
-        return "bar";
+    public String getBar() {
+        return bar;
     }
 
     @Override
-    public String foo() {
-        return "foo";
+    public String getFoo() {
+        return foo;
     }
 }

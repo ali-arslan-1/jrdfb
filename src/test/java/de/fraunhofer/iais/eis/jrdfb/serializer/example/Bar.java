@@ -7,5 +7,5 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
  */
 public interface Bar {
     @RdfProperty("example:bar")
-    String bar();
+    String getBar();
 }

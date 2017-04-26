@@ -9,5 +9,5 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 @RdfType("example:Bar")
 public interface Foo extends Bar {
     @RdfProperty("example:foo")
-    String foo();
+    String getFoo();
 }
