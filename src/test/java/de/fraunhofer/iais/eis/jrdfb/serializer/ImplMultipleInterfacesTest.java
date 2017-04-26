@@ -4,6 +4,7 @@ import de.fraunhofer.iais.eis.jrdfb.serializer.example.Bar;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Foo;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ImplMultipleInterfaces;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
+import de.fraunhofer.iais.eis.jrdfb.util.TestUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.testng.annotations.BeforeMethod;
@@ -33,15 +34,27 @@ public class ImplMultipleInterfacesTest {
     }
 
     @Test
-    public void testSerialize() throws Exception {
+    public void testSerializeWithOrder1() throws Exception {
         serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
         ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
-        Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(obj).trim();
-        System.out.println("Serialized Turtle:");
-        System.out.println(serializedTurtle);
-        actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
-                null, "TURTLE");
+        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
+
+    @Test
+    public void testSerializeWithOrder2() throws Exception {
+        serializer = new RdfSerializer(Foo.class, Bar.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
+        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        assertTrue(expectedModel.isIsomorphicWith(actualModel));
+    }
+
+    @Test
+    public void testSerializeWithOrder3() throws Exception {
+        serializer = new RdfSerializer(Bar.class, Foo.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces();
+        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        assertTrue(expectedModel.isIsomorphicWith(actualModel));
+    }
+
 }

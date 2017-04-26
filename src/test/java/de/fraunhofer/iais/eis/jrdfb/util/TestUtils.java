@@ -1,6 +1,11 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
+import de.fraunhofer.iais.eis.jrdfb.serializer.RdfSerializer;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.testng.annotations.Test;
+
+import java.io.ByteArrayInputStream;
 
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -28,5 +33,17 @@ public class TestUtils {
         assertEquals("example/1234",
                 Utils.pluckIdFromUri("example/1234",
                         ""));
+    }
+
+    public static Model getSerializedModel(RdfSerializer serializer, Object object)
+            throws Exception{
+        Model actualModel = ModelFactory.createDefaultModel();
+        String serializedTurtle = serializer.serialize(object).trim();
+        System.out.println("Serialized Turtle:");
+        System.out.println(serializedTurtle);
+        actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
+                null, "TURTLE");
+
+        return actualModel;
     }
 }

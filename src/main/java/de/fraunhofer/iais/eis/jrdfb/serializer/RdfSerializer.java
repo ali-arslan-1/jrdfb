@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -40,14 +42,8 @@ public class RdfSerializer {
         model = ModelFactory.createDefaultModel();
         isRoot = true;
 
-        Class rootClass = tClasses[0];
-        for(Class clazz: tClasses){
-            if(clazz.isInstance(obj))
-                rootClass = clazz;
-        }
-
         try {
-            this.createResource(rootClass, obj);
+            this.createResource(obj);
         } catch (ReflectiveOperationException e) {
             throw new JrdfbException(e);
         }
@@ -66,21 +62,22 @@ public class RdfSerializer {
         return result;
     }
 
-    Resource createResource(@NotNull Class clazz, @NotNull Object obj) throws
+    Resource createResource(@NotNull Object obj) throws
             ReflectiveOperationException{
         Resource resource;
         Resource metaData;
         Object id = null;
         String uriTemplate = "";
-        Collection allFields = ReflectUtils.getFieldsUpTo(clazz, Object
-                .class);
 
-        Collection allMethods = ReflectUtils.getAllMethodsInHierarchy
-                (clazz, Object.class);
-
-        Collection allAccessibleObjects = new ArrayList();
-        allAccessibleObjects.addAll(allFields);
-        allAccessibleObjects.addAll(allMethods);
+        Set allAccessibleObjects = new HashSet();
+        for(Class<?> clazz: tClasses) {
+            if(clazz.isAssignableFrom(obj.getClass())){
+                allAccessibleObjects.addAll(ReflectUtils.getFieldsUpTo(clazz, Object
+                        .class));
+                allAccessibleObjects.addAll(ReflectUtils.getAllMethodsInHierarchy
+                        (clazz, Object.class));
+            }
+        }
 
         Collection<AccessibleObject> allMembers = (Collection<AccessibleObject>)(Collection<?>)
                 allAccessibleObjects;
@@ -110,7 +107,7 @@ public class RdfSerializer {
         resource = id == null? model.createResource(): model.createResource(id.toString());
         metaData = model.createResource();
 
-        RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(clazz, RdfType.class);
+        RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(obj.getClass(), RdfType.class);
         String rdfType;
         if(rdfTypeAnnotation != null) {
             rdfType = rdfTypeAnnotation.value();
@@ -139,13 +136,13 @@ public class RdfSerializer {
                 ObjectResolver resolver = resolverFactory.createResolver(member,this);
                 boolean resolved = false;
 
-                Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses, resolver.resolveMemberClassName
-                        (obj));
+                Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
+                        resolver.resolveMemberClassName(obj));
                 if(tClass != null){
                     Object resolvedObj = resolver.getMemberValue(obj);
                     if(resolvedObj!= null)
                         resource.addProperty(jenaProperty,
-                                this.createResource(tClass, resolvedObj));
+                                this.createResource(resolvedObj));
 
                     resolved = true;
                 }

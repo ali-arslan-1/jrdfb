@@ -9,11 +9,11 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 public class ImplMultipleInterfaces implements Foo{
     @Override
     public String bar() {
-        return "foo";
+        return "bar";
     }
 
     @Override
     public String foo() {
-        return "bar";
+        return "foo";
     }
 }

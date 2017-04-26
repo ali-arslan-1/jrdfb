@@ -46,7 +46,7 @@ public class CollectionResolver extends ObjectResolver {
                 tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
                         elem.getClass().getName());
             if(tClass != null){
-                rdfNode = (elem == null? RDF.nil: rdfSerializer.createResource(tClass, elem));
+                rdfNode = (elem == null? RDF.nil: rdfSerializer.createResource(elem));
             }else{
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());
