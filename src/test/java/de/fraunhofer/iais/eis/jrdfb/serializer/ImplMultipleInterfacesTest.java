@@ -59,6 +59,14 @@ public class ImplMultipleInterfacesTest {
     }
 
     @Test
+    public void testSerializeWithOrder4() throws Exception {
+        serializer = new RdfSerializer(Bar.class, ImplMultipleInterfaces.class, Foo.class);
+        ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
+        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        assertTrue(expectedModel.isIsomorphicWith(actualModel));
+    }
+
+    @Test
     public void testDeserializeWithOrder1() throws Exception {
         serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
         ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
