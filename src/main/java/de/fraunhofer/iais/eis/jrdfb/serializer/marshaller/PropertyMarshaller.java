@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;

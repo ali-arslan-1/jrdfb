@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfUri;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;

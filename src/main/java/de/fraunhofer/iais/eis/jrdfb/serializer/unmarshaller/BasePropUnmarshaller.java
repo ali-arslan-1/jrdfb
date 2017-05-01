@@ -1,7 +1,8 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
+import de.fraunhofer.iais.eis.jrdfb.serializer.MemberWrapper;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.rdf.model.Model;

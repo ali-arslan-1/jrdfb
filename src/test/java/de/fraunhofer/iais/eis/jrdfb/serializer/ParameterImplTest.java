@@ -3,6 +3,8 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Parameter;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterDataType;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ParameterImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;

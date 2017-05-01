@@ -2,6 +2,8 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.*;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;

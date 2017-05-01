@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfBag;
 import org.apache.jena.rdf.model.NodeIterator;

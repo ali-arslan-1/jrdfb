@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfTypedLiteral;
 import org.apache.jena.rdf.model.RDFNode;

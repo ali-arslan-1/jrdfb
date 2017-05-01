@@ -1,6 +1,8 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithLangLiterals;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;

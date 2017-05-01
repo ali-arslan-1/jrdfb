@@ -1,9 +1,11 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
+import de.fraunhofer.iais.eis.jrdfb.serializer.Factory;
+import de.fraunhofer.iais.eis.jrdfb.serializer.FactoryImpl;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.jena.rdf.model.*;
@@ -25,14 +27,14 @@ import java.util.Set;
 public class RdfMarshaller {
 
     Class[] tClasses;
-    private MarshallerFactory marshallerFactory;
+    private Factory factory;
     Model model;
 
     private boolean isRoot;
 
     public RdfMarshaller(Class... tClasses){
         this.tClasses = tClasses;
-        marshallerFactory = new MarshallerFactoryImpl();
+        factory = new FactoryImpl();
     }
     public String marshal(@NotNull Object obj) throws JrdfbException {
         model = ModelFactory.createDefaultModel();
@@ -82,7 +84,7 @@ public class RdfMarshaller {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
-                PropertyMarshaller marshaller = marshallerFactory.createMarshaller(member, this);
+                PropertyMarshaller marshaller = factory.createMarshaller(member, this);
                 RDFNode resolvedNode = marshaller.resolveMember(obj);
                 if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
@@ -129,7 +131,7 @@ public class RdfMarshaller {
 
             if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                BasePropMarshaller unmarshaller = marshallerFactory.createMarshaller(member,this);
+                BasePropMarshaller unmarshaller = factory.createMarshaller(member,this);
                 boolean resolved = false;
 
                 Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,

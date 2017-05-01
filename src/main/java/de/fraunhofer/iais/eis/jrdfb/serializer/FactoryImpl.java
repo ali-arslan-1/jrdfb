@@ -1,5 +1,8 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.*;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.*;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,7 +12,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class MarshallerFactoryImpl implements MarshallerFactory {
+public class FactoryImpl implements Factory {
 
     @Override
     public BasePropMarshaller createMarshaller(AccessibleObject accessibleObject,
@@ -44,7 +47,7 @@ public class MarshallerFactoryImpl implements MarshallerFactory {
     }
 
     @Override
-    public BasePropUnmarshaller createUnmarshaller(AccessibleObject accessibleObject, 
+    public BasePropUnmarshaller createUnmarshaller(AccessibleObject accessibleObject,
                                                    RdfUnmarshaller rdfMarshaller) {
         BasePropUnmarshaller unmarshaller = null;
         if(accessibleObject instanceof Field) {

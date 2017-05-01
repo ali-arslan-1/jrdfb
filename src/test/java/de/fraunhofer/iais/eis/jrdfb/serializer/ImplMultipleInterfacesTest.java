@@ -3,6 +3,8 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Bar;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Foo;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ImplMultipleInterfaces;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import de.fraunhofer.iais.eis.jrdfb.util.TestUtils;
 import org.apache.jena.rdf.model.Model;

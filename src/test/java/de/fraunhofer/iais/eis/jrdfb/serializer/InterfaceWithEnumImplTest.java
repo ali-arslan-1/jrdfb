@@ -4,6 +4,8 @@ import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.DayEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnum;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.InterfaceWithEnumImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import de.fraunhofer.iais.eis.jrdfb.util.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;

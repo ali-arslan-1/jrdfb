@@ -5,6 +5,8 @@ import de.fraunhofer.iais.eis.jrdfb.serializer.example.Address;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Person;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Student;
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.ids.*;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.RdfMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller.RdfUnmarshaller;
 import org.testng.annotations.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;

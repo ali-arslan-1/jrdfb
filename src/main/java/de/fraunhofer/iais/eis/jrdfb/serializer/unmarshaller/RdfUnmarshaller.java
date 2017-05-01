@@ -1,9 +1,12 @@
-package de.fraunhofer.iais.eis.jrdfb.serializer;
+package de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
+import de.fraunhofer.iais.eis.jrdfb.serializer.Factory;
+import de.fraunhofer.iais.eis.jrdfb.serializer.FactoryImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.MemberWrapper;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import de.fraunhofer.iais.eis.jrdfb.util.Utils;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
@@ -25,14 +28,14 @@ import java.util.Collection;
 public class RdfUnmarshaller {
 
     Class[] tClasses;
-    private MarshallerFactory marshallerFactory;
+    private Factory factory;
     Model model;
 
     private boolean isRoot;
 
     public RdfUnmarshaller(Class... tClasses){
         this.tClasses = tClasses;
-        marshallerFactory = new MarshallerFactoryImpl();
+        factory = new FactoryImpl();
     }
 
     public Object unmarshal(@NotNull String data) throws JrdfbException {
@@ -139,7 +142,7 @@ public class RdfUnmarshaller {
             }
             if (rdfPropertyInfo != null) {
 
-                BasePropUnmarshaller resolver = marshallerFactory.createUnmarshaller(member,this);
+                BasePropUnmarshaller resolver = factory.createUnmarshaller(member,this);
                 boolean resolved = false;
                 Object propertyVal = null;
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
