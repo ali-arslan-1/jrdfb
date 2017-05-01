@@ -137,7 +137,7 @@ public class RdfMarshaller {
                 Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
                         unmarshaller.resolveMemberClassName(obj));
                 if(tClass != null){
-                    Object resolvedObj = unmarshaller.getMemberValue(obj);
+                    Object resolvedObj = unmarshaller.memberWrapper.getMemberValue(obj);
                     if(resolvedObj!= null)
                         resource.addProperty(jenaProperty,
                                 this.createResource(resolvedObj));

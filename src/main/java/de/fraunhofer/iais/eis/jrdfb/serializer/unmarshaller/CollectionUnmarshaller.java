@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Collection;
 
@@ -38,7 +36,7 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
         Resource collectionRes = (Resource)value.getObject();
 
         Class tClass = ReflectUtils.getIfAssignableFromAny(rdfUnmarshaller.tClasses,
-                getGenericType().getTypeName());
+                memberWrapper.getGenericTypeArgument().getTypeName());
 
         StmtIterator it  = collectionRes.listProperties(SKOS.member);
 
@@ -47,7 +45,7 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
 
         while( it.hasNext() ) {
             Statement stmt = it.nextStatement();
-            if(tClass != null && getGenericType() instanceof Class){
+            if(tClass != null && memberWrapper.getGenericTypeArgument() instanceof Class){
                 RDFNode elem = stmt.getObject();
                 Object object = elem.equals(RDF.nil)? null
                                     : rdfUnmarshaller
@@ -57,16 +55,18 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
                 String stringValue;
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     stringValue = stmt.getObject().toString();
-                }else if(getGenericType() instanceof Class && RDFNode.class
-                        .isAssignableFrom((Class<?>) getGenericType())){
+                }else if(memberWrapper.getGenericTypeArgument() instanceof Class && RDFNode.class
+                        .isAssignableFrom((Class<?>) memberWrapper.getGenericTypeArgument())){
                     collection.add(stmt.getObject());
                     continue;
                 }
                 else{
                     stringValue = stmt.getLiteral().getString();
                 }
-                collection.add(ReflectUtils.stringToObject(getGenericType().getTypeName(),
-                        stringValue));
+                collection.add(
+                        ReflectUtils.stringToObject
+                                (memberWrapper.getGenericTypeArgument().getTypeName(),
+                                    stringValue));
             }
 
         }
@@ -74,9 +74,4 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
         return collection;
     }
 
-    private Type getGenericType(){
-        ParameterizedType genericType = (ParameterizedType) memberWrapper
-                .getGenericType();
-        return genericType.getActualTypeArguments()[0];
-    }
 }

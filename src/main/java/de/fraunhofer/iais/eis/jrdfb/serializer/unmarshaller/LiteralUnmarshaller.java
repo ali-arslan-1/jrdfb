@@ -30,7 +30,7 @@ public class LiteralUnmarshaller extends BasePropUnmarshaller {
             throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;
-        if(getMemberPath().isEmpty()){
+        if(memberWrapper.getMemberPath().isEmpty()){
             String stringValue;
             if(memberWrapper.getType().equals(URL.class))
                 stringValue = value.getObject().toString();
@@ -47,7 +47,7 @@ public class LiteralUnmarshaller extends BasePropUnmarshaller {
                     .getDeclaredConstructor();
             cons.setAccessible(true);
             return memberWrapper.initNestedObject(cons.newInstance(),
-                    getMemberPath(),
+                    memberWrapper.getMemberPath(),
                     value.getObject().toString());
         }
     }

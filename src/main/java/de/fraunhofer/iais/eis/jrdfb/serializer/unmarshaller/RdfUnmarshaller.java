@@ -160,7 +160,7 @@ public class RdfUnmarshaller {
                     propertyVal = resolver.resolveProperty(resource);
 
                 if (propertyVal != null) {
-                    resolver.setMemberValue(obj, propertyVal);
+                    resolver.memberWrapper.setMemberValue(obj, propertyVal);
                 }
             }
         }

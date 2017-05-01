@@ -24,7 +24,7 @@ public class EnumMarshaller extends BasePropMarshaller {
     @Override
     public @Nullable RDFNode resolveMember(@NotNull Object object)
             throws ReflectiveOperationException {
-        Object value = extractMemberValue(object);
+        Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
 
         RDFNode rdfNode;

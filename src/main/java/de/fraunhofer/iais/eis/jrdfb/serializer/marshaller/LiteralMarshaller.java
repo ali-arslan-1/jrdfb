@@ -30,7 +30,7 @@ public class LiteralMarshaller extends BasePropMarshaller {
 
     @Override
     public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
-        Object value = extractMemberValue(object);
+        Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
         RDFNode rdfNode;
 

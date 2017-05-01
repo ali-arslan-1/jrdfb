@@ -1,10 +1,8 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.unmarshaller;
 
-import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.serializer.MemberWrapper;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -35,26 +33,6 @@ public abstract class BasePropUnmarshaller implements PropertyUnmarshaller {
         this.rdfUnmarshaller = rdfUnmarshaller;
     }
 
-    protected Object extractMemberValue(Object object)
-            throws ReflectiveOperationException {
-        if(getMemberPath().isEmpty()){
-            return getMemberValue(object);
-        }else{
-            return memberWrapper.getNestedObject(object, getMemberPath());
-        }
-    }
-
-    public @Nullable Object getMemberValue(@NotNull Object object)
-            throws ReflectiveOperationException {
-        return memberWrapper.getValue(object);
-    }
-
-    public void setMemberValue(@NotNull Object object, @NotNull Object value)
-            throws ReflectiveOperationException {
-        if(!ClassUtils.isAssignable(value.getClass(), memberWrapper.getType())) return;
-        memberWrapper.setValue(object, value);
-    }
-
     @Override
     @Nullable
     public String resolveMemberClassName(@NotNull Resource resource)
@@ -69,22 +47,6 @@ public abstract class BasePropUnmarshaller implements PropertyUnmarshaller {
     }
 
     protected Property getJenaProperty(){
-        return model.createProperty(getRdfProperty().value());
-    }
-
-    protected RdfProperty getRdfProperty(){
-        return memberWrapper.getAnnotation(RdfProperty.class);
-    }
-
-    protected String getMemberPath(){
-        RdfProperty rdfPropertyInfo = getRdfProperty();
-        RdfId rdfIdInfo = memberWrapper.getAnnotation(RdfId.class);
-
-        if(rdfPropertyInfo!=null && !rdfPropertyInfo.path().isEmpty())
-            return rdfPropertyInfo.path();
-        else if(rdfIdInfo!=null && !rdfIdInfo.path().isEmpty())
-            return rdfIdInfo.path();
-
-        return "";
+        return model.createProperty(memberWrapper.getAnnotation(RdfProperty.class).value());
     }
 }

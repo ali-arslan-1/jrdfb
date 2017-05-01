@@ -1,6 +1,11 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
+import org.apache.commons.lang3.ClassUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
@@ -159,5 +164,42 @@ public class MemberWrapper implements AnnotatedElement, Member{
         else if(member instanceof Method)
             return ((Method) member).getGenericReturnType();
         return null;
+    }
+
+    public String getMemberPath(){
+        RdfProperty rdfPropertyInfo = this.getAnnotation(RdfProperty.class);
+        RdfId rdfIdInfo = this.getAnnotation(RdfId.class);
+
+        if(rdfPropertyInfo!=null && !rdfPropertyInfo.path().isEmpty())
+            return rdfPropertyInfo.path();
+        else if(rdfIdInfo!=null && !rdfIdInfo.path().isEmpty())
+            return rdfIdInfo.path();
+
+        return "";
+    }
+
+    public @Nullable Object getMemberValue(@NotNull Object object)
+            throws ReflectiveOperationException {
+        return getValue(object);
+    }
+
+    public void setMemberValue(@NotNull Object object, @NotNull Object value)
+            throws ReflectiveOperationException {
+        if(!ClassUtils.isAssignable(value.getClass(), getType())) return;
+        setValue(object, value);
+    }
+
+    public Object extractMemberValue(Object object)
+            throws ReflectiveOperationException {
+        if(getMemberPath().isEmpty()){
+            return getMemberValue(object);
+        }else{
+            return getNestedObject(object, getMemberPath());
+        }
+    }
+
+    public Type getGenericTypeArgument(){
+        ParameterizedType genericType = (ParameterizedType) this.getGenericType();
+        return genericType.getActualTypeArguments()[0];
     }
 }

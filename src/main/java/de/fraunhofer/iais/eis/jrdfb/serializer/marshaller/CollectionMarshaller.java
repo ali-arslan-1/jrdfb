@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Collection;
 
@@ -29,7 +27,7 @@ public class CollectionMarshaller extends BasePropMarshaller {
 
     @Override
     public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
-        Object value = extractMemberValue(object);
+        Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
         RDFNode rdfNode;
 
@@ -48,8 +46,8 @@ public class CollectionMarshaller extends BasePropMarshaller {
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());
                 }
-                else if(getGenericType() instanceof Class && RDFNode.class
-                        .isAssignableFrom((Class<?>) getGenericType())){
+                else if(memberWrapper.getGenericTypeArgument() instanceof Class && RDFNode.class
+                        .isAssignableFrom((Class<?>) memberWrapper.getGenericTypeArgument())){
                     rdfNode = (RDFNode)elem;
                 }
                 else{
@@ -60,11 +58,5 @@ public class CollectionMarshaller extends BasePropMarshaller {
         }
 
         return resource;
-    }
-
-    private Type getGenericType(){
-        ParameterizedType genericType = (ParameterizedType) memberWrapper
-                .getGenericType();
-        return genericType.getActualTypeArguments()[0];
     }
 }
