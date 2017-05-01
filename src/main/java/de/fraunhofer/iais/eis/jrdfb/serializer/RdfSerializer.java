@@ -29,14 +29,14 @@ import java.util.Set;
 public class RdfSerializer {
 
     Class[] tClasses;
-    private ResolverFactory resolverFactory;
+    private MarshallerFactory marshallerFactory;
     Model model;
 
     private boolean isRoot;
 
     public RdfSerializer(Class... tClasses){
         this.tClasses = tClasses;
-        resolverFactory = new ResolverFactoryImpl();
+        marshallerFactory = new MarshallerFactoryImpl();
     }
     public String serialize(@NotNull Object obj) throws JrdfbException {
         model = ModelFactory.createDefaultModel();
@@ -86,7 +86,7 @@ public class RdfSerializer {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
-                Resolver resolver = resolverFactory.createResolver(member, this);
+                PropertyMarshaller resolver = marshallerFactory.createMarshaller(member, this);
                 RDFNode resolvedNode = resolver.resolveMember(obj);
                 if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
@@ -133,7 +133,7 @@ public class RdfSerializer {
 
             if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                ObjectResolver resolver = resolverFactory.createResolver(member,this);
+                BasePropMarshaller resolver = marshallerFactory.createMarshaller(member,this);
                 boolean resolved = false;
 
                 Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
@@ -270,7 +270,7 @@ public class RdfSerializer {
             }
             if (rdfPropertyInfo != null) {
 
-                ObjectResolver resolver = resolverFactory.createResolver(member,this);
+                BasePropUnmarshaller resolver = marshallerFactory.createUnmarshaller(member,this);
                 boolean resolved = false;
                 Object propertyVal = null;
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());

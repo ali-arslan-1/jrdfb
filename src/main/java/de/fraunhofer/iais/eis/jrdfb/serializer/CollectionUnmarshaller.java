@@ -20,49 +20,14 @@ import java.util.Collection;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class CollectionResolver extends ObjectResolver {
+public class CollectionUnmarshaller extends BasePropUnmarshaller {
 
-    public CollectionResolver(Field field, RdfSerializer rdfSerializer) {
+    public CollectionUnmarshaller(Field field, RdfSerializer rdfSerializer) {
         super(field, rdfSerializer);
     }
 
-    public CollectionResolver(Method method, RdfSerializer rdfSerializer) {
+    public CollectionUnmarshaller(Method method, RdfSerializer rdfSerializer) {
         super(method, rdfSerializer);
-    }
-
-    @Override
-    public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
-        Object value = extractMemberValue(object);
-        if(value == null) return null;
-        RDFNode rdfNode;
-
-        Collection collection = (Collection)value;
-        Resource resource = model.createResource();
-        resource.addProperty(RDF.type, SKOS.Collection);
-        Class tClass = null;
-
-        for (Object elem : collection) {
-            if(elem != null)
-                tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
-                        elem.getClass().getName());
-            if(tClass != null){
-                rdfNode = (elem == null? RDF.nil: rdfSerializer.createResource(elem));
-            }else{
-                if(memberWrapper.getGenericType().equals(URL.class)){
-                    rdfNode =  model.createProperty(elem.toString());
-                }
-                else if(getGenericType() instanceof Class && RDFNode.class
-                        .isAssignableFrom((Class<?>) getGenericType())){
-                    rdfNode = (RDFNode)elem;
-                }
-                else{
-                    rdfNode = model.createLiteral(elem.toString());
-                }
-            }
-            resource.addProperty(SKOS.member, rdfNode);
-        }
-
-        return resource;
     }
 
     @Override

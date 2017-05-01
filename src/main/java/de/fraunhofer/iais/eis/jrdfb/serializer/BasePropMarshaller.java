@@ -2,12 +2,9 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
-import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,18 +14,18 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public abstract class ObjectResolver implements Resolver {
+public abstract class BasePropMarshaller implements PropertyMarshaller {
     protected MemberWrapper memberWrapper;
     protected Model model;
     protected RdfSerializer rdfSerializer;
 
-    public ObjectResolver(Field field, RdfSerializer rdfSerializer) {
+    public BasePropMarshaller(Field field, RdfSerializer rdfSerializer) {
         this.memberWrapper = new MemberWrapper(field);
         this.model = rdfSerializer.model;
         this.rdfSerializer = rdfSerializer;
     }
 
-    public ObjectResolver(Method method, RdfSerializer rdfSerializer) {
+    public BasePropMarshaller(Method method, RdfSerializer rdfSerializer) {
         this.memberWrapper = new MemberWrapper(method);
         this.model = rdfSerializer.model;
         this.rdfSerializer = rdfSerializer;
@@ -60,21 +57,6 @@ public abstract class ObjectResolver implements Resolver {
         Object extractedValue = extractMemberValue(object);
         if(extractedValue == null) return null;
         return extractedValue.getClass().getName();
-    }
-
-    @Override
-    @Nullable
-    public String resolveMemberClassName(@NotNull Resource resource)
-            throws ReflectiveOperationException{
-        Resource metadata = (Resource)resource
-                                .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
-        Statement metaProperty = metadata.getProperty(getJenaProperty());
-        if(metaProperty==null)
-            return null;
-//            throw new NoSuchFieldException("Metadata for memberWrapper '"
-//                    + memberWrapper.getName()+"' Not provided" +
-//                    " in RDF Resource: "+resource.getURI());
-        return metaProperty.getObject().toString();
     }
 
     protected Property getJenaProperty(){

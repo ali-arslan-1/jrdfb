@@ -2,7 +2,6 @@ package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfUri;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.jetbrains.annotations.NotNull;
@@ -14,32 +13,14 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class EnumResolver extends ObjectResolver {
+public class EnumUnmarshaller extends BasePropUnmarshaller {
 
-    public EnumResolver(Field field, RdfSerializer rdfSerializer) {
+    public EnumUnmarshaller(Field field, RdfSerializer rdfSerializer) {
         super(field, rdfSerializer);
     }
 
-    public EnumResolver(Method method, RdfSerializer rdfSerializer) {
+    public EnumUnmarshaller(Method method, RdfSerializer rdfSerializer) {
         super(method, rdfSerializer);
-    }
-
-    @Override
-    public @Nullable RDFNode resolveMember(@NotNull Object object)
-            throws ReflectiveOperationException {
-        Object value = extractMemberValue(object);
-        if(value == null) return null;
-
-        RDFNode rdfNode;
-        RdfUri rdfUri = memberWrapper.getType().getField(((Enum)value).name())
-                .getAnnotation(RdfUri.class);
-        if(rdfUri != null){
-            rdfNode =  model.createProperty(rdfUri.value());
-        }else{
-            rdfNode = model.createLiteral(value.toString());
-        }
-
-        return rdfNode;
     }
 
     @Override
