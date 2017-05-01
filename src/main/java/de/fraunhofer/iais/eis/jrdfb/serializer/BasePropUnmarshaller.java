@@ -20,18 +20,18 @@ import java.lang.reflect.Method;
 public abstract class BasePropUnmarshaller implements PropertyUnmarshaller {
     protected MemberWrapper memberWrapper;
     protected Model model;
-    protected RdfSerializer rdfSerializer;
+    protected RdfUnmarshaller rdfUnmarshaller;
 
-    public BasePropUnmarshaller(Field field, RdfSerializer rdfSerializer) {
+    public BasePropUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
         this.memberWrapper = new MemberWrapper(field);
-        this.model = rdfSerializer.model;
-        this.rdfSerializer = rdfSerializer;
+        this.model = rdfUnmarshaller.model;
+        this.rdfUnmarshaller = rdfUnmarshaller;
     }
 
-    public BasePropUnmarshaller(Method method, RdfSerializer rdfSerializer) {
+    public BasePropUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
         this.memberWrapper = new MemberWrapper(method);
-        this.model = rdfSerializer.model;
-        this.rdfSerializer = rdfSerializer;
+        this.model = rdfUnmarshaller.model;
+        this.rdfUnmarshaller = rdfUnmarshaller;
     }
 
     protected Object extractMemberValue(Object object)

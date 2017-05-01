@@ -22,9 +22,11 @@ import static org.testng.AssertJUnit.assertNotNull;
  */
 public class MultipleSerializeDeserializeTest {
 
-    RdfSerializer serializer = new RdfSerializer(Dataset.class, Instant.class, Interval.class,
+    RdfMarshaller marshaller = new RdfMarshaller(Dataset.class, Instant.class, Interval.class,
             TemporalEntity.class, Person.class, Student.class, Address.class);
 
+    RdfUnmarshaller unmarshaller = new RdfUnmarshaller(Dataset.class, Instant.class, Interval.class,
+            TemporalEntity.class, Person.class, Student.class, Address.class);
 
     private Dataset createDataset() throws Exception {
         GregorianCalendar t1 = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
@@ -77,15 +79,15 @@ public class MultipleSerializeDeserializeTest {
 
     @Test
     public void testDeserializeDataset() throws Exception{
-        String serializedDataset = serializer.serialize(createDataset());
-        String serializedStudent = serializer.serialize(createStudent());
+        String serializedDataset = marshaller.marshal(createDataset());
+        String serializedStudent = marshaller.marshal(createStudent());
 
         System.out.println("serializedDataset:");
         System.out.println(serializedDataset);
         System.out.println("serializedStudent:");
         System.out.println(serializedStudent);
 
-        Dataset dataset = (Dataset)serializer.deserialize(serializedDataset);
+        Dataset dataset = (Dataset) unmarshaller.unmarshal(serializedDataset);
         assertNotNull(dataset);
 
         ArrayList<IntervalImpl> interval = (ArrayList) dataset.getCoversTemporal();
@@ -97,7 +99,7 @@ public class MultipleSerializeDeserializeTest {
         assertEquals(interval.get(0).getEnd().getInXSDDateTime().getMonth(), 2);
         assertEquals(interval.get(0).getEnd().getInXSDDateTime().getDay(), 2);
 
-        Student student = (Student)serializer.deserialize(serializedStudent);
+        Student student = (Student) unmarshaller.unmarshal(serializedStudent);
 
         assertEquals(student.getName(), "Ali Arslan");
         assertEquals(student.getMatrNo().intValue(), 111111);

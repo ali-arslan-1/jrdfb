@@ -13,12 +13,12 @@ import java.lang.reflect.Method;
  */
 public class EnumMarshaller extends BasePropMarshaller {
 
-    public EnumMarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public EnumMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+        super(field, rdfMarshaller);
     }
 
-    public EnumMarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public EnumMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+        super(method, rdfMarshaller);
     }
 
     @Override

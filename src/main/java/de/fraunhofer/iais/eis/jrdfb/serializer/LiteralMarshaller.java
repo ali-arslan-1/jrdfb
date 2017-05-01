@@ -20,12 +20,12 @@ import java.util.Map;
  */
 public class LiteralMarshaller extends BasePropMarshaller {
 
-    public LiteralMarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public LiteralMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+        super(field, rdfMarshaller);
     }
 
-    public LiteralMarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public LiteralMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+        super(method, rdfMarshaller);
     }
 
     @Override

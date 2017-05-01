@@ -20,13 +20,11 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class CollectionsTest {
-    RdfSerializer serializer;
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(Person.class, Student.class);
         rdf_turtle = FileUtils
                 .readResource("PersonWithCollection.ttl",
                         this.getClass());
@@ -36,6 +34,8 @@ public class CollectionsTest {
 
     @Test
     public void testSerializeNestedCollection() throws Exception{
+        RdfMarshaller marshaller = new RdfMarshaller(Person.class, Student.class);
+        
         Student student = new Student("Ali Arslan", 111111);
         student.setProfileUrl(new URL("http://example.com/profile/1"));
 
@@ -49,7 +49,7 @@ public class CollectionsTest {
         student.setFriends(friends);
 
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(student).trim();
+        String serializedTurtle = marshaller.marshal(student).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
@@ -59,7 +59,9 @@ public class CollectionsTest {
 
     @Test
     public void testDeserializeNestedCollection() throws Exception{
-        Student student = (Student)serializer.deserialize(rdf_turtle);
+        RdfUnmarshaller unmarshaller = new RdfUnmarshaller(Person.class, Student.class);
+
+        Student student = (Student) unmarshaller.unmarshal(rdf_turtle);
         List<Person> friends = student.getFriends();
 
         assertEquals(student.getName(), "Ali Arslan");
@@ -80,6 +82,9 @@ public class CollectionsTest {
 
     @Test
     public void testCollectionWithNullValues() throws Exception{
+        RdfMarshaller marshaller = new RdfMarshaller(Person.class, Student.class);
+        RdfUnmarshaller unmarshaller = new RdfUnmarshaller(Person.class, Student.class);
+
         Student student = new Student("Ali Arslan", 111111);
         student.setProfileUrl(new URL("http://example.com/profile/1"));
 
@@ -94,9 +99,9 @@ public class CollectionsTest {
         boolean exceptionThrown = false;
         String rdf;
         try {
-            rdf = serializer.serialize(student);
+            rdf = marshaller.marshal(student);
             System.out.println(rdf);
-            Student deserialized = (Student)serializer.deserialize(rdf);
+            Student deserialized = (Student) unmarshaller.unmarshal(rdf);
             assertEquals(deserialized.getMatrNo().intValue(), 111111);
             Person p1 = student.getFriends().get(0);
             Person p2 = student.getFriends().get(1);

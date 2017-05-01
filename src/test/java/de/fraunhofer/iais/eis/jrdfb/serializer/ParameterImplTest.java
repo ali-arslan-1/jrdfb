@@ -19,7 +19,8 @@ import static org.testng.AssertJUnit.assertTrue;
  */
 public class ParameterImplTest {
 
-    RdfSerializer serializer;
+    RdfMarshaller marshaller;
+    RdfUnmarshaller unmarshaller;
     String rdf_turtle;
     Model expectedModel;
 
@@ -36,7 +37,7 @@ public class ParameterImplTest {
 
     @Test
     public void testSerializeParameter_oneClass() throws Exception {
-        serializer = new RdfSerializer(ParameterImpl.class);
+        marshaller = new RdfMarshaller(ParameterImpl.class);
         Model actualModel = createSerializedParameterModel();
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
@@ -45,7 +46,7 @@ public class ParameterImplTest {
         Parameter parameter = new ParameterImpl(ParameterDataType.XSD_STRING);
 
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(parameter).trim();
+        String serializedTurtle = marshaller.marshal(parameter).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
@@ -56,9 +57,9 @@ public class ParameterImplTest {
 
     @Test
     public void testDeserialize() throws Exception{
-        serializer = new RdfSerializer(ParameterImpl.class);
+        unmarshaller = new RdfUnmarshaller(ParameterImpl.class);
         ParameterImpl parameter =
-                (ParameterImpl)serializer.deserialize(rdf_turtle);
+                (ParameterImpl) unmarshaller.unmarshal(rdf_turtle);
         assertEquals(parameter.getDataType(), ParameterDataType.XSD_STRING);
     }
 }

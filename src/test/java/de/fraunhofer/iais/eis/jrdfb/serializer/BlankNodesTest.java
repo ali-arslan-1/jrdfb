@@ -24,13 +24,11 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class BlankNodesTest {
-    RdfSerializer serializer;
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(Person.class, Student.class, Address.class);
         rdf_turtle = FileUtils
                 .readResource("BlankNode.ttl",
                         this.getClass());
@@ -40,6 +38,8 @@ public class BlankNodesTest {
 
     @Test
     public void testSerializeNestedProperties() throws Exception{
+        RdfMarshaller marshaller = new RdfMarshaller(Person.class, Student.class, Address.class);
+
         Integer matno = null;
         Student student = new Student("Ali Arslan", matno);
 
@@ -58,7 +58,7 @@ public class BlankNodesTest {
         student.setBirthDate(birthDate);
 
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(student).trim();
+        String serializedTurtle = marshaller.marshal(student).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
@@ -68,7 +68,10 @@ public class BlankNodesTest {
 
     @Test
     public void testDeserialize() throws Exception{
-        Student student = (Student)serializer.deserialize(rdf_turtle);
+        RdfUnmarshaller unmarshaller = new RdfUnmarshaller(Person.class, Student.class, Address
+                .class);
+
+        Student student = (Student)unmarshaller.unmarshal(rdf_turtle);
 
         assertEquals(student.getName(), "Ali Arslan");
         assertEquals(student.getMatrNo(), null);

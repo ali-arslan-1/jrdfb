@@ -22,12 +22,12 @@ import java.util.Collection;
  */
 public class CollectionUnmarshaller extends BasePropUnmarshaller {
 
-    public CollectionUnmarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public CollectionUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
+        super(field, rdfUnmarshaller);
     }
 
-    public CollectionUnmarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public CollectionUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
+        super(method, rdfUnmarshaller);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
         if(value==null)return null;
         Resource collectionRes = (Resource)value.getObject();
 
-        Class tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
+        Class tClass = ReflectUtils.getIfAssignableFromAny(rdfUnmarshaller.tClasses,
                 getGenericType().getTypeName());
 
         StmtIterator it  = collectionRes.listProperties(SKOS.member);
@@ -50,7 +50,7 @@ public class CollectionUnmarshaller extends BasePropUnmarshaller {
             if(tClass != null && getGenericType() instanceof Class){
                 RDFNode elem = stmt.getObject();
                 Object object = elem.equals(RDF.nil)? null
-                                    : rdfSerializer
+                                    : rdfUnmarshaller
                                         .createObject((Resource) elem);
                 collection.add(object);
             }else{

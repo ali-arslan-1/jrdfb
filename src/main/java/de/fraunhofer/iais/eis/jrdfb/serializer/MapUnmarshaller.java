@@ -19,12 +19,12 @@ import java.util.TreeMap;
  */
 public class MapUnmarshaller extends BasePropUnmarshaller {
 
-    public MapUnmarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public MapUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
+        super(field, rdfUnmarshaller);
     }
 
-    public MapUnmarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public MapUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
+        super(method, rdfUnmarshaller);
     }
 
     @Override

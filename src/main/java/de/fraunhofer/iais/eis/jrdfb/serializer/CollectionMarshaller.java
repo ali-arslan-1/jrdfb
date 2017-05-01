@@ -19,12 +19,12 @@ import java.util.Collection;
  */
 public class CollectionMarshaller extends BasePropMarshaller {
 
-    public CollectionMarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public CollectionMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+        super(field, rdfMarshaller);
     }
 
-    public CollectionMarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public CollectionMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+        super(method, rdfMarshaller);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class CollectionMarshaller extends BasePropMarshaller {
 
         for (Object elem : collection) {
             if(elem != null)
-                tClass = ReflectUtils.getIfAssignableFromAny(rdfSerializer.tClasses,
+                tClass = ReflectUtils.getIfAssignableFromAny(rdfMarshaller.tClasses,
                         elem.getClass().getName());
             if(tClass != null){
-                rdfNode = (elem == null? RDF.nil: rdfSerializer.createResource(elem));
+                rdfNode = (elem == null? RDF.nil: rdfMarshaller.createResource(elem));
             }else{
                 if(memberWrapper.getGenericType().equals(URL.class)){
                     rdfNode =  model.createProperty(elem.toString());

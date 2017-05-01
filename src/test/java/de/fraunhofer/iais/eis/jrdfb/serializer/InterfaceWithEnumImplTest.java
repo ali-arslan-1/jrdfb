@@ -12,7 +12,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
-import java.net.URL;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -22,7 +21,8 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class InterfaceWithEnumImplTest {
-    RdfSerializer serializer;
+    RdfMarshaller marshaller;
+    RdfUnmarshaller unmarshaller;
     String rdf_turtle;
     Resource expectedRes;
     Model expectedModel;
@@ -30,7 +30,8 @@ public class InterfaceWithEnumImplTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(InterfaceWithEnumImpl.class);
+        marshaller = new RdfMarshaller(InterfaceWithEnumImpl.class);
+        unmarshaller = new RdfUnmarshaller(InterfaceWithEnumImpl.class);
         rdf_turtle = FileUtils
                 .readResource("InterfaceWithEnumImpl.ttl",
                         this.getClass());
@@ -44,7 +45,7 @@ public class InterfaceWithEnumImplTest {
         InterfaceWithEnum interfaceWithEnum = new InterfaceWithEnumImpl(DayEnum.FRIDAY);
 
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(interfaceWithEnum).trim();
+        String serializedTurtle = marshaller.marshal(interfaceWithEnum).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
@@ -55,7 +56,8 @@ public class InterfaceWithEnumImplTest {
 
     @Test
     public void testDeserialize() throws Exception{
-        InterfaceWithEnumImpl interfaceWithEnum = (InterfaceWithEnumImpl)serializer.deserialize(rdf_turtle);
+        InterfaceWithEnumImpl interfaceWithEnum =
+                (InterfaceWithEnumImpl) unmarshaller.unmarshal(rdf_turtle);
 
         assertNotNull(interfaceWithEnum.id);
         assertEquals(interfaceWithEnum.getSomeEnum(), DayEnum.FRIDAY);
@@ -64,13 +66,13 @@ public class InterfaceWithEnumImplTest {
     @Test
     public void enumFieldUnused() throws JrdfbException {
         InterfaceWithEnum interfaceWithEnum = new InterfaceWithEnumImpl(null);
-        String serializedTurtle = serializer.serialize(interfaceWithEnum).trim();
+        String serializedTurtle = marshaller.marshal(interfaceWithEnum).trim();
         Model serializedModel = ModelFactory.createDefaultModel();
         serializedModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()), null, "TURTLE");
 
         InterfaceWithEnumImpl interfaceWithEnum_fromRdf =
-                (InterfaceWithEnumImpl)serializer.deserialize(serializedTurtle);
-        String reSerializedTurtle = serializer.serialize(interfaceWithEnum_fromRdf).trim();
+                (InterfaceWithEnumImpl) unmarshaller.unmarshal(serializedTurtle);
+        String reSerializedTurtle = marshaller.marshal(interfaceWithEnum_fromRdf).trim();
         Model reSerializedModel = ModelFactory.createDefaultModel();
         reSerializedModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()), null, "TURTLE");
 

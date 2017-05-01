@@ -1,0 +1,163 @@
+package de.fraunhofer.iais.eis.jrdfb.serializer;
+
+import de.fraunhofer.iais.eis.jrdfb.JrdfbException;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
+import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
+import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDF;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.core.annotation.AnnotationUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
+ */
+public class RdfMarshaller {
+
+    Class[] tClasses;
+    private MarshallerFactory marshallerFactory;
+    Model model;
+
+    private boolean isRoot;
+
+    public RdfMarshaller(Class... tClasses){
+        this.tClasses = tClasses;
+        marshallerFactory = new MarshallerFactoryImpl();
+    }
+    public String marshal(@NotNull Object obj) throws JrdfbException {
+        model = ModelFactory.createDefaultModel();
+        isRoot = true;
+
+        try {
+            this.createResource(obj);
+        } catch (ReflectiveOperationException e) {
+            throw new JrdfbException(e);
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        model.write(out, "TURTLE");
+
+        String result;
+        try {
+            result = out.toString("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new JrdfbException(e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    Resource createResource(@NotNull Object obj) throws
+            ReflectiveOperationException{
+        Resource resource;
+        Resource metaData;
+        Object id = null;
+        String uriTemplate = "";
+
+        Set allAccessibleObjects = new HashSet();
+        for(Class<?> clazz: tClasses) {
+            if(clazz.isAssignableFrom(obj.getClass())){
+                allAccessibleObjects.addAll(ReflectUtils.getFieldsUpTo(clazz, Object
+                        .class));
+                allAccessibleObjects.addAll(ReflectUtils.getAllMethodsInHierarchy
+                        (clazz, Object.class));
+            }
+        }
+
+        Collection<AccessibleObject> allMembers = (Collection<AccessibleObject>)(Collection<?>)
+                allAccessibleObjects;
+
+        for(AccessibleObject member: allMembers) {
+
+            member.setAccessible(true);
+            if (member.isAnnotationPresent(RdfId.class)) {
+                PropertyMarshaller marshaller = marshallerFactory.createMarshaller(member, this);
+                RDFNode resolvedNode = marshaller.resolveMember(obj);
+                if(resolvedNode == null) break;
+                if(resolvedNode.isLiteral())
+                    id =   ((Literal)resolvedNode).getString();
+                else
+                    id = resolvedNode.toString();
+
+                uriTemplate = member.getAnnotation(RdfId.class).uriTemplate();
+                break;
+            }
+        }
+
+
+        if(id !=null && uriTemplate.contains("{RdfId}")){
+            id = uriTemplate.replace("{RdfId}", id.toString());
+        }
+
+        resource = id == null? model.createResource(): model.createResource(id.toString());
+        metaData = model.createResource();
+
+        RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(obj.getClass(), RdfType.class);
+        String rdfType;
+        if(rdfTypeAnnotation != null) {
+            rdfType = rdfTypeAnnotation.value();
+
+            resource.addProperty(RDF.type, model.createProperty(rdfType));
+            metaData.addProperty(model.createProperty(rdfType), obj.getClass().getName());
+
+            if(isRoot){
+                metaData.addProperty(model.createProperty(IAIS.IS_MAPPING_ROOT), "true");
+                isRoot = false;
+            }
+
+        }else
+            throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
+                    "Not provided");
+        for(AccessibleObject member: allMembers) {
+            member.setAccessible(true);
+            RdfProperty rdfPropertyInfo;
+            if(member instanceof Method)
+                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty.class);
+            else
+                rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
+
+            if (rdfPropertyInfo !=null ){
+                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
+                BasePropMarshaller unmarshaller = marshallerFactory.createMarshaller(member,this);
+                boolean resolved = false;
+
+                Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
+                        unmarshaller.resolveMemberClassName(obj));
+                if(tClass != null){
+                    Object resolvedObj = unmarshaller.getMemberValue(obj);
+                    if(resolvedObj!= null)
+                        resource.addProperty(jenaProperty,
+                                this.createResource(resolvedObj));
+
+                    resolved = true;
+                }
+
+
+                if(!resolved){
+                    RDFNode resolvedNode = unmarshaller.resolveMember(obj);
+                    if(resolvedNode != null) {
+                        resource.addProperty(jenaProperty, resolvedNode);
+                    }
+                }
+                String memberClassName = unmarshaller.resolveMemberClassName(obj);
+                if(memberClassName != null)
+                    metaData.addProperty(jenaProperty, memberClassName);
+            }
+        }
+
+        resource.addProperty(model.createProperty(IAIS.CLASS_MAPPING), metaData);
+
+        return resource;
+    }
+}

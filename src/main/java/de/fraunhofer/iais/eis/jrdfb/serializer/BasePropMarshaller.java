@@ -17,18 +17,18 @@ import java.lang.reflect.Method;
 public abstract class BasePropMarshaller implements PropertyMarshaller {
     protected MemberWrapper memberWrapper;
     protected Model model;
-    protected RdfSerializer rdfSerializer;
+    protected RdfMarshaller rdfMarshaller;
 
-    public BasePropMarshaller(Field field, RdfSerializer rdfSerializer) {
+    public BasePropMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(field);
-        this.model = rdfSerializer.model;
-        this.rdfSerializer = rdfSerializer;
+        this.model = rdfMarshaller.model;
+        this.rdfMarshaller = rdfMarshaller;
     }
 
-    public BasePropMarshaller(Method method, RdfSerializer rdfSerializer) {
+    public BasePropMarshaller(Method method, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(method);
-        this.model = rdfSerializer.model;
-        this.rdfSerializer = rdfSerializer;
+        this.model = rdfMarshaller.model;
+        this.rdfMarshaller = rdfMarshaller;
     }
 
     protected Object extractMemberValue(Object object)

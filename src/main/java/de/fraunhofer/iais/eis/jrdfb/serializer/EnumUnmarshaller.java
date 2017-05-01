@@ -15,12 +15,12 @@ import java.lang.reflect.Method;
  */
 public class EnumUnmarshaller extends BasePropUnmarshaller {
 
-    public EnumUnmarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public EnumUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
+        super(field, rdfUnmarshaller);
     }
 
-    public EnumUnmarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public EnumUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
+        super(method, rdfUnmarshaller);
     }
 
     @Override

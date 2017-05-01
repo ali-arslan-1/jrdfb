@@ -25,13 +25,15 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class PersonSerializationTest {
-    RdfSerializer serializer;
+    RdfMarshaller marshaller;
+    RdfUnmarshaller unmarshaller;
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(Person.class, Student.class, Address.class);
+        marshaller = new RdfMarshaller(Person.class, Student.class, Address.class);
+        unmarshaller = new RdfUnmarshaller(Person.class, Student.class, Address.class);
         rdf_turtle = FileUtils
                 .readResource("Person.ttl",
                         this.getClass());
@@ -59,7 +61,7 @@ public class PersonSerializationTest {
         student.setBirthDate(birthDate);
 
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(student).trim();
+        String serializedTurtle = marshaller.marshal(student).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
@@ -69,7 +71,7 @@ public class PersonSerializationTest {
 
     @Test
     public void testDeserializeNestedProperties() throws Exception{
-        Student student = (Student)serializer.deserialize(rdf_turtle);
+        Student student = (Student) unmarshaller.unmarshal(rdf_turtle);
 
         assertEquals(student.getName(), "Ali Arslan");
         assertEquals(student.getMatrNo().intValue(), 111111);
@@ -98,9 +100,9 @@ public class PersonSerializationTest {
         boolean exceptionThrown = false;
         String rdf = null;
         try {
-            rdf = serializer.serialize(student);
+            rdf = marshaller.marshal(student);
             System.out.println(rdf);
-            Student deserialized = (Student)serializer.deserialize(rdf);
+            Student deserialized = (Student) unmarshaller.unmarshal(rdf);
             assertEquals(deserialized.getMatrNo().intValue(), 111111);
         } catch (Exception e) {
             exceptionThrown = true;

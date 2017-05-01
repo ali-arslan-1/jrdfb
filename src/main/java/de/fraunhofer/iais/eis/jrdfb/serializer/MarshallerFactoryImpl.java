@@ -13,31 +13,31 @@ public class MarshallerFactoryImpl implements MarshallerFactory {
 
     @Override
     public BasePropMarshaller createMarshaller(AccessibleObject accessibleObject,
-                                               RdfSerializer rdfSerializer) {
+                                               RdfMarshaller rdfMarshaller) {
         BasePropMarshaller marshaller = null;
         if(accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
-            marshaller = new LiteralMarshaller(field, rdfSerializer);
+            marshaller = new LiteralMarshaller(field, rdfMarshaller);
 
             if (Collection.class.isAssignableFrom(field.getType())) {
-                marshaller = new CollectionMarshaller(field, rdfSerializer);
+                marshaller = new CollectionMarshaller(field, rdfMarshaller);
             } else if (Map.class.isAssignableFrom(field.getType())) {
-                marshaller = new MapMarshaller(field, rdfSerializer);
+                marshaller = new MapMarshaller(field, rdfMarshaller);
             } else if (field.getType() instanceof Class
                     && (field.getType()).isEnum() ){
-                marshaller = new EnumMarshaller(field, rdfSerializer);
+                marshaller = new EnumMarshaller(field, rdfMarshaller);
             }
         }else if(accessibleObject instanceof Method){
             Method method = (Method) accessibleObject;
-            marshaller = new LiteralMarshaller(method, rdfSerializer);
+            marshaller = new LiteralMarshaller(method, rdfMarshaller);
 
             if(Collection.class.isAssignableFrom(method.getReturnType())){
-                marshaller = new CollectionMarshaller(method, rdfSerializer);
+                marshaller = new CollectionMarshaller(method, rdfMarshaller);
             }else if(Map.class.isAssignableFrom(method.getReturnType())){
-                marshaller = new MapMarshaller(method, rdfSerializer);
+                marshaller = new MapMarshaller(method, rdfMarshaller);
             }else if (method.getReturnType() instanceof Class
                     && (method.getReturnType()).isEnum()){
-                marshaller = new EnumMarshaller(method, rdfSerializer);
+                marshaller = new EnumMarshaller(method, rdfMarshaller);
             }
         }
         return marshaller;
@@ -45,31 +45,31 @@ public class MarshallerFactoryImpl implements MarshallerFactory {
 
     @Override
     public BasePropUnmarshaller createUnmarshaller(AccessibleObject accessibleObject, 
-                                                   RdfSerializer rdfSerializer) {
+                                                   RdfUnmarshaller rdfMarshaller) {
         BasePropUnmarshaller unmarshaller = null;
         if(accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
-            unmarshaller = new LiteralUnmarshaller(field, rdfSerializer);
+            unmarshaller = new LiteralUnmarshaller(field, rdfMarshaller);
 
             if (Collection.class.isAssignableFrom(field.getType())) {
-                unmarshaller = new CollectionUnmarshaller(field, rdfSerializer);
+                unmarshaller = new CollectionUnmarshaller(field, rdfMarshaller);
             } else if (Map.class.isAssignableFrom(field.getType())) {
-                unmarshaller = new MapUnmarshaller(field, rdfSerializer);
+                unmarshaller = new MapUnmarshaller(field, rdfMarshaller);
             } else if (field.getType() instanceof Class
                     && (field.getType()).isEnum() ){
-                unmarshaller = new EnumUnmarshaller(field, rdfSerializer);
+                unmarshaller = new EnumUnmarshaller(field, rdfMarshaller);
             }
         }else if(accessibleObject instanceof Method){
             Method method = (Method) accessibleObject;
-            unmarshaller = new LiteralUnmarshaller(method, rdfSerializer);
+            unmarshaller = new LiteralUnmarshaller(method, rdfMarshaller);
 
             if(Collection.class.isAssignableFrom(method.getReturnType())){
-                unmarshaller = new CollectionUnmarshaller(method, rdfSerializer);
+                unmarshaller = new CollectionUnmarshaller(method, rdfMarshaller);
             }else if(Map.class.isAssignableFrom(method.getReturnType())){
-                unmarshaller = new MapUnmarshaller(method, rdfSerializer);
+                unmarshaller = new MapUnmarshaller(method, rdfMarshaller);
             }else if (method.getReturnType() instanceof Class
                     && (method.getReturnType()).isEnum()){
-                unmarshaller = new EnumUnmarshaller(method, rdfSerializer);
+                unmarshaller = new EnumUnmarshaller(method, rdfMarshaller);
             }
         }
         return unmarshaller;

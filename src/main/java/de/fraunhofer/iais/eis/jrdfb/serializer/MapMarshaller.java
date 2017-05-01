@@ -17,12 +17,12 @@ import java.util.Map;
  */
 public class MapMarshaller extends BasePropMarshaller {
 
-    public MapMarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public MapMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+        super(field, rdfMarshaller);
     }
 
-    public MapMarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public MapMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+        super(method, rdfMarshaller);
     }
 
     @Override

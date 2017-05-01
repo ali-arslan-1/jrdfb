@@ -7,8 +7,8 @@ import java.lang.reflect.AccessibleObject;
  */
 public interface MarshallerFactory {
     BasePropMarshaller createMarshaller(AccessibleObject accessibleObject,
-                                        RdfSerializer rdfSerializer);
+                                        RdfMarshaller rdfMarshaller);
 
     BasePropUnmarshaller createUnmarshaller(AccessibleObject accessibleObject,
-                                        RdfSerializer rdfSerializer);
+                                        RdfUnmarshaller rdfUnmarshaller);
 }

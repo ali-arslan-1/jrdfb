@@ -19,13 +19,11 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class ClassWithLangLiteralsTest {
-    RdfSerializer serializer;
     String rdf_turtle;
     Model expectedModel;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        serializer = new RdfSerializer(ClassWithLangLiterals.class);
         rdf_turtle = FileUtils
                 .readResource("ClassWithLangLiterals.ttl",
                         this.getClass());
@@ -35,6 +33,8 @@ public class ClassWithLangLiteralsTest {
 
     @Test
     public void testSerialize() throws Exception{
+        RdfMarshaller marshaller = new RdfMarshaller(ClassWithLangLiterals.class);
+        
         ClassWithLangLiterals classWithLangLiterals = new ClassWithLangLiterals();
         classWithLangLiterals.setSingleLiteral(expectedModel
                                                 .createLiteral("test_literal_single","en"));
@@ -48,7 +48,7 @@ public class ClassWithLangLiteralsTest {
 
         classWithLangLiterals.setLiteralCollection(literalCollection);
 
-        String serializedTurtle = serializer.serialize(classWithLangLiterals).trim();
+        String serializedTurtle = marshaller.marshal(classWithLangLiterals).trim();
 
         Model actualModel = ModelFactory.createDefaultModel();
         System.out.println("Serialized Turtle:");
@@ -61,8 +61,10 @@ public class ClassWithLangLiteralsTest {
 
     @Test
     public void testDeserialize() throws Exception{
-        ClassWithLangLiterals classWithLangLiterals = (ClassWithLangLiterals)serializer
-                                                                        .deserialize(rdf_turtle);
+        RdfUnmarshaller unmarshaller = new RdfUnmarshaller(ClassWithLangLiterals.class);
+        
+        ClassWithLangLiterals classWithLangLiterals = (ClassWithLangLiterals)unmarshaller
+                                                                        .unmarshal(rdf_turtle);
 
         assertEquals(classWithLangLiterals.getSingleLiteral().getLanguage(), "en");
         assertEquals(classWithLangLiterals.getSingleLiteral().getString(), "test_literal_single");

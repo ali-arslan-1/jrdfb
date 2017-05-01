@@ -17,12 +17,12 @@ import java.net.URL;
  */
 public class LiteralUnmarshaller extends BasePropUnmarshaller {
 
-    public LiteralUnmarshaller(Field field, RdfSerializer rdfSerializer) {
-        super(field, rdfSerializer);
+    public LiteralUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
+        super(field, rdfUnmarshaller);
     }
 
-    public LiteralUnmarshaller(Method method, RdfSerializer rdfSerializer) {
-        super(method, rdfSerializer);
+    public LiteralUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
+        super(method, rdfUnmarshaller);
     }
 
     @Override

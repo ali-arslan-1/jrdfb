@@ -20,8 +20,7 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class DatasetTest {
-
-    RdfSerializer serializer;
+    
     String rdf_turtle;
     Model expectedModel;
 
@@ -36,7 +35,7 @@ public class DatasetTest {
 
     @Test
     public void testSerializeDataset() throws Exception {
-        serializer = new RdfSerializer(Dataset.class, Instant.class, Interval.class,
+        RdfMarshaller marshaller = new RdfMarshaller(Dataset.class, Instant.class, Interval.class,
                 TemporalEntity.class);
 
         GregorianCalendar t1 = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
@@ -64,7 +63,7 @@ public class DatasetTest {
         dataset.url = new URL("http://example.org/bla");
         dataset.coversTemporal = Arrays.asList(interval);
 
-        String serializedTurtle = serializer.serialize(dataset).trim();
+        String serializedTurtle = marshaller.marshal(dataset).trim();
         Model actualModel = ModelFactory.createDefaultModel();
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),
                 null, "TURTLE");
@@ -77,10 +76,11 @@ public class DatasetTest {
 
     @Test
     public void testDeserializeDataset() throws Exception{
-        serializer = new RdfSerializer(Dataset.class, Instant.class, Interval.class,
+        RdfUnmarshaller marshaller = new RdfUnmarshaller(Dataset.class, Instant.class, Interval
+                .class,
                 TemporalEntity.class);
 
-        Dataset dataset = (Dataset)serializer.deserialize(rdf_turtle);
+        Dataset dataset = (Dataset) marshaller.unmarshal(rdf_turtle);
         assertNotNull(dataset);
 
         ArrayList<IntervalImpl> interval = (ArrayList) dataset.getCoversTemporal();

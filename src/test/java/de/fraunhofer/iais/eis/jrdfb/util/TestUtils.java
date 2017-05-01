@@ -1,6 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.util;
 
-import de.fraunhofer.iais.eis.jrdfb.serializer.RdfSerializer;
+import de.fraunhofer.iais.eis.jrdfb.serializer.RdfMarshaller;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.testng.annotations.Test;
@@ -35,10 +35,10 @@ public class TestUtils {
                         ""));
     }
 
-    public static Model getSerializedModel(RdfSerializer serializer, Object object)
+    public static Model getSerializedModel(RdfMarshaller serializer, Object object)
             throws Exception{
         Model actualModel = ModelFactory.createDefaultModel();
-        String serializedTurtle = serializer.serialize(object).trim();
+        String serializedTurtle = serializer.marshal(object).trim();
         System.out.println("Serialized Turtle:");
         System.out.println(serializedTurtle);
         actualModel.read(new ByteArrayInputStream(serializedTurtle.getBytes()),

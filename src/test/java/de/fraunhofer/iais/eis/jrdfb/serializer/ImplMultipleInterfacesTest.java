@@ -19,7 +19,8 @@ import static org.testng.AssertJUnit.assertTrue;
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
 public class ImplMultipleInterfacesTest {
-    RdfSerializer serializer;
+    RdfMarshaller marshaller;
+    RdfUnmarshaller unmarshaller;
     String rdf_turtle;
     Model expectedModel;
 
@@ -36,56 +37,56 @@ public class ImplMultipleInterfacesTest {
 
     @Test
     public void testSerializeWithOrder1() throws Exception {
-        serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
+        marshaller = new RdfMarshaller(ImplMultipleInterfaces.class, Foo.class, Bar.class);
         ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
-        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        Model actualModel = TestUtils.getSerializedModel(marshaller, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test
     public void testSerializeWithOrder2() throws Exception {
-        serializer = new RdfSerializer(Foo.class, Bar.class, ImplMultipleInterfaces.class);
+        marshaller = new RdfMarshaller(Foo.class, Bar.class, ImplMultipleInterfaces.class);
         ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
-        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        Model actualModel = TestUtils.getSerializedModel(marshaller, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test
     public void testSerializeWithOrder3() throws Exception {
-        serializer = new RdfSerializer(Bar.class, Foo.class, ImplMultipleInterfaces.class);
+        marshaller = new RdfMarshaller(Bar.class, Foo.class, ImplMultipleInterfaces.class);
         ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
-        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        Model actualModel = TestUtils.getSerializedModel(marshaller, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test
     public void testSerializeWithOrder4() throws Exception {
-        serializer = new RdfSerializer(Bar.class, ImplMultipleInterfaces.class, Foo.class);
+        marshaller = new RdfMarshaller(Bar.class, ImplMultipleInterfaces.class, Foo.class);
         ImplMultipleInterfaces obj = new ImplMultipleInterfaces("foo", "bar");
-        Model actualModel = TestUtils.getSerializedModel(serializer, obj);
+        Model actualModel = TestUtils.getSerializedModel(marshaller, obj);
         assertTrue(expectedModel.isIsomorphicWith(actualModel));
     }
 
     @Test
     public void testDeserializeWithOrder1() throws Exception {
-        serializer = new RdfSerializer(ImplMultipleInterfaces.class, Foo.class, Bar.class);
-        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        unmarshaller = new RdfUnmarshaller(ImplMultipleInterfaces.class, Foo.class, Bar.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces) unmarshaller.unmarshal(rdf_turtle);
         assertEquals(obj.getBar(), "bar");
         assertEquals(obj.getFoo(), "foo");
     }
 
     @Test
     public void testDeserializeWithOrder2() throws Exception {
-        serializer = new RdfSerializer(Foo.class, Bar.class, ImplMultipleInterfaces.class);
-        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        unmarshaller = new RdfUnmarshaller(Foo.class, Bar.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces) unmarshaller.unmarshal(rdf_turtle);
         assertEquals(obj.getBar(), "bar");
         assertEquals(obj.getFoo(), "foo");
     }
 
     @Test
     public void testDeserializeWithOrder3() throws Exception {
-        serializer = new RdfSerializer(Bar.class, Foo.class, ImplMultipleInterfaces.class);
-        ImplMultipleInterfaces obj = (ImplMultipleInterfaces)serializer.deserialize(rdf_turtle);
+        unmarshaller = new RdfUnmarshaller(Bar.class, Foo.class, ImplMultipleInterfaces.class);
+        ImplMultipleInterfaces obj = (ImplMultipleInterfaces) unmarshaller.unmarshal(rdf_turtle);
         assertEquals(obj.getBar(), "bar");
         assertEquals(obj.getFoo(), "foo");
     }
