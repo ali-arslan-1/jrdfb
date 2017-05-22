@@ -28,8 +28,7 @@ public class ClassWithByteArrayTest {
                 .readResource("ClassWithByteArray.ttl",
                         this.getClass());
         expectedModel = ModelFactory.createDefaultModel();
-        expectedModel.read(new ByteArrayInputStream(rdf_turtle.getBytes()),
-                                                        null, "TURTLE");
+        expectedModel.read(new ByteArrayInputStream(rdf_turtle.getBytes()), null, "TURTLE");
     }
 
     @Test
