@@ -2,6 +2,7 @@ package de.fraunhofer.iais.eis.jrdfb.util;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
+import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.apache.jena.rdf.model.Model;
@@ -120,7 +121,7 @@ public class ReflectUtils {
             IllegalAccessException, InvocationTargetException, InstantiationException {
         if( UUID.class == clazz ) return UUID.fromString(value);
         if( LocalDateTime.class == clazz ) return LocalDateTime.parse(value);
-
+        if( byte[].class == clazz) return value.getBytes(Charsets.UTF_8);
         Constructor<?> cons = clazz.getDeclaredConstructor(String.class);
         cons.setAccessible(true);
         return cons.newInstance(value);

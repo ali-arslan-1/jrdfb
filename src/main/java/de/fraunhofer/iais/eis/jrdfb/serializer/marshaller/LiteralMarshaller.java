@@ -38,14 +38,19 @@ public class LiteralMarshaller extends BasePropMarshaller {
             rdfNode =  model.createTypedLiteral(value.toString(),
                 memberWrapper.getAnnotation(RdfTypedLiteral.class).value());
         } else if(LiteralMapping.containsKey(memberWrapper.getType())){
-            rdfNode =  model.createTypedLiteral(value.toString(),
-                                                    LiteralMapping.get(memberWrapper.getType()));
+            String serializedValue = value.toString();
+            if(LiteralMapping.get(memberWrapper.getType()).equals("xsd:base64Binary"))
+                serializedValue = new String((byte[])value);
+
+            rdfNode =  model.createTypedLiteral(
+                    serializedValue,
+                    LiteralMapping.get(memberWrapper.getType())
+            );
         }else if(memberWrapper.getType().equals(URL.class)){
             rdfNode =  model.createProperty(value.toString());
         }else if(RDFNode.class.isAssignableFrom(memberWrapper.getType())){
             rdfNode = (RDFNode)value;
-        }
-        else{
+        }else{
             rdfNode = model.createLiteral(value.toString());
         }
 

@@ -1,0 +1,9 @@
+<example.com/classWithByteArray>
+        a                           <example:ClassWithByteArray> ;
+        <example:byteArrayLiteral>  "xxx"^^<xsd:base64Binary> ;
+        <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
+                [ <example:ClassWithByteArray>  "de.fraunhofer.iais.eis.jrdfb.serializer.example.ClassWithByteArray" ;
+                  <example:byteArrayLiteral>    "[B" ;
+                  <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                          "true"
+                ] .
