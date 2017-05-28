@@ -1,7 +1,7 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfTypedLiteral;
-import org.apache.commons.codec.Charsets;
+import org.apache.jena.ext.com.google.common.base.Charsets;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
 

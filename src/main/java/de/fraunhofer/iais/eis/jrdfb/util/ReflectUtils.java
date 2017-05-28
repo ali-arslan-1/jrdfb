@@ -2,8 +2,8 @@ package de.fraunhofer.iais.eis.jrdfb.util;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
-import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.jena.ext.com.google.common.base.Charsets;
 import org.apache.jena.ext.com.google.common.collect.Lists;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
