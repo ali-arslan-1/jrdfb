@@ -1,9 +1,9 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfUri;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,7 +22,7 @@ public class EnumMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public @Nullable RDFNode resolveMember(@NotNull Object object)
+    public RDFNode resolveMember(@NotNull Object object, Model model)
             throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;

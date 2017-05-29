@@ -1,0 +1,17 @@
+[]    a       <bibo:Book> ;
+      <bibo:author>
+              [ <http://www.w3.org/2001/vcard-rdf/3.0#CATEGORIES>
+                        "Computer Science" ;
+                <http://www.w3.org/2001/vcard-rdf/3.0#FN>
+                        "Ali Arslan"
+              ] ;
+      <bibo:book_title> "Jrdfb" ;
+      <bibo:published_on> "Mon May 29 13:37:27 CEST 2017"^^<xsd:dateTime> ;
+      <http://jrdfb.iais.fraunhofer.de/vocab/classMapping>
+              [ <bibo:Book> "de.fraunhofer.iais.eis.jrdfb.serializer.example.Book" ;
+                <bibo:author> "de.fraunhofer.iais.eis.jrdfb.serializer.example.Author" ;
+                <bibo:book_title> "java.lang.String" ;
+                <bibo:published_on> "java.util.Date" ;
+                <http://jrdfb.iais.fraunhofer.de/vocab/isMappingRoot>
+                        "true"
+              ] .

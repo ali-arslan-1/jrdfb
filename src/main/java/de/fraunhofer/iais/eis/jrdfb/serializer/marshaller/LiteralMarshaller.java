@@ -2,6 +2,7 @@ package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfTypedLiteral;
 import org.apache.jena.ext.com.google.common.base.Charsets;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,8 @@ public class LiteralMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
+    public RDFNode resolveMember(@NotNull Object object, Model model)
+            throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
         RDFNode rdfNode;
@@ -40,7 +42,8 @@ public class LiteralMarshaller extends BasePropMarshaller {
                 memberWrapper.getAnnotation(RdfTypedLiteral.class).value());
         } else if(LiteralMapping.containsKey(memberWrapper.getType())){
             String serializedValue = value.toString();
-            if(LiteralMapping.get(memberWrapper.getType()).equals("xsd:base64Binary"))
+            if(LiteralMapping.get(memberWrapper.getType())
+                    .equals("xsd:base64Binary"))
                 serializedValue = new String((byte[])value, Charsets.UTF_8);
 
             rdfNode =  model.createTypedLiteral(

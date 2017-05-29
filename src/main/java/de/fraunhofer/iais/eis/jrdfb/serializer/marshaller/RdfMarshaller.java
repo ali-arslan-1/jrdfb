@@ -16,6 +16,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
@@ -77,15 +78,15 @@ public class RdfMarshaller {
             }
         }
 
-        Collection<AccessibleObject> allMembers = (Collection<AccessibleObject>)(Collection<?>)
-                allAccessibleObjects;
+        Collection<AccessibleObject> allMembers =
+                (Collection<AccessibleObject>)(Collection<?>) allAccessibleObjects;
 
         for(AccessibleObject member: allMembers) {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
                 PropertyMarshaller marshaller = factory.createMarshaller(member, this);
-                RDFNode resolvedNode = marshaller.resolveMember(obj);
+                RDFNode resolvedNode = marshaller.resolveMember(obj, model);
                 if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
                     id =   ((Literal)resolvedNode).getString();
@@ -124,20 +125,50 @@ public class RdfMarshaller {
         for(AccessibleObject member: allMembers) {
             member.setAccessible(true);
             RdfProperty rdfPropertyInfo;
-            if(member instanceof Method)
-                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)member, RdfProperty.class);
-            else
-                rdfPropertyInfo = AnnotationUtils.findAnnotation(member, RdfProperty.class);
+            de.fraunhofer.iais.eis.jrdfb.annotation.RdfMarshaller
+                    customMarshallerInfo;
+            if(member instanceof Method){
+                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)
+                        member, RdfProperty.class);
+                customMarshallerInfo = AnnotationUtils.findAnnotation((Method)
+                        member, de.fraunhofer.iais.eis.jrdfb.annotation
+                        .RdfMarshaller.class);
+            }
+            else{
+                rdfPropertyInfo = AnnotationUtils.findAnnotation(member,
+                        RdfProperty.class);
+
+                customMarshallerInfo = AnnotationUtils.findAnnotation(member,
+                        de.fraunhofer.iais.eis.jrdfb.annotation
+                                                        .RdfMarshaller.class);
+            }
 
             if (rdfPropertyInfo !=null ){
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
-                BasePropMarshaller unmarshaller = factory.createMarshaller(member,this);
+
+                if(customMarshallerInfo != null){
+                    Object memberValue;
+                    if(member instanceof Method)
+                        memberValue = ((Method) member).invoke(obj);
+                    else
+                        memberValue = ((Field) member).get(obj);
+                    PropertyMarshaller customMarshaller =
+                            (PropertyMarshaller)ReflectUtils.initClassInstance
+                            (customMarshallerInfo.value());
+                    resource.addProperty(jenaProperty, customMarshaller
+                            .resolveMember(memberValue, model));
+                    metaData.addProperty(jenaProperty,
+                            memberValue.getClass().getName());
+                    continue;
+                }
+
+                BasePropMarshaller marshaller = factory.createMarshaller(member,this);
                 boolean resolved = false;
 
                 Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
-                        unmarshaller.resolveMemberClassName(obj));
+                        marshaller.resolveMemberClassName(obj));
                 if(tClass != null){
-                    Object resolvedObj = unmarshaller.memberWrapper.getMemberValue(obj);
+                    Object resolvedObj = marshaller.memberWrapper.getMemberValue(obj);
                     if(resolvedObj!= null)
                         resource.addProperty(jenaProperty,
                                 this.createResource(resolvedObj));
@@ -147,12 +178,12 @@ public class RdfMarshaller {
 
 
                 if(!resolved){
-                    RDFNode resolvedNode = unmarshaller.resolveMember(obj);
+                    RDFNode resolvedNode = marshaller.resolveMember(obj, model);
                     if(resolvedNode != null) {
                         resource.addProperty(jenaProperty, resolvedNode);
                     }
                 }
-                String memberClassName = unmarshaller.resolveMemberClassName(obj);
+                String memberClassName = marshaller.resolveMemberClassName(obj);
                 if(memberClassName != null)
                     metaData.addProperty(jenaProperty, memberClassName);
             }

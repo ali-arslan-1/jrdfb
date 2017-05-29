@@ -2,11 +2,11 @@ package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfBag;
 import org.apache.jena.rdf.model.Bag;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ public class MapMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public @Nullable RDFNode resolveMember(@NotNull Object object) throws ReflectiveOperationException {
+    public RDFNode resolveMember(@NotNull Object object, Model model) throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
 

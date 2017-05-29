@@ -1,7 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.serializer.MemberWrapper;
-import org.apache.jena.rdf.model.Model;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,24 +12,24 @@ import java.lang.reflect.Method;
  */
 public abstract class BasePropMarshaller implements PropertyMarshaller {
     protected MemberWrapper memberWrapper;
-    protected Model model;
-    protected RdfMarshaller rdfMarshaller;
+    RdfMarshaller rdfMarshaller;
 
-    public BasePropMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+    BasePropMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(field);
-        this.model = rdfMarshaller.model;
         this.rdfMarshaller = rdfMarshaller;
     }
 
-    public BasePropMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+    BasePropMarshaller(Method method, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(method);
-        this.model = rdfMarshaller.model;
         this.rdfMarshaller = rdfMarshaller;
     }
 
-    @Nullable
-    @Override
-    public String resolveMemberClassName(@NotNull Object object)
+    /**
+     * @param object whose member class name to be resolved
+     * @return java class name of member
+     * @throws ReflectiveOperationException
+     */
+    @Nullable String resolveMemberClassName(@NotNull Object object)
             throws ReflectiveOperationException {
         Object extractedValue = memberWrapper.extractMemberValue(object);
         if(extractedValue == null) return null;

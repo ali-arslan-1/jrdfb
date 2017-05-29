@@ -1,8 +1,8 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.marshaller;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
@@ -10,17 +10,11 @@ import org.jetbrains.annotations.Nullable;
 public interface PropertyMarshaller {
     /**
      * @param object the java object to be serialized into rdf
+     * @param model jena model used to build up the entire RDF graph
      * @return RDFNode object
      * @throws ReflectiveOperationException
      */
-    @Nullable RDFNode resolveMember(@NotNull Object object)
+    RDFNode resolveMember(@NotNull Object object, Model model)
             throws ReflectiveOperationException;
 
-    /**
-     * @param object whose member class name to be resolved
-     * @return java class name of member
-     * @throws ReflectiveOperationException
-     */
-    @Nullable String resolveMemberClassName(@NotNull Object object)
-            throws ReflectiveOperationException;
 }

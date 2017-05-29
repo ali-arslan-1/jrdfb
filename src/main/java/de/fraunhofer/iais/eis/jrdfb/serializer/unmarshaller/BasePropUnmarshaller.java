@@ -33,7 +33,11 @@ public abstract class BasePropUnmarshaller implements PropertyUnmarshaller {
         this.rdfUnmarshaller = rdfUnmarshaller;
     }
 
-    @Override
+    /**
+     * @param resource whose property class name to be resolved
+     * @return java class name of property
+     * @throws ReflectiveOperationException
+     */
     @Nullable
     public String resolveMemberClassName(@NotNull Resource resource)
             throws ReflectiveOperationException{

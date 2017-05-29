@@ -317,8 +317,13 @@ public class ReflectUtils {
      */
     @NotNull
     public static Object initClassInstance(@NotNull Class<?> clazz){
-        Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
-        return objenesis.newInstance(clazz);
+        try {
+            return initClassDefaultInstance(clazz);
+        } catch (NoSuchMethodException | IllegalAccessException |
+                    InvocationTargetException | InstantiationException e) {
+            Objenesis objenesis = new ObjenesisStd(); // or ObjenesisSerializer
+            return objenesis.newInstance(clazz);
+        }
     }
 
 
@@ -330,7 +335,7 @@ public class ReflectUtils {
      * @return returns the instance of the class
      */
     @NotNull
-    public static Object initClassDefaultInstance(@NotNull Class<?> clazz)
+    private static Object initClassDefaultInstance(@NotNull Class<?> clazz)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
                 InstantiationException {
         Constructor<?> cons = clazz.getDeclaredConstructor();
