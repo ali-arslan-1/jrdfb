@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfType;
 import de.fraunhofer.iais.eis.jrdfb.serializer.Factory;
 import de.fraunhofer.iais.eis.jrdfb.serializer.FactoryImpl;
+import de.fraunhofer.iais.eis.jrdfb.serializer.MemberWrapper;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import de.fraunhofer.iais.eis.jrdfb.vocabulary.IAIS;
 import org.apache.jena.rdf.model.*;
@@ -16,8 +17,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class RdfMarshaller {
 
     Class[] tClasses;
     private Factory factory;
-    Model model;
+    private Model model;
 
     private boolean isRoot;
 
@@ -71,10 +70,10 @@ public class RdfMarshaller {
         Set allAccessibleObjects = new HashSet();
         for(Class<?> clazz: tClasses) {
             if(clazz.isAssignableFrom(obj.getClass())){
-                allAccessibleObjects.addAll(ReflectUtils.getFieldsUpTo(clazz, Object
-                        .class));
-                allAccessibleObjects.addAll(ReflectUtils.getAllMethodsInHierarchy
-                        (clazz, Object.class));
+                allAccessibleObjects
+                        .addAll(ReflectUtils.getFieldsUpTo(clazz, Object.class));
+                allAccessibleObjects
+                        .addAll(ReflectUtils.getAllMethodsInHierarchy(clazz, Object.class));
             }
         }
 
@@ -85,7 +84,8 @@ public class RdfMarshaller {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
-                PropertyMarshaller marshaller = factory.createMarshaller(member, this);
+                PropertyMarshaller marshaller =
+                        factory.createMarshaller(member, this);
                 RDFNode resolvedNode = marshaller.resolveMember(obj, model);
                 if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
@@ -103,10 +103,12 @@ public class RdfMarshaller {
             id = uriTemplate.replace("{RdfId}", id.toString());
         }
 
-        resource = id == null? model.createResource(): model.createResource(id.toString());
+        resource = id == null? model.createResource():
+                                        model.createResource(id.toString());
         metaData = model.createResource();
 
-        RdfType rdfTypeAnnotation = AnnotationUtils.findAnnotation(obj.getClass(), RdfType.class);
+        RdfType rdfTypeAnnotation =
+                AnnotationUtils.findAnnotation(obj.getClass(), RdfType.class);
         String rdfType;
         if(rdfTypeAnnotation != null) {
             rdfType = rdfTypeAnnotation.value();
@@ -120,38 +122,21 @@ public class RdfMarshaller {
             }
 
         }else
-            throw new NoSuchFieldException("RdfType for class '"+obj.getClass().getName()+"' " +
-                    "Not provided");
+            throw new NoSuchFieldException
+                    ("RdfType for class '"+obj.getClass().getName()+"' " +
+                                                                "Not provided");
         for(AccessibleObject member: allMembers) {
-            member.setAccessible(true);
-            RdfProperty rdfPropertyInfo;
+            MemberWrapper memberWrapper = new MemberWrapper(member);
+            RdfProperty rdfPropertyInfo = memberWrapper.getRdfProperty();
             de.fraunhofer.iais.eis.jrdfb.annotation.RdfMarshaller
-                    customMarshallerInfo;
-            if(member instanceof Method){
-                rdfPropertyInfo = AnnotationUtils.findAnnotation((Method)
-                        member, RdfProperty.class);
-                customMarshallerInfo = AnnotationUtils.findAnnotation((Method)
-                        member, de.fraunhofer.iais.eis.jrdfb.annotation
-                        .RdfMarshaller.class);
-            }
-            else{
-                rdfPropertyInfo = AnnotationUtils.findAnnotation(member,
-                        RdfProperty.class);
+                    customMarshallerInfo = memberWrapper.getRdfMarshaller();
 
-                customMarshallerInfo = AnnotationUtils.findAnnotation(member,
-                        de.fraunhofer.iais.eis.jrdfb.annotation
-                                                        .RdfMarshaller.class);
-            }
-
-            if (rdfPropertyInfo !=null ){
-                Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
+            if (rdfPropertyInfo != null ){
+                Property jenaProperty =
+                                model.createProperty(rdfPropertyInfo.value());
 
                 if(customMarshallerInfo != null){
-                    Object memberValue;
-                    if(member instanceof Method)
-                        memberValue = ((Method) member).invoke(obj);
-                    else
-                        memberValue = ((Field) member).get(obj);
+                    Object memberValue = memberWrapper.getMemberValue(obj);
                     PropertyMarshaller customMarshaller =
                             (PropertyMarshaller)ReflectUtils.initClassInstance
                             (customMarshallerInfo.value());
@@ -162,13 +147,15 @@ public class RdfMarshaller {
                     continue;
                 }
 
-                BasePropMarshaller marshaller = factory.createMarshaller(member,this);
+                BasePropMarshaller marshaller =
+                        factory.createMarshaller(member,this);
                 boolean resolved = false;
 
                 Class tClass = ReflectUtils.getIfAssignableFromAny(tClasses,
                         marshaller.resolveMemberClassName(obj));
                 if(tClass != null){
-                    Object resolvedObj = marshaller.memberWrapper.getMemberValue(obj);
+                    Object resolvedObj =
+                            marshaller.memberWrapper.getMemberValue(obj);
                     if(resolvedObj!= null)
                         resource.addProperty(jenaProperty,
                                 this.createResource(resolvedObj));

@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer;
 
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfId;
+import de.fraunhofer.iais.eis.jrdfb.annotation.RdfMarshaller;
 import de.fraunhofer.iais.eis.jrdfb.annotation.RdfProperty;
 import de.fraunhofer.iais.eis.jrdfb.util.ReflectUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -19,17 +20,24 @@ public class MemberWrapper implements AnnotatedElement, Member{
 
     public MemberWrapper(Field field) {
         this.member = field;
+        member.setAccessible(true);
     }
 
     public MemberWrapper(Method method) {
         this.member = method;
+        member.setAccessible(true);
     }
 
-    public AccessibleObject getMember(){
-        return member;
+    public MemberWrapper(AccessibleObject member){
+        if(!(member instanceof Field) && !(member instanceof Method))
+            throw new IllegalArgumentException("Only java.lang.reflect.Method" +
+                    " or java.lang.reflect.Field are accepted as " +
+                    "constructor parameter type");
+        this.member = member;
+        member.setAccessible(true);
     }
 
-    public Object getValue(Object object) throws ReflectiveOperationException {
+    private Object getValue(Object object) throws ReflectiveOperationException {
         if(member instanceof Field)
             return ((Field) member) .get(object);
         else if(member instanceof Method)
@@ -37,7 +45,8 @@ public class MemberWrapper implements AnnotatedElement, Member{
         return null;
     }
 
-    public void setValue(Object object, Object value) throws ReflectiveOperationException {
+    public void setValue(Object object, Object value)
+            throws ReflectiveOperationException {
         if(member instanceof Field)
             ((Field) member) .set(object, value);
         else if(member instanceof Method ){
@@ -51,7 +60,7 @@ public class MemberWrapper implements AnnotatedElement, Member{
         }
     }
 
-    public Object getNestedObject(final Object bean, final String fieldPath)
+    private Object getNestedObject(final Object bean, final String fieldPath)
             throws ReflectiveOperationException{
         if(member instanceof Field){
             String [] fieldNames = fieldPath.split("\\.");
@@ -199,7 +208,30 @@ public class MemberWrapper implements AnnotatedElement, Member{
     }
 
     public Type getGenericTypeArgument(){
-        ParameterizedType genericType = (ParameterizedType) this.getGenericType();
+        ParameterizedType genericType =
+                (ParameterizedType) this.getGenericType();
         return genericType.getActualTypeArguments()[0];
+    }
+
+    public RdfProperty getRdfProperty(){
+        if(member instanceof Method){
+            return AnnotationUtils
+                    .findAnnotation((Method) member, RdfProperty.class);
+        }
+        else{
+            return AnnotationUtils.findAnnotation(member, RdfProperty.class);
+        }
+    }
+
+    public RdfMarshaller getRdfMarshaller(){
+        if(member instanceof Method){
+            return AnnotationUtils.findAnnotation((Method)
+                    member, de.fraunhofer.iais.eis.jrdfb.annotation
+                    .RdfMarshaller.class);
+        }else{
+            return AnnotationUtils.findAnnotation(member,
+                    de.fraunhofer.iais.eis.jrdfb.annotation
+                            .RdfMarshaller.class);
+        }
     }
 }
