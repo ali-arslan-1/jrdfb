@@ -16,7 +16,7 @@ import java.util.Collection;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class CollectionMarshaller extends BasePropMarshaller {
+public class CollectionMarshaller extends AbstractMemberMarshaller {
 
     public CollectionMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         super(field, rdfMarshaller);
@@ -27,7 +27,7 @@ public class CollectionMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public RDFNode resolveMember(@NotNull Object object, Model model) throws ReflectiveOperationException {
+    public RDFNode marshalMember(@NotNull Object object, Model model) throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
         RDFNode rdfNode;

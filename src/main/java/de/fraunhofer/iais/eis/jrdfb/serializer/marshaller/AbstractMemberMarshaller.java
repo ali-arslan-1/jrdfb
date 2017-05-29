@@ -10,16 +10,16 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public abstract class BasePropMarshaller implements PropertyMarshaller {
+public abstract class AbstractMemberMarshaller implements MemberMarshaller {
     protected MemberWrapper memberWrapper;
     RdfMarshaller rdfMarshaller;
 
-    BasePropMarshaller(Field field, RdfMarshaller rdfMarshaller) {
+    AbstractMemberMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(field);
         this.rdfMarshaller = rdfMarshaller;
     }
 
-    BasePropMarshaller(Method method, RdfMarshaller rdfMarshaller) {
+    AbstractMemberMarshaller(Method method, RdfMarshaller rdfMarshaller) {
         this.memberWrapper = new MemberWrapper(method);
         this.rdfMarshaller = rdfMarshaller;
     }

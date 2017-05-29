@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class MapMarshaller extends BasePropMarshaller {
+public class MapMarshaller extends AbstractMemberMarshaller {
 
     public MapMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         super(field, rdfMarshaller);
@@ -26,7 +26,7 @@ public class MapMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public RDFNode resolveMember(@NotNull Object object, Model model) throws ReflectiveOperationException {
+    public RDFNode marshalMember(@NotNull Object object, Model model) throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;
 

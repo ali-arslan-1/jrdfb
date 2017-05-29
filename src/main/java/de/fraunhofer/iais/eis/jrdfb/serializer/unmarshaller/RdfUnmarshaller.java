@@ -142,7 +142,7 @@ public class RdfUnmarshaller {
             }
             if (rdfPropertyInfo != null) {
 
-                BasePropUnmarshaller resolver = factory.createUnmarshaller(member,this);
+                AbstractMemberUnmarshaller resolver = factory.createUnmarshaller(member,this);
                 boolean resolved = false;
                 Object propertyVal = null;
                 Property jenaProperty = model.createProperty(rdfPropertyInfo.value());
@@ -157,7 +157,7 @@ public class RdfUnmarshaller {
                 }
 
                 if(!resolved)
-                    propertyVal = resolver.resolveProperty(resource);
+                    propertyVal = resolver.unmarshalMember(resource);
 
                 if (propertyVal != null) {
                     resolver.memberWrapper.setMemberValue(obj, propertyVal);

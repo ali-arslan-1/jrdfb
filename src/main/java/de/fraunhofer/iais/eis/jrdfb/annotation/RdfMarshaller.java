@@ -1,6 +1,6 @@
 package de.fraunhofer.iais.eis.jrdfb.annotation;
 
-import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.PropertyMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.MemberMarshaller;
 
 import java.lang.annotation.*;
 
@@ -21,5 +21,5 @@ public @interface RdfMarshaller {
      * The field or method with this annotation will use the provided
      * PropertyMarshaller implementation to marshall the field contents.
      */
-    Class<? extends PropertyMarshaller> value();
+    Class<? extends MemberMarshaller> value();
 }

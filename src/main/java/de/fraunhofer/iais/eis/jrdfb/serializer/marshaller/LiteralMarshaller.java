@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class LiteralMarshaller extends BasePropMarshaller {
+public class LiteralMarshaller extends AbstractMemberMarshaller {
 
     public LiteralMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         super(field, rdfMarshaller);
@@ -31,7 +31,7 @@ public class LiteralMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public RDFNode resolveMember(@NotNull Object object, Model model)
+    public RDFNode marshalMember(@NotNull Object object, Model model)
             throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;

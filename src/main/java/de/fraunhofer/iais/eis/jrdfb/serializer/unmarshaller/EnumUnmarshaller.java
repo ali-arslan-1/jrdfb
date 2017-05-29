@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class EnumUnmarshaller extends BasePropUnmarshaller {
+public class EnumUnmarshaller extends AbstractMemberUnmarshaller {
 
     public EnumUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
         super(field, rdfUnmarshaller);
@@ -24,7 +24,7 @@ public class EnumUnmarshaller extends BasePropUnmarshaller {
     }
 
     @Override
-    public @Nullable Object resolveProperty(@NotNull Resource resource)
+    public @Nullable Object unmarshalMember(@NotNull Resource resource)
             throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         String stringValue = null;

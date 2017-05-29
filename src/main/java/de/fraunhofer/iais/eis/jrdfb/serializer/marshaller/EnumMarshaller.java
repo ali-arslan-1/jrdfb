@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class EnumMarshaller extends BasePropMarshaller {
+public class EnumMarshaller extends AbstractMemberMarshaller {
 
     public EnumMarshaller(Field field, RdfMarshaller rdfMarshaller) {
         super(field, rdfMarshaller);
@@ -22,7 +22,7 @@ public class EnumMarshaller extends BasePropMarshaller {
     }
 
     @Override
-    public RDFNode resolveMember(@NotNull Object object, Model model)
+    public RDFNode marshalMember(@NotNull Object object, Model model)
             throws ReflectiveOperationException {
         Object value = memberWrapper.extractMemberValue(object);
         if(value == null) return null;

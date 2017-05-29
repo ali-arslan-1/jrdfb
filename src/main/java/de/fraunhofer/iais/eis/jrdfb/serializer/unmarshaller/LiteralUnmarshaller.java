@@ -15,7 +15,7 @@ import java.net.URL;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class LiteralUnmarshaller extends BasePropUnmarshaller {
+public class LiteralUnmarshaller extends AbstractMemberUnmarshaller {
 
     public LiteralUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
         super(field, rdfUnmarshaller);
@@ -26,7 +26,7 @@ public class LiteralUnmarshaller extends BasePropUnmarshaller {
     }
 
     @Override
-    public @Nullable Object resolveProperty(@NotNull Resource resource)
+    public @Nullable Object unmarshalMember(@NotNull Resource resource)
             throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(value==null)return null;

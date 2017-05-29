@@ -17,7 +17,7 @@ import java.util.TreeMap;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class MapUnmarshaller extends BasePropUnmarshaller {
+public class MapUnmarshaller extends AbstractMemberUnmarshaller {
 
     public MapUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
         super(field, rdfUnmarshaller);
@@ -28,7 +28,7 @@ public class MapUnmarshaller extends BasePropUnmarshaller {
     }
 
     @Override
-    public @Nullable Object resolveProperty(@NotNull Resource resource) throws ReflectiveOperationException {
+    public @Nullable Object unmarshalMember(@NotNull Resource resource) throws ReflectiveOperationException {
         Statement value = resource.getProperty(getJenaProperty());
         if(memberWrapper.isAnnotationPresent(RdfBag.class)){
             SortedMap<String, String> map = null;

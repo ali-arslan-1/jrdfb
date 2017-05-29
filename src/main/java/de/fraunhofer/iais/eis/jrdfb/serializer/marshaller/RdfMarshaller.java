@@ -84,9 +84,9 @@ public class RdfMarshaller {
 
             member.setAccessible(true);
             if (member.isAnnotationPresent(RdfId.class)) {
-                PropertyMarshaller marshaller =
+                MemberMarshaller marshaller =
                         factory.createMarshaller(member, this);
-                RDFNode resolvedNode = marshaller.resolveMember(obj, model);
+                RDFNode resolvedNode = marshaller.marshalMember(obj, model);
                 if(resolvedNode == null) break;
                 if(resolvedNode.isLiteral())
                     id =   ((Literal)resolvedNode).getString();
@@ -137,17 +137,17 @@ public class RdfMarshaller {
 
                 if(customMarshallerInfo != null){
                     Object memberValue = memberWrapper.getMemberValue(obj);
-                    PropertyMarshaller customMarshaller =
-                            (PropertyMarshaller)ReflectUtils.initClassInstance
+                    MemberMarshaller customMarshaller =
+                            (MemberMarshaller)ReflectUtils.initClassInstance
                             (customMarshallerInfo.value());
                     resource.addProperty(jenaProperty, customMarshaller
-                            .resolveMember(memberValue, model));
+                            .marshalMember(memberValue, model));
                     metaData.addProperty(jenaProperty,
                             memberValue.getClass().getName());
                     continue;
                 }
 
-                BasePropMarshaller marshaller =
+                AbstractMemberMarshaller marshaller =
                         factory.createMarshaller(member,this);
                 boolean resolved = false;
 
@@ -165,7 +165,7 @@ public class RdfMarshaller {
 
 
                 if(!resolved){
-                    RDFNode resolvedNode = marshaller.resolveMember(obj, model);
+                    RDFNode resolvedNode = marshaller.marshalMember(obj, model);
                     if(resolvedNode != null) {
                         resource.addProperty(jenaProperty, resolvedNode);
                     }

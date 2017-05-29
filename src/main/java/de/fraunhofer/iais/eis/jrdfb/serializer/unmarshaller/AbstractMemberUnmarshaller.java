@@ -16,18 +16,18 @@ import java.lang.reflect.Method;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public abstract class BasePropUnmarshaller implements PropertyUnmarshaller {
+public abstract class AbstractMemberUnmarshaller implements MemberUnmarshaller {
     protected MemberWrapper memberWrapper;
     protected Model model;
     protected RdfUnmarshaller rdfUnmarshaller;
 
-    public BasePropUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
+    public AbstractMemberUnmarshaller(Field field, RdfUnmarshaller rdfUnmarshaller) {
         this.memberWrapper = new MemberWrapper(field);
         this.model = rdfUnmarshaller.model;
         this.rdfUnmarshaller = rdfUnmarshaller;
     }
 
-    public BasePropUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
+    public AbstractMemberUnmarshaller(Method method, RdfUnmarshaller rdfUnmarshaller) {
         this.memberWrapper = new MemberWrapper(method);
         this.model = rdfUnmarshaller.model;
         this.rdfUnmarshaller = rdfUnmarshaller;

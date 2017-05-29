@@ -7,13 +7,13 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public interface PropertyUnmarshaller {
+public interface MemberUnmarshaller {
     /**
      * @param resource the jena rdf resource object to be deserialized
      * to java object.
      * @return deserialized java object
      * @throws ReflectiveOperationException
      */
-    @Nullable Object resolveProperty(@NotNull Resource resource)
+    @Nullable Object unmarshalMember(@NotNull Resource resource)
             throws ReflectiveOperationException;
 }

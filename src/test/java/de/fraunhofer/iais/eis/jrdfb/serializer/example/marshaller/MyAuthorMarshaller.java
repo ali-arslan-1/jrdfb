@@ -1,7 +1,7 @@
 package de.fraunhofer.iais.eis.jrdfb.serializer.example.marshaller;
 
 import de.fraunhofer.iais.eis.jrdfb.serializer.example.Author;
-import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.PropertyMarshaller;
+import de.fraunhofer.iais.eis.jrdfb.serializer.marshaller.MemberMarshaller;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author <a href="mailto:ali.arslan@rwth-aachen.de">AliArslan</a>
  */
-public class MyAuthorMarshaller implements PropertyMarshaller{
+public class MyAuthorMarshaller implements MemberMarshaller {
     @Override
-    public RDFNode resolveMember(@NotNull Object object, Model model)
+    public RDFNode marshalMember(@NotNull Object object, Model model)
             throws ReflectiveOperationException {
         if(object instanceof Author) {
             Resource author = model.createResource();

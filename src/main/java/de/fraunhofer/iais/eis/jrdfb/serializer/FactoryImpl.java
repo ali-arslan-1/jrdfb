@@ -15,9 +15,9 @@ import java.util.Map;
 public class FactoryImpl implements Factory {
 
     @Override
-    public BasePropMarshaller createMarshaller(AccessibleObject accessibleObject,
-                                               RdfMarshaller rdfMarshaller) {
-        BasePropMarshaller marshaller = null;
+    public AbstractMemberMarshaller createMarshaller(AccessibleObject accessibleObject,
+                                                     RdfMarshaller rdfMarshaller) {
+        AbstractMemberMarshaller marshaller = null;
         if(accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
             marshaller = new LiteralMarshaller(field, rdfMarshaller);
@@ -47,9 +47,9 @@ public class FactoryImpl implements Factory {
     }
 
     @Override
-    public BasePropUnmarshaller createUnmarshaller(AccessibleObject accessibleObject,
-                                                   RdfUnmarshaller rdfMarshaller) {
-        BasePropUnmarshaller unmarshaller = null;
+    public AbstractMemberUnmarshaller createUnmarshaller(AccessibleObject accessibleObject,
+                                                         RdfUnmarshaller rdfMarshaller) {
+        AbstractMemberUnmarshaller unmarshaller = null;
         if(accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
             unmarshaller = new LiteralUnmarshaller(field, rdfMarshaller);
