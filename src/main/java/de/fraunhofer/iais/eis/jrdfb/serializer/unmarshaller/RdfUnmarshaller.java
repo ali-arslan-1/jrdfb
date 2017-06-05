@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,19 +32,15 @@ public class RdfUnmarshaller {
     private Factory factory;
     Model model;
 
-    private boolean isRoot;
-
     public RdfUnmarshaller(Class... tClasses){
         this.tClasses = tClasses;
         factory = new FactoryImpl();
     }
-
-    public Object unmarshal(@NotNull String data) throws JrdfbException {
-
+    public Object unmarshal(@NotNull InputStream in) throws JrdfbException {
         Class rootClass = null;
         model = ModelFactory.createDefaultModel();
 
-        model.read(new ByteArrayInputStream(data.getBytes()), null, "TURTLE");
+        model.read(in, null, "TURTLE");
 
         Resource resource = null;
         outerloop:
@@ -57,7 +54,7 @@ public class RdfUnmarshaller {
                     resource = iter.nextResource();
 
                     Resource metadata = (Resource)resource
-                                .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
+                            .getProperty(model.createProperty(IAIS.CLASS_MAPPING)).getObject();
                     Statement metaRdfType = metadata.getProperty(model.createProperty(rdfType));
                     if(metaRdfType==null)
                         throw new JrdfbException("Metadata for Java Class Name Not provided" +
@@ -67,8 +64,8 @@ public class RdfUnmarshaller {
                         if(ReflectUtils.getIfAssignableFromAny(tClasses, metaRdfType.getObject()
                                 .toString()) != null
                                 && (metadata
-                                    .getProperty
-                                            (model.createProperty(IAIS.IS_MAPPING_ROOT)) != null))
+                                .getProperty
+                                        (model.createProperty(IAIS.IS_MAPPING_ROOT)) != null))
                         {
                             rootClass = clazz;
                             break outerloop;
@@ -81,13 +78,18 @@ public class RdfUnmarshaller {
         }
 
         if(rootClass == null)
-            throw new JrdfbException("No matching java class found for rdf resource: " +
-                    ""+data);
+            throw new JrdfbException("No matching java class found for rdf " +
+                    "model");
         try {
             return createObject(resource);
         } catch (ReflectiveOperationException e) {
             throw new JrdfbException(e.getMessage(), e);
         }
+    }
+
+    public Object unmarshal(@NotNull String data) throws JrdfbException {
+
+        return unmarshal(new ByteArrayInputStream(data.getBytes()));
     }
 
     Object createObject(@NotNull Resource resource)

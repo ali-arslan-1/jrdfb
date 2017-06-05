@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
 import java.util.Collection;
@@ -36,7 +37,9 @@ public class RdfMarshaller {
         this.tClasses = tClasses;
         factory = new FactoryImpl();
     }
-    public String marshal(@NotNull Object obj) throws JrdfbException {
+
+    public void marshal(@NotNull Object obj, OutputStream out) throws
+            JrdfbException {
         model = ModelFactory.createDefaultModel();
         isRoot = true;
 
@@ -46,10 +49,14 @@ public class RdfMarshaller {
             throw new JrdfbException(e);
         }
 
+        model.write(out, "TURTLE");
+    }
+
+    public String marshal(@NotNull Object obj) throws JrdfbException {
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        model.write(out, "TURTLE");
-
+        marshal(obj, out);
         String result;
         try {
             result = out.toString("UTF-8");
