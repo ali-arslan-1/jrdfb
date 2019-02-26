@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fraunhofer.iais.eis</groupId>
     <artifactId>jrdfb</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <dependencies>
 
